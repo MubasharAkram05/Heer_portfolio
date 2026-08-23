@@ -372,7 +372,6 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
 .hero-panel{
   position:relative;
   padding:52px 44px 44px;
-  border:1px solid var(--line);
   border-radius:10px;
   background-color:var(--hero-bg-1);
   background-image:
