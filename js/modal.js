@@ -13,6 +13,11 @@ function openItem(panelId, initName){
   const panel = document.getElementById(panelId);
   if(!panel) return;
 
+  // If something is already open, put it back first. Clearing the body with
+  // innerHTML would delete that panel outright, and it is the only copy — the
+  // item would be dead for the rest of the session.
+  if(modalPanel && modalPanel !== panel) returnPanel();
+
   modalReturnFocus = document.activeElement;
   document.getElementById('modalTitle').innerHTML = entry ? entry.title : '';
   const body = document.getElementById('modalBody');
@@ -48,16 +53,20 @@ function trapFocus(e){
 }
 document.addEventListener('keydown', trapFocus);
 
+/* Move whatever is in the dialog back to the store it came from. */
+function returnPanel(){
+  if(!modalPanel) return;
+  modalPanel.classList.remove('open');
+  document.getElementById('panelStore').appendChild(modalPanel);
+  modalPanel = null;
+}
+
 function closeItem(){
   const backdrop = document.getElementById('itemModal');
   if(backdrop.hidden) return;
   backdrop.hidden = true;
   document.body.style.overflow = '';
-  if(modalPanel){
-    modalPanel.classList.remove('open');
-    document.getElementById('panelStore').appendChild(modalPanel);
-    modalPanel = null;
-  }
+  returnPanel();
   if(modalReturnFocus && modalReturnFocus.focus) modalReturnFocus.focus();
   modalReturnFocus = null;
 }
