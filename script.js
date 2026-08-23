@@ -168,7 +168,7 @@ function initCounters(){
     const duration = 1100;
     const startTime = performance.now();
     function tick(now){
-      const progress = Math.min((now - startTime) / duration, 1);
+      const progress = Math.min(Math.max((now - startTime) / duration, 0), 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(eased * target) + suffix;
       if(progress < 1) requestAnimationFrame(tick);
@@ -176,14 +176,30 @@ function initCounters(){
     requestAnimationFrame(tick);
   };
 
+  // The cards fade in on a stagger, so counting straight away would run
+  // most of the way through while they are still hidden. Wait for the
+  // card's entrance to finish, then count.
+  const countAfterEntrance = (el) => {
+    const card = el.closest('.stat-card');
+    if(reduceMotion || !card || typeof card.getAnimations !== 'function'){
+      animateNum(el);
+      return;
+    }
+    const pending = card.getAnimations().filter(a => a.playState !== 'finished');
+    if(!pending.length){ animateNum(el); return; }
+    Promise.all(pending.map(a => a.finished))
+      .then(() => animateNum(el))
+      .catch(() => animateNum(el));
+  };
+
   if(!('IntersectionObserver' in window)){
-    nums.forEach(animateNum);
+    nums.forEach(countAfterEntrance);
     return;
   }
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
-        animateNum(entry.target);
+        countAfterEntrance(entry.target);
         io.unobserve(entry.target);
       }
     });
