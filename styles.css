@@ -2056,3 +2056,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   .footer-col > summary{ padding:var(--space-4) 0; }
   .footer-col > ul{ padding-bottom:var(--space-3); }
 }
+
+/* A project with no public link says so rather than showing a dead button. */
+.row-note{
+  font-family:var(--mono);
+  font-size:var(--fs-xs);
+  letter-spacing:.04em;
+  color:var(--muted);
+  margin-bottom:var(--space-6);
+}

@@ -2,6 +2,26 @@
    Part of the portfolio's plain-JS bundle. Files load in dependency order
    from index.html: data -> router -> render -> modal -> tools -> games
    -> forms -> ui -> main. Nothing here needs a build step. */
+/* A project only gets a link when there is somewhere to send you. The data
+   ships with "#" placeholders, and a link that goes nowhere is worse than no
+   link — it looks live and does nothing. Put real URLs in PROJECTS (data.js)
+   and the buttons appear on their own. */
+function hasUrl(url){ return !!url && url !== '#'; }
+
+function projectLinks(p){
+  const links = [];
+  if(hasUrl(p.demo)){
+    links.push(`<a href="${p.demo}" class="row-cta" target="_blank" rel="noopener">Live demo <span class="arrow" aria-hidden="true">↗</span></a>`);
+  }
+  if(hasUrl(p.code)){
+    links.push(`<a href="${p.code}" class="row-link" target="_blank" rel="noopener">Source</a>`);
+  }
+  if(!links.length){
+    return '<p class="row-note">Case study on request</p>';
+  }
+  return `<div class="row-links">${links.join('')}</div>`;
+}
+
 function renderProjectCards(containerId, list){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -13,10 +33,7 @@ function renderProjectCards(containerId, list){
       <div class="row-main">
         <h3>${p.title}</h3>
         <p>${p.desc}</p>
-        <div class="row-links">
-          <a href="${p.demo}" class="row-cta" target="_blank" rel="noopener">Live demo <span class="arrow" aria-hidden="true">↗</span></a>
-          <a href="${p.code}" class="row-link" target="_blank" rel="noopener">Source</a>
-        </div>
+        ${projectLinks(p)}
         <ul class="row-tags">${p.stack.map(t=>`<li>${t}</li>`).join('')}</ul>
       </div>
       <div class="row-spec">

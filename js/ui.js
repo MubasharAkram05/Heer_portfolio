@@ -131,10 +131,21 @@ function initCounters(){
 
 /* ---------------- Theme (auto light/dark) ---------------- */
 function applyTheme(mode){
+  const dark = mode === 'dark';
   document.documentElement.setAttribute('data-theme', mode);
   try{ localStorage.setItem('portfolio-theme', mode); }catch(e){}
-  const icon = document.querySelector('#themeToggle .mode-icon');
-  if(icon) icon.textContent = mode === 'dark' ? '☀️' : '🌙';
+  const btn = document.getElementById('themeToggle');
+  if(btn){
+    const icon = btn.querySelector('.mode-icon');
+    if(icon) icon.textContent = dark ? '☀️' : '🌙';
+    // the button was announcing "switch to dark mode" while already dark, and
+    // its pressed state never moved off false
+    btn.setAttribute('aria-pressed', String(dark));
+    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+  // the address bar / status bar tint should follow the theme too
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', dark ? '#0d1117' : '#f7f9fc');
 }
 function toggleTheme(){
   const current = document.documentElement.getAttribute('data-theme') || 'light';

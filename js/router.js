@@ -4,6 +4,11 @@
    -> forms -> ui -> main. Nothing here needs a build step. */
 const pageOrder = ['home','about','work','tools','games','services','contact'];
 
+/* The browser restores scroll on its own by default, and it races the offset
+   we restore from the history state — Back landed at y=12 instead of 600.
+   Taking manual control leaves one mechanism in charge. */
+try { history.scrollRestoration = 'manual'; } catch(e){}
+
 /* Pages visited this session, so Back steps through them instead of
    leaving the site the way the browser's own back button does. */
 const pageTrail = [];
@@ -21,6 +26,7 @@ function updateBackBtn(){
 function goTo(id, isBack, restoreY){
   const current = document.querySelector('.page.active');
   const currentId = current && current.id.replace('page-','');
+  const leavingY = window.scrollY;
   if(!isBack && currentId && currentId !== id){
     // remember where we were on that page, not just which page it was
     pageTrail.push({ id: currentId, scrollY: window.scrollY });
@@ -54,8 +60,35 @@ function goTo(id, isBack, restoreY){
   // 'auto' resolves to the CSS scroll-behavior, which is smooth here, so the
   // jump never happened; 'instant' forces it
   window.scrollTo({ top: isBack ? (restoreY || 0) : 0, behavior:'instant' });
-  try { history.replaceState(null,'','#'+id); } catch(err) { /* sandboxed preview: ignore */ }
+
+  /* History. Going forward stamps where we are leaving from onto the current
+     entry, then pushes the new page — so the browser's own Back returns to the
+     right page AND the right scroll offset. Going back must not push, or every
+     step back would add another entry to come forward through. */
+  try {
+    if(isBack || !currentId || currentId === id){
+      history.replaceState({ id, scrollY: isBack ? (restoreY || 0) : 0 }, '', '#' + id);
+    } else {
+      history.replaceState({ id: currentId, scrollY: leavingY }, '', '#' + currentId);
+      history.pushState({ id, scrollY: 0 }, '', '#' + id);
+    }
+  } catch(err) { /* sandboxed preview: ignore */ }
 }
+
+/* The browser's Back and Forward, and anyone editing the hash by hand. Both
+   route without pushing, or they would fight the entry they just moved to. */
+addEventListener('popstate', (e) => {
+  const id = (e.state && e.state.id) || location.hash.replace('#','') || 'home';
+  if(!pageOrder.includes(id)) return;
+  goTo(id, true, e.state ? e.state.scrollY : 0);
+});
+
+addEventListener('hashchange', () => {
+  const id = location.hash.replace('#','');
+  const current = document.querySelector('.page.active');
+  const activeId = current && current.id.replace('page-','');
+  if(pageOrder.includes(id) && id !== activeId) goTo(id, true, 0);
+});
 
 /* ---------------- Dropdown ---------------- */
 function toggleDropdown(e){
