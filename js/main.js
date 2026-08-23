@@ -1,11 +1,10 @@
 /* Boot: everything that actually runs on page load, in one place.
    Part of the portfolio's plain-JS bundle. Files load in dependency order
    from index.html: data -> router -> render -> modal -> tools -> games
-   -> forms -> ui -> main. Nothing here needs a build step. */
+   -> deck -> forms -> ui -> feedback -> main. Nothing here needs a build step. */
 
 /* Content into the page */
 renderProjectCards('projectGrid', PROJECTS);
-renderProjectReel('projectReel', PROJECTS);
 renderServiceRows('serviceRows', SERVICES);
 renderServiceRows('homeServiceRows', SERVICES);
 renderTicker('capTicker', CAPABILITIES);
@@ -17,12 +16,10 @@ renderProcess('servicesProcess', PROCESS);
 renderRating('homeRating', REVIEW_SCORE);
 renderItemRows('toolRows', 'tools');
 renderItemRows('gameRows', 'games');
-/* reads the reels, so it has to run after they exist */
 renderFooterLinks();
 
 /* Behaviour */
-/* after the reels exist, since it binds to each .marquee */
-initReelTouch();
+initDecks();
 initReveal();
 initCounters();
 tickRole();

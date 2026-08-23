@@ -110,41 +110,14 @@ function renderFooterLinks(){
     svc.innerHTML = SERVICES.slice(0,6).map(v =>
       `<li><a href="#services" onclick="goTo('services')">${v.title}</a></li>`).join('');
   }
-  // the reels already list every tool and game, so reuse them as the source
   const fill = (id, page) => {
     const box = document.getElementById(id);
     if(!box) return;
-    const reel = document.querySelector(`.marquee[aria-label="${page}"]`);
-    if(!reel) return;
-    const seen = [...reel.querySelectorAll('.mini-card:not([aria-hidden]) h4')];
-    box.innerHTML = seen.map(h => {
-      const btn = h.parentElement.querySelector('.mini-open');
-      return `<li><a href="#${page.toLowerCase()}" onclick="${btn.getAttribute('onclick')}">${h.innerHTML}</a></li>`;
-    }).join('');
+    box.innerHTML = CATALOG.filter(it => it.page === page).map(it =>
+      `<li><a href="#${page}" onclick="openItem('${it.panel}','${it.init}'); return false;">${it.title}</a></li>`).join('');
   };
-  fill('footerTools', 'Tools');
-  fill('footerGames', 'Games');
-}
-
-/* The home reel. The track animates translateX(0) -> -50%, so the card set has
-   to appear exactly twice: the second copy is the frame the loop lands back on
-   and is hidden from assistive tech. Spacing lives on the card (margin-right),
-   not as a track gap, or -50% would not line up. */
-function renderProjectReel(containerId, list){
-  const container = document.getElementById(containerId);
-  if(!container) return;
-
-  const card = (p, i, isClone) => `
-    <article class="mini-card"${isClone ? ' aria-hidden="true"' : ''}>
-      <span class="icon" aria-hidden="true">${p.icon}</span>
-      <h4>${p.title}</h4>
-      <p>${p.desc}</p>
-      <button class="mini-open"${isClone ? ' tabindex="-1"' : ''} onclick="openProject(${i})">Open <span aria-hidden="true">↗</span></button>
-    </article>`;
-
-  container.innerHTML =
-    list.map((p, i) => card(p, i, false)).join('') +
-    list.map((p, i) => card(p, i, true)).join('');
+  fill('footerTools', 'tools');
+  fill('footerGames', 'games');
 }
 
 /* Open takes you to the full row for that project on the Work page. */
@@ -180,9 +153,9 @@ function renderItemRows(containerId, page){
         <p class="row-glyph" aria-hidden="true">${it.icon}</p>
       </div>`;
     // the whole row opens the item, not just the button
-    row.addEventListener('click', () => openItem(it.page, it.panel, it.init));
+    row.addEventListener('click', () => openItem(it.panel, it.init));
     row.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openItem(it.page, it.panel, it.init); }
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openItem(it.panel, it.init); }
     });
     container.appendChild(row);
   });

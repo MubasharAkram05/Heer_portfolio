@@ -818,72 +818,6 @@ nav.wrap{
 @media (max-width:520px){
 }
 
-/* ---------- Home showreel: tools / games sliding right to left ---------- */
-.showreel{ margin-top:var(--space-7); }
-.showreel + .showreel{ margin-top:var(--space-10); }
-
-.marquee{
-  overflow-x:auto;
-  overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-x:contain;
-  /* the row moves on its own, so a scrollbar would never match it */
-  scrollbar-width:none;
-  -ms-overflow-style:none;
-  /* soften the edges so cards enter and leave rather than get cut */
-  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-  mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
-}
-.marquee::-webkit-scrollbar{ display:none; }
-.marquee-track{
-  display:flex;
-  width:max-content;
-  animation:reelRTL 36s linear infinite;
-}
-/* the card set is duplicated in the markup, so exactly half the track is
-   one full set and -50% lands back on an identical frame */
-@keyframes reelRTL{
-  from{ transform:translateX(0); }
-  to{ transform:translateX(-50%); }
-}
-.marquee:focus-within .marquee-track,
-.marquee.is-touching .marquee-track{ animation-play-state:paused; }
-/* Only where a real pointer hovers: on touch, :hover sticks after a tap and
-   would leave the row frozen for good. */
-@media (hover: hover) and (pointer: fine){
-  .marquee:hover .marquee-track{ animation-play-state:paused; }
-}
-
-.mini-card{
-  flex:0 0 auto;
-  width:252px;
-  /* spacing lives on the card, not as a track gap, so -50% stays exact */
-  margin-right:var(--space-3);
-  border:1px solid var(--line);
-  background:linear-gradient(135deg, var(--cyan-soft), var(--mint-soft));
-  padding:var(--space-5) var(--space-4);
-  transition:border-color .2s ease, transform .2s ease;
-}
-.mini-card:nth-child(4n+2){ background:linear-gradient(135deg, var(--mint-soft), var(--gold-soft)); }
-.mini-card:nth-child(4n+3){ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)); }
-.mini-card:nth-child(4n+4){ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)); }
-.mini-card:hover{ border-color:var(--accent); transform:translateY(-3px); }
-.mini-card .icon{ font-size:var(--fs-md); color:var(--cyan); display:block; margin-bottom:var(--space-2); }
-.mini-card h4{ font-family:var(--display); font-size:var(--fs-base); font-weight:600; margin-bottom:var(--space-1-5); }
-.mini-card p{ color:var(--muted); font-size:var(--fs-sm); line-height:1.5; }
-.mini-open{
-  display:inline-flex; align-items:center; gap:var(--space-1-5);
-  margin-top:var(--space-3);
-  padding:var(--space-1-5) var(--space-3);
-  border:1px solid var(--line);
-  border-radius:var(--radius-pill);
-  font-family:var(--mono);
-  font-size:var(--fs-2xs);
-  text-transform:uppercase;
-  letter-spacing:.07em;
-  transition:border-color .18s ease, color .18s ease;
-}
-.mini-open:hover{ border-color:var(--accent); color:var(--accent-text); }
 
 .reel-title{
   margin-bottom:var(--space-3);
@@ -898,19 +832,8 @@ nav.wrap{
 }
 .reel-title a:hover{ color:var(--accent-text); }
 .reel-title .icon{ font-size:var(--fs-base); }
-
-@media (max-width:800px){
-  .mini-card{ width:220px; padding:var(--space-4) var(--space-3); }
-  .marquee-track{ animation-duration:28s; }
-}
 @media (max-width:480px){
-  .mini-card{ width:196px; margin-right:var(--space-2); }
   .reel-title{ font-size:var(--fs-base); }
-}
-@media (prefers-reduced-motion: reduce){
-  .marquee{ -webkit-mask-image:none; mask-image:none; }
-  .marquee-track{ animation:none; }
-  .marquee-track > [aria-hidden="true"]{ display:none; }
 }
 
 /* ---------- Sub-section split (used inside Tools page) ---------- */
@@ -1749,13 +1672,7 @@ header.scrolled{ box-shadow:var(--shadow-1); border-bottom-color:var(--line); }
   .toast.in{ transform:none; }
 }
 
-/* ---------- Interactive states ----------
-   Every control gets the same three answers: hover, pressed, and disabled.
-   The pressed state is what tells a touch user the tap registered, since they
-   never see hover at all. */
-.btn:active, .nav-links a.nav-cta:active, .row-cta:active,
-.mini-open:active, .back-btn:active, .modal-close:active,
-.theme-toggle:active, .row-link:active, .reel-title a:active{
+.btn:active, .nav-links a.nav-cta:active, .row-cta:active, .back-btn:active, .modal-close:active, .theme-toggle:active, .row-link:active, .reel-title a:active{
   transform:scale(.97);
 }
 
@@ -1779,15 +1696,14 @@ button[disabled]:hover{
 .btn.ghost:disabled:hover{ background:transparent; color:var(--text); border-color:var(--line); }
 button[aria-busy="true"]{ cursor:progress; }
 
-/* Buttons share one size system: two heights, one padding rhythm. */
-.btn, .small-btn, .mini-open, .nav-links a.nav-cta, .row-cta{
+.btn, .small-btn, .nav-links a.nav-cta, .row-cta{
   display:inline-flex; align-items:center; justify-content:center;
 }
 .btn, .row-cta{
   min-height:var(--control-h);
   padding:var(--space-2) var(--space-6);
 }
-.small-btn, .mini-open, .nav-links a.nav-cta, .btn.small{
+.small-btn, .nav-links a.nav-cta, .btn.small{
   min-height:var(--control-h-sm);
   padding:var(--space-2) var(--space-4);
 }
@@ -1806,8 +1722,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 /* Hover effects only where a pointer can actually hover, so touch devices do
    not get a hover state stuck on after a tap. */
 @media (hover: none){
-  .btn:hover, .small-btn:hover, .mini-open:hover, .to-top:hover,
-  .social-icons a:hover, .footer-col a:hover{ transform:none; }
+  .btn:hover, .small-btn:hover, .to-top:hover, .social-icons a:hover, .footer-col a:hover{ transform:none; }
 }
 
 /* ---------- Row flash ----------
@@ -1821,4 +1736,175 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 }
 @media (prefers-reduced-motion: reduce){
   .service-row.row-flash{ animation:none; border-top-color:var(--accent); }
+}
+
+/* ---------- Card deck ----------
+   One card on screen at a time; the next one replaces it with a 3D swap.
+   The stage carries the perspective, so cards rotate through real depth
+   rather than looking like a flat slide. */
+:root{
+  --deck-swap:.7s;      /* keep in step with DECK_SWAP in js/deck.js */
+  --deck-depth:900px;
+}
+
+.deck{ margin-top:var(--space-7); }
+.deck + .deck{ margin-top:var(--space-10); }
+
+.deck-stage{
+  position:relative;
+  perspective:var(--deck-depth);
+  perspective-origin:50% 45%;
+  min-height:320px;
+  /* the cards are absolute, so the stage needs its own height */
+  display:grid;
+  touch-action:pan-y;      /* vertical scroll still belongs to the page */
+  /* mid-swap a card sits 60% outside the stage; without this it spills across
+     the page and only the body's overflow-x:hidden saves it */
+  overflow:hidden;
+}
+
+.deck-card{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:var(--space-2);
+  text-align:left;
+  padding:var(--space-7) var(--space-6);
+  border:1px solid var(--line);
+  background:linear-gradient(135deg, var(--cyan-soft), var(--mint-soft));
+  color:inherit;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  will-change:transform, opacity;
+  transition:transform var(--deck-swap) var(--ease),
+             opacity var(--deck-swap) var(--ease),
+             border-color var(--dur-fast) var(--ease),
+             box-shadow var(--dur-mid) var(--ease);
+}
+.deck:nth-of-type(2n) .deck-card{ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)); }
+.deck:nth-of-type(3n) .deck-card{ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)); }
+
+/* Resting card. --drag is set live while a finger is on it. */
+.deck-card.is-current{
+  transform:translate3d(var(--drag, 0px), 0, 0) rotateY(calc(var(--drag, 0px) * 0.04)) scale(1);
+  opacity:1;
+  z-index:2;
+  box-shadow:var(--shadow-2);
+}
+/* Waiting off to one side, turned away from the viewer and pushed back. */
+.deck-card.is-entering.from-right{ transform:translate3d(60%, 0, -320px) rotateY(-38deg) scale(.9); opacity:0; }
+.deck-card.is-entering.from-left { transform:translate3d(-60%, 0, -320px) rotateY(38deg) scale(.9); opacity:0; }
+/* Leaving: rotates away and drops behind the incoming card. */
+.deck-card.is-leaving{ z-index:1; pointer-events:none; }
+.deck-card.is-leaving.to-left { transform:translate3d(-55%, 0, -260px) rotateY(30deg) scale(.88); opacity:0; }
+.deck-card.is-leaving.to-right{ transform:translate3d(55%, 0, -260px) rotateY(-30deg) scale(.88); opacity:0; }
+
+/* Only where a real pointer hovers: after a tap, :hover sticks on touch and
+   would leave the card looking permanently pressed. */
+@media (hover: hover) and (pointer: fine){
+  .deck-card:hover{ border-color:var(--accent); }
+  .deck-card:hover .deck-cue{ background:var(--accent); color:#14100c; border-color:var(--accent); }
+}
+.deck-card:active{ transform:translate3d(0,0,0) scale(.99); }
+
+.deck-meta{
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--cyan);
+}
+.deck-icon{ font-size:var(--fs-2xl); line-height:1; color:var(--accent-text); }
+.deck-title{
+  font-family:var(--display);
+  font-size:var(--fs-xl);
+  font-weight:600;
+  line-height:1.2;
+}
+.deck-desc{
+  color:var(--muted);
+  font-size:var(--fs-sm);
+  line-height:1.6;
+  max-width:52ch;
+}
+.deck-tags{ display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:auto; }
+.deck-tags span{
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:var(--radius-pill);
+  padding:var(--space-1) var(--space-3);
+}
+.deck-cue{
+  display:inline-flex; align-items:center; gap:var(--space-2);
+  min-height:var(--control-h-sm);
+  padding:var(--space-2) var(--space-4);
+  margin-top:var(--space-3);
+  border:1px solid var(--accent);
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--accent-text);
+  transition:background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+/* ---------- Deck controls ---------- */
+.deck-bar{
+  display:flex; align-items:center; gap:var(--space-4);
+  margin-top:var(--space-4);
+}
+.deck-nav{
+  width:var(--control-h-sm); height:var(--control-h-sm);
+  flex-shrink:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--text);
+  font-size:var(--fs-lg); line-height:1;
+  transition:border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
+             transform var(--dur-fast) var(--ease);
+}
+.deck-nav:hover{ border-color:var(--accent); color:var(--accent-text); }
+.deck-nav:active{ transform:scale(.94); }
+.deck-dots{
+  display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2);
+  flex:1;
+}
+.deck-dot{
+  width:var(--space-2); height:var(--space-2);
+  padding:0;
+  border:1px solid var(--muted);
+  background:transparent;
+  border-radius:var(--radius-circle);
+  transition:background-color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+             transform var(--dur-fast) var(--ease);
+}
+.deck-dot:hover{ border-color:var(--accent); transform:scale(1.3); }
+.deck-dot.on{
+  background:var(--accent);
+  border-color:var(--accent);
+  transform:scale(1.3);
+}
+
+@media (max-width:640px){
+  .deck-stage{ min-height:360px; }
+  .deck-card{ padding:var(--space-6) var(--space-5); }
+  .deck-title{ font-size:var(--fs-lg); }
+}
+
+/* Depth is the effect; without it, cross-fade in place. */
+@media (prefers-reduced-motion: reduce){
+  .deck-card{ transition:opacity var(--dur-mid) linear; }
+  .deck-card.is-current{ transform:none; }
+  .deck-card.is-entering.from-right,
+  .deck-card.is-entering.from-left{ transform:none; opacity:0; }
+  .deck-card.is-leaving.to-left,
+  .deck-card.is-leaving.to-right{ transform:none; opacity:0; }
 }
