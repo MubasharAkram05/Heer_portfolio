@@ -151,49 +151,97 @@
             <span class="icon">✎</span>
             <h4>Word &amp; Character Counter</h4>
             <p>Live word, character, and sentence counts.</p>
-            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('tools','panel-counter','')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card">
             <span class="icon">◆</span>
             <h4>Color Palette Generator</h4>
             <p>Random 5-colour palettes, click to copy a hex.</p>
-            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('tools','panel-palette','genPalette')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card">
             <span class="icon">⚿</span>
             <h4>Password Generator</h4>
             <p>Build a password from the sets you choose.</p>
-            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('tools','panel-pass','genPassword')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card">
             <span class="icon">↔</span>
             <h4>Unit Converter</h4>
             <p>Length between metric and imperial.</p>
-            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('tools','panel-unit','convertUnit')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">Aa</span>
+            <h4>Text Case Converter</h4>
+            <p>Switch between sentence, title, camel and snake case.</p>
+            <button class="mini-open" onclick="openItem('tools','panel-case','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">⧉</span>
+            <h4>Base64 Encoder / Decoder</h4>
+            <p>Encode text to Base64 or decode it back.</p>
+            <button class="mini-open" onclick="openItem('tools','panel-b64','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">¶</span>
+            <h4>Lorem Ipsum Generator</h4>
+            <p>Placeholder paragraphs at the length you need.</p>
+            <button class="mini-open" onclick="openItem('tools','panel-lorem','genLorem')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">◑</span>
+            <h4>Contrast Checker</h4>
+            <p>Check a colour pair against the WCAG levels.</p>
+            <button class="mini-open" onclick="openItem('tools','panel-contrast','checkContrast')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✎</span>
             <h4>Word &amp; Character Counter</h4>
             <p>Live word, character, and sentence counts.</p>
-            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-counter','')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">◆</span>
             <h4>Color Palette Generator</h4>
             <p>Random 5-colour palettes, click to copy a hex.</p>
-            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-palette','genPalette')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">⚿</span>
             <h4>Password Generator</h4>
             <p>Build a password from the sets you choose.</p>
-            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-pass','genPassword')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">↔</span>
             <h4>Unit Converter</h4>
             <p>Length between metric and imperial.</p>
-            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-unit','convertUnit')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">Aa</span>
+            <h4>Text Case Converter</h4>
+            <p>Switch between sentence, title, camel and snake case.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-case','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">⧉</span>
+            <h4>Base64 Encoder / Decoder</h4>
+            <p>Encode text to Base64 or decode it back.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-b64','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">¶</span>
+            <h4>Lorem Ipsum Generator</h4>
+            <p>Placeholder paragraphs at the length you need.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-lorem','genLorem')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">◑</span>
+            <h4>Contrast Checker</h4>
+            <p>Check a colour pair against the WCAG levels.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-contrast','checkContrast')">Open <span aria-hidden="true">↗</span></button>
           </article>
           </div>
         </div>
@@ -206,37 +254,73 @@
             <span class="icon">✕</span>
             <h4>Tic-Tac-Toe</h4>
             <p>Local two-player. First to three in a row.</p>
-            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('games','panel-ttt','initTTT')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card">
             <span class="icon">▦</span>
             <h4>Memory Match</h4>
             <p>Flip two at a time, match all the pairs.</p>
-            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('games','panel-memory','initMemory')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card">
             <span class="icon">✊</span>
             <h4>Rock, Paper, Scissors</h4>
             <p>Play the computer. First to five wins.</p>
-            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" onclick="openItem('games','panel-rps','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">⚡</span>
+            <h4>Reaction Timer</h4>
+            <p>Wait for the panel to turn, then hit it.</p>
+            <button class="mini-open" onclick="openItem('games','panel-reaction','resetReaction')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">?</span>
+            <h4>Guess the Number</h4>
+            <p>One to a hundred, higher or lower each time.</p>
+            <button class="mini-open" onclick="openItem('games','panel-guess','resetGuess')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card">
+            <span class="icon">◎</span>
+            <h4>Simon Says</h4>
+            <p>Watch the sequence, then repeat it back.</p>
+            <button class="mini-open" onclick="openItem('games','panel-simon','resetSimon')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✕</span>
             <h4>Tic-Tac-Toe</h4>
             <p>Local two-player. First to three in a row.</p>
-            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-ttt','initTTT')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">▦</span>
             <h4>Memory Match</h4>
             <p>Flip two at a time, match all the pairs.</p>
-            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-memory','initMemory')">Open <span aria-hidden="true">↗</span></button>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✊</span>
             <h4>Rock, Paper, Scissors</h4>
             <p>Play the computer. First to five wins.</p>
-            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-rps','')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">⚡</span>
+            <h4>Reaction Timer</h4>
+            <p>Wait for the panel to turn, then hit it.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-reaction','resetReaction')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">?</span>
+            <h4>Guess the Number</h4>
+            <p>One to a hundred, higher or lower each time.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-guess','resetGuess')">Open <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mini-card" aria-hidden="true">
+            <span class="icon">◎</span>
+            <h4>Simon Says</h4>
+            <p>Watch the sequence, then repeat it back.</p>
+            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-simon','resetSimon')">Open <span aria-hidden="true">↗</span></button>
           </article>
           </div>
         </div>
@@ -440,6 +524,82 @@
           </div>
         </div>
 
+        <div class="util-card">
+          <h3><span class="icon">Aa</span> Text Case Converter</h3>
+          <p>Switch text between sentence, title, camel, snake and kebab case.</p>
+          <button class="btn ghost" onclick="togglePanel('panel-case')">Open</button>
+          <div class="util-panel" id="panel-case">
+            <div class="util-panel-inner">
+              <textarea rows="3" id="caseInput" dir="auto" placeholder="Type or paste text here…" oninput="convertCase()"></textarea>
+              <div class="chip-row">
+                <button class="small-btn" onclick="setCase('upper')">UPPER</button>
+                <button class="small-btn" onclick="setCase('lower')">lower</button>
+                <button class="small-btn" onclick="setCase('sentence')">Sentence</button>
+                <button class="small-btn" onclick="setCase('title')">Title</button>
+                <button class="small-btn" onclick="setCase('camel')">camelCase</button>
+                <button class="small-btn" onclick="setCase('snake')">snake_case</button>
+                <button class="small-btn" onclick="setCase('kebab')">kebab-case</button>
+              </div>
+              <textarea rows="3" id="caseOutput" readonly placeholder="Result appears here"></textarea>
+              <button class="small-btn" onclick="copyFrom('caseOutput', this)">Copy result</button>
+            </div>
+          </div>
+        </div>
+        <div class="util-card">
+          <h3><span class="icon">⧉</span> Base64 Encoder / Decoder</h3>
+          <p>Encode text to Base64 or decode it back, entirely in your browser.</p>
+          <button class="btn ghost" onclick="togglePanel('panel-b64')">Open</button>
+          <div class="util-panel" id="panel-b64">
+            <div class="util-panel-inner">
+              <textarea rows="3" id="b64Input" dir="auto" placeholder="Text or Base64…" oninput="runBase64()"></textarea>
+              <div class="chip-row">
+                <button class="small-btn" onclick="setB64Mode('encode')" id="b64EncodeBtn">Encode</button>
+                <button class="small-btn" onclick="setB64Mode('decode')" id="b64DecodeBtn">Decode</button>
+              </div>
+              <textarea rows="3" id="b64Output" readonly placeholder="Result appears here"></textarea>
+              <p class="eyebrow" id="b64Note">Encoding</p>
+              <button class="small-btn" onclick="copyFrom('b64Output', this)">Copy result</button>
+            </div>
+          </div>
+        </div>
+        <div class="util-card">
+          <h3><span class="icon">¶</span> Lorem Ipsum Generator</h3>
+          <p>Placeholder paragraphs for mockups, at the length you need.</p>
+          <button class="btn ghost" onclick="togglePanel('panel-lorem'); genLorem();">Open</button>
+          <div class="util-panel" id="panel-lorem">
+            <div class="util-panel-inner">
+              <div class="field">
+                <label for="loremCount">Paragraphs: <span id="loremCountVal">3</span></label>
+                <input type="range" id="loremCount" min="1" max="8" value="3" oninput="document.getElementById('loremCountVal').textContent=this.value; genLorem();">
+              </div>
+              <button class="small-btn" onclick="genLorem()">Generate again</button>
+              <div id="loremOut" class="lorem-out"></div>
+              <button class="small-btn" onclick="copyFrom('loremOut', this)">Copy text</button>
+            </div>
+          </div>
+        </div>
+        <div class="util-card">
+          <h3><span class="icon">◑</span> Contrast Checker</h3>
+          <p>Check a text and background pair against the WCAG contrast levels.</p>
+          <button class="btn ghost" onclick="togglePanel('panel-contrast'); checkContrast();">Open</button>
+          <div class="util-panel" id="panel-contrast">
+            <div class="util-panel-inner">
+              <div class="field-row">
+                <div class="field">
+                  <label for="cFg">Text colour</label>
+                  <input type="color" id="cFg" value="#141d2e" oninput="checkContrast()">
+                </div>
+                <div class="field">
+                  <label for="cBg">Background</label>
+                  <input type="color" id="cBg" value="#f7f9fc" oninput="checkContrast()">
+                </div>
+              </div>
+              <div class="contrast-preview" id="contrastPreview">Sample text at this pairing</div>
+              <p class="contrast-ratio" id="contrastRatio">—</p>
+              <div class="chip-row" id="contrastBadges"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -496,6 +656,52 @@
         </div>
       </div>
 
+      <div class="util-card">
+        <h3><span class="icon">⚡</span> Reaction Timer</h3>
+        <p>Wait for the panel to turn, then hit it. How fast are you really?</p>
+        <button class="btn ghost" onclick="togglePanel('panel-reaction'); resetReaction();">Open</button>
+        <div class="util-panel" id="panel-reaction">
+          <div class="util-panel-inner">
+            <button class="reaction-pad" id="reactionPad" onclick="reactionClick()">Click to start</button>
+            <p class="eyebrow" id="reactionBest">Best: —</p>
+          </div>
+        </div>
+      </div>
+      <div class="util-card">
+        <h3><span class="icon">?</span> Guess the Number</h3>
+        <p>One to a hundred. Every guess tells you higher or lower.</p>
+        <button class="btn ghost" onclick="togglePanel('panel-guess'); resetGuess();">Open</button>
+        <div class="util-panel" id="panel-guess">
+          <div class="util-panel-inner">
+            <div class="field-row">
+              <div class="field">
+                <label for="guessInput">Your guess</label>
+                <input type="number" id="guessInput" min="1" max="100" placeholder="1 – 100" onkeydown="if(event.key==='Enter'){event.preventDefault();submitGuess();}">
+              </div>
+            </div>
+            <div class="chip-row">
+              <button class="small-btn" onclick="submitGuess()">Guess</button>
+              <button class="small-btn" onclick="resetGuess()">New number</button>
+            </div>
+            <p class="eyebrow" id="guessResult">Pick a number to begin.</p>
+            <p class="eyebrow" id="guessHistory"></p>
+          </div>
+        </div>
+      </div>
+      <div class="util-card">
+        <h3><span class="icon">◎</span> Simon Says</h3>
+        <p>Watch the sequence, repeat it back. It gets one longer each round.</p>
+        <button class="btn ghost" onclick="togglePanel('panel-simon'); resetSimon();">Open</button>
+        <div class="util-panel" id="panel-simon">
+          <div class="util-panel-inner">
+            <div class="simon-board" id="simonBoard"></div>
+            <div class="chip-row">
+              <button class="small-btn" onclick="startSimon()">Start round</button>
+            </div>
+            <p class="eyebrow" id="simonStatus">Press start to play.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -576,13 +782,59 @@
 </main>
 
 <footer>
+  <div class="wrap footer-top">
+    <div class="footer-brand">
+      <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
+      <p>App and games developer. Apps, games and the design work in between — from the first sketch to the shipped build.</p>
+      <a href="#contact" class="btn ghost small" onclick="goTo('contact')">Start a project</a>
+    </div>
+
+    <nav class="footer-cols" aria-label="Footer">
+      <div class="footer-col">
+        <p class="eyebrow">Pages</p>
+        <ul>
+          <li><a href="#home" onclick="goTo('home')">Home</a></li>
+          <li><a href="#about" onclick="goTo('about')">About</a></li>
+          <li><a href="#work" onclick="goTo('work')">Work</a></li>
+          <li><a href="#services" onclick="goTo('services')">Services</a></li>
+          <li><a href="#contact" onclick="goTo('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Services</p>
+        <ul id="footerServices"></ul>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Tools</p>
+        <ul id="footerTools"></ul>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Games</p>
+        <ul id="footerGames"></ul>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Elsewhere</p>
+        <ul>
+          <li><a href="mailto:hello@hiraiqbal.dev">Email</a></li>
+          <li><a href="https://github.com" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://twitter.com" target="_blank" rel="noopener">Twitter / X <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble <span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
   <div class="wrap footer-row">
     <div class="titleblock">
       <div>DRAWN BY<span>Heer</span></div>
       <div>DATE<span id="footDate"></span></div>
-      <div>SHEET<span id="footSheet">01/05</span></div>
+      <div>SHEET<span id="footSheet">01/07</span></div>
     </div>
-    <div>© <span id="footYear"></span> Heer — Built with plain HTML, CSS &amp; JS.</div>
+    <div class="footer-meta">
+      <span>&copy; <span id="footYear"></span> Heer &mdash; Built with plain HTML, CSS &amp; JS.</span>
+      <span class="footer-status"><span class="dot"></span> Available for freelance projects</span>
+    </div>
   </div>
   <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
