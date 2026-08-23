@@ -172,6 +172,12 @@ const SERVICES = [
   {icon:'⟳', title:'Maintenance & Support', desc:'The work that starts after launch. Updates, bug fixes, performance passes and keeping up with everything the app stores and operating systems keep changing underneath you. Available as an ongoing retainer or on demand, whichever suits how often your product moves.',
    tags:['Bug fixes','OS updates','Store compliance','Performance'],
    points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+  {icon:'◈', title:'AI Chatbots', desc:'Intelligent chatbots that handle customer support, qualify leads and keep conversations moving while you sleep. Built on natural language models and wired into your website, mobile app or WhatsApp, so people get answers where they already are.',
+   tags:['Natural language','Website widget','WhatsApp','Lead capture','Handover to human'],
+   points:['Trained on your own content','Works across web and mobile','Analytics on every conversation']},
+  {icon:'⬢', title:'Business Automation', desc:'Workflows that run themselves instead of eating your week. CRM updates, lead routing, reporting and the integrations between the tools you already pay for, so the repetitive parts stop needing a person in the middle.',
+   tags:['Workflow automation','CRM integration','Lead routing','Reporting','APIs'],
+   points:['Mapped before it is built','Connects existing tools','Handover docs included']},
   {icon:'◑', title:'Graphic Designing', desc:'Brand identity and the artwork around your product — logos, icon sets, key art, store screenshots and social assets. Everything is built to a system rather than as one-off files, so the next piece stays on brand without starting from scratch.',
    tags:['Brand identity','Logo design','Icon sets','Key art','Social assets'],
    points:['Source files handed over','Brand guidelines included','Print and screen ready']},
@@ -180,7 +186,7 @@ const SERVICES = [
    points:['Store listing optimised','Campaigns set up and tracked','Monthly reporting']},
 ];
 
-const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','Graphic Design','Digital Marketing','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
+const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','AI Chatbots','Business Automation','Graphic Design','Digital Marketing','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
 
 const TESTIMONIALS = [
   {quote:'We came in with a rough idea and a deadline. Heer scoped it down to something we could actually ship, then shipped it — the first build was in our hands inside three weeks.', name:'Amara Okafor', role:'Founder, Trailhead', feature:true},
