@@ -235,9 +235,18 @@
 
     <hr class="divider" style="margin:80px 0;">
 
+    <!-- Client reviews -->
+    <div class="section-head">
+      <p class="eyebrow">05 — Client reviews</p>
+      <h2>What people say afterwards</h2>
+    </div>
+    <div class="quote-grid" id="homeQuoteGrid"></div>
+
+    <hr class="divider" style="margin:80px 0;">
+
     <!-- Contact CTA -->
     <div class="section-head">
-      <p class="eyebrow">05 — Contact</p>
+      <p class="eyebrow">06 — Contact</p>
       <h2>Let's build something</h2>
     </div>
     <p class="lede" style="margin-bottom:28px;">Have a project, a role, or just a question? I usually reply within 24 hours.</p>
@@ -466,9 +475,11 @@
       <p class="eyebrow">05 — Services</p>
       <h2>What I can build for you</h2>
     </div>
-    <p class="lede" style="margin-bottom:40px;">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
+    <p class="lede" style="margin-bottom:32px;">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
 
-    <div class="grid-cards" id="servicesGrid"></div>
+    <div class="ticker" id="capTicker" role="group" aria-label="Capabilities"></div>
+
+    <ol class="service-rows" id="serviceRows"></ol>
 
     <hr class="divider" style="margin:72px 0;">
 
@@ -498,6 +509,14 @@
         <p>Store submission, release, and a support window afterwards for the fixes that only turn up once real people are using it.</p>
       </li>
     </ol>
+
+    <hr class="divider" style="margin:72px 0;">
+
+    <div class="section-head">
+      <p class="eyebrow">Client reviews</p>
+      <h2>What it is like to work together</h2>
+    </div>
+    <div class="quote-grid" id="quoteGrid"></div>
 
     <hr class="divider" style="margin:72px 0;">
 
@@ -555,6 +574,7 @@
     </div>
     <div>© <span id="footYear"></span> Heer — Built with plain HTML, CSS &amp; JS.</div>
   </div>
+  <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
 
 <script src="script.js"></script>

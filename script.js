@@ -154,12 +154,33 @@ renderProjectCards('homeProjectGrid', PROJECTS.slice(0,3));
 
 /* ---------------- Services ---------------- */
 const SERVICES = [
-  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release.', points:['Native and cross-platform','Offline-first where it matters','Store submission handled']},
-  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and performance that holds up on real devices.', points:['Unity and C#','Gameplay and level tooling','Tested on low-end hardware']},
-  {icon:'◐', title:'UI / UX Design', desc:'Interfaces designed around how people actually use them, handed over ready to build.', points:['Wireframes to final screens','Design systems and tokens','Accessible by default']},
-  {icon:'⬡', title:'Web Development', desc:'Fast, responsive sites and web apps built on web standards rather than page builders.', points:['Hand-written HTML, CSS, JS','Responsive to the smallest screen','Fast on a slow connection']},
-  {icon:'✦', title:'MVP & Prototyping', desc:'A working slice of the idea in weeks, so you can put it in front of people before committing.', points:['Scoped to one core loop','Real data, not mockups','Built to be thrown away or grown']},
-  {icon:'⟳', title:'Maintenance & Support', desc:'The work after launch: updates, fixes, and keeping up with what the stores require.', points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release — native where it earns its keep, cross-platform where it does not.',
+   tags:['Swift','Kotlin','Flutter','React Native'],
+   points:['Native and cross-platform','Offline-first where it matters','Store submission handled']},
+  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and performance that holds up on the phones people actually own, not just the newest one.',
+   tags:['Unity','C#','Shaders','Level tooling'],
+   points:['Unity and C#','Gameplay and level tooling','Tested on low-end hardware']},
+  {icon:'◐', title:'UI / UX Design', desc:'Interfaces designed around how people actually use them — research, wireframes and final screens, handed over ready to build.',
+   tags:['Figma','Design systems','Prototyping','Accessibility'],
+   points:['Wireframes to final screens','Design systems and tokens','Accessible by default']},
+  {icon:'⬡', title:'Web Development', desc:'Fast, responsive sites and web apps built on web standards rather than page builders, so they stay cheap to change later.',
+   tags:['HTML','CSS','JavaScript','Performance'],
+   points:['Hand-written HTML, CSS, JS','Responsive to the smallest screen','Fast on a slow connection']},
+  {icon:'✦', title:'MVP & Prototyping', desc:'A working slice of the idea in weeks, so you can put it in front of real people before committing a full budget to it.',
+   tags:['Scoping','Rapid build','User testing'],
+   points:['Scoped to one core loop','Real data, not mockups','Built to be thrown away or grown']},
+  {icon:'⟳', title:'Maintenance & Support', desc:'The work after launch: updates, fixes, and keeping up with what the app stores and operating systems keep changing.',
+   tags:['Bug fixes','OS updates','Store compliance'],
+   points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+];
+
+const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
+
+const TESTIMONIALS = [
+  {quote:'We came in with a rough idea and a deadline. Heer scoped it down to something we could actually ship, then shipped it — the first build was in our hands inside three weeks.', name:'Amara Okafor', role:'Founder, Trailhead', feature:true},
+  {quote:'The handover was the best part. Clean code, a real README, and a walkthrough call. Our own team picked it up without a single question.', name:'Daniel Reyes', role:'CTO, Northbeam'},
+  {quote:'Our game finally feels good to play on cheap Android phones. That was the whole brief and it got solved properly rather than patched over.', name:'Priya Nair', role:'Producer, Sunbreak Studio'},
+  {quote:'Weekly builds meant we caught a bad assumption in week two instead of at launch. That alone paid for the project.', name:'Tomas Lindqvist', role:'Product Lead, Habitline'},
 ];
 function renderServiceCards(containerId, list){
   const container = document.getElementById(containerId);
@@ -174,8 +195,55 @@ function renderServiceCards(containerId, list){
     container.appendChild(card);
   });
 }
-renderServiceCards('servicesGrid', SERVICES);
+
+function renderServiceRows(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach((sv, i) => {
+    const row = document.createElement('li');
+    row.className = 'service-row';
+    row.innerHTML = `
+      <span class="row-num">${String(i+1).padStart(2,'0')}</span>
+      <div class="row-main">
+        <h3><span class="icon">${sv.icon}</span> ${sv.title}</h3>
+        <p>${sv.desc}</p>
+        <ul class="row-tags">${sv.tags.map(t=>`<li>${t}</li>`).join('')}</ul>
+        <a href="#contact" class="btn ghost small" onclick="goTo('contact')">Start a project</a>
+      </div>
+      <div class="row-spec">
+        <p class="eyebrow">Deliverables</p>
+        <ul>${sv.points.map(pt=>`<li>${pt}</li>`).join('')}</ul>
+      </div>`;
+    container.appendChild(row);
+  });
+}
+
+function renderTicker(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  const set = list.map(c=>`<li>${c}</li>`).join('');
+  // duplicated so the track loops seamlessly at -50%, same as the home reels
+  container.innerHTML = `<ul class="ticker-track">${set}${list.map(c=>`<li aria-hidden="true">${c}</li>`).join('')}</ul>`;
+}
+
+function renderQuotes(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach(q => {
+    const card = document.createElement('figure');
+    card.className = 'quote-card' + (q.feature ? ' featured' : '');
+    card.innerHTML = `
+      <blockquote>${q.quote}</blockquote>
+      <figcaption><strong>${q.name}</strong><span>${q.role}</span></figcaption>`;
+    container.appendChild(card);
+  });
+}
+
 renderServiceCards('homeServicesGrid', SERVICES);
+renderServiceRows('serviceRows', SERVICES);
+renderTicker('capTicker', CAPABILITIES);
+renderQuotes('quoteGrid', TESTIMONIALS);
+renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
 
 initReveal();
 initCounters();
