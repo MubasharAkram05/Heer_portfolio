@@ -188,6 +188,17 @@ const SERVICES = [
 
 const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','AI Chatbots','Business Automation','Graphic Design','Digital Marketing','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
 
+const PROCESS = [
+  {title:'User research &amp; discovery', desc:'We start by understanding the product, the people who will use it, and the market it lands in. Research and analysis surface the real needs, the pain points, and where the growth actually is.'},
+  {title:'Problem definition &amp; strategy', desc:'The core challenges and project goals get written down and agreed. That turns into a focused plan aligned with what the business is trying to achieve, not a wish list.'},
+  {title:'Design &amp; prototyping', desc:'Wireframes first, then interactive prototypes and final screens. You get to click through the experience and change your mind before a line of production code exists.'},
+  {title:'Development &amp; integration', desc:'The build itself — apps, games and web, wired into whatever services they need. Written for speed, security and for the next person who has to change it.'},
+  {title:'Testing &amp; optimisation', desc:'Every build goes through functional testing, performance passes and a real-device sweep. Speed, usability and cross-device behaviour all get tuned before release.'},
+  {title:'Launch &amp; deployment', desc:'Once you approve it, we ship — store submission, release and monitoring. The goal is that everything works properly from day one, not day thirty.'},
+];
+
+const REVIEW_SCORE = {score:'4.9/5', stars:5, note:'Based on 12 client reviews'};
+
 const TESTIMONIALS = [
   {quote:'We came in with a rough idea and a deadline. Heer scoped it down to something we could actually ship, then shipped it — the first build was in our hands inside three weeks.', name:'Amara Okafor', role:'Founder, Trailhead', feature:true},
   {quote:'The handover was the best part. Clean code, a real README, and a walkthrough call. Our own team picked it up without a single question.', name:'Daniel Reyes', role:'CTO, Northbeam'},
@@ -240,6 +251,34 @@ function renderTicker(containerId, list){
   container.innerHTML = `<ul class="ticker-track">${set}${list.map(c=>`<li aria-hidden="true">${c}</li>`).join('')}</ul>`;
 }
 
+function renderProcess(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach((st, i) => {
+    const card = document.createElement('li');
+    card.className = 'process-card';
+    card.innerHTML = `
+      <span class="step-oval">${String(i+1).padStart(2,'0')}</span>
+      <h3>${st.title}</h3>
+      <p>${st.desc}</p>`;
+    container.appendChild(card);
+  });
+}
+
+function renderRating(containerId, r){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = `
+    <strong>${r.score}</strong>
+    <span class="stars" aria-hidden="true">${'\u2605'.repeat(r.stars)}</span>
+    <span class="note">${r.note}</span>`;
+  container.setAttribute('aria-label', r.score + ' — ' + r.note);
+}
+
+function initials(name){
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
 function renderQuotes(containerId, list){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -248,7 +287,10 @@ function renderQuotes(containerId, list){
     card.className = 'quote-card' + (q.feature ? ' featured' : '');
     card.innerHTML = `
       <blockquote>${q.quote}</blockquote>
-      <figcaption><strong>${q.name}</strong><span>${q.role}</span></figcaption>`;
+      <figcaption>
+        <span class="avatar" aria-hidden="true">${initials(q.name)}</span>
+        <span class="who"><strong>${q.name}</strong><span>${q.role}</span></span>
+      </figcaption>`;
     container.appendChild(card);
   });
 }
@@ -259,6 +301,8 @@ renderTicker('capTicker', CAPABILITIES);
 renderTicker('heroTicker', CAPABILITIES);
 renderQuotes('quoteGrid', TESTIMONIALS);
 renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
+renderProcess('homeProcess', PROCESS);
+renderRating('homeRating', REVIEW_SCORE);
 
 initReveal();
 initCounters();
