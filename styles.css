@@ -1757,18 +1757,36 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 }
 
 /* ---------- Card deck ----------
-   A coverflow: the centre card at full size, and one to each side turned away,
-   pushed back in Z and overlapped by the centre one, so only about half of
-   each shows and they read as sitting behind it. The stage carries the
-   perspective, so the depth is real rather than a flat scale. */
+   One component, two movements. The stylesheet places each card from the
+   data-offset the script writes on it, so the JS never needs to know which
+   look a deck is wearing.
+
+     data-style="coverflow"  Recent builds. The centre card full size and
+                             solid; one to each side, turned toward the
+                             middle, set back and faded.
+     data-style="stack"      Tools and Games. A pile: the front card square
+                             on, the next two peeking out behind it. Smaller
+                             cards than the coverflow.
+*/
 :root{
   --deck-swap:.62s;
   --deck-depth:1100px;
-  --deck-card-w:62%;     /* of the stage */
-  --deck-side-x:64%;     /* how far a side card slides, in its own width */
-  --deck-side-z:-260px;
-  --deck-side-turn:26deg;
-  --deck-side-scale:.84;
+
+  /* coverflow */
+  --cf-card-w:62%;        /* of the stage */
+  --cf-side-x:64%;        /* how far a side card slides, in its own width */
+  --cf-side-z:-260px;
+  --cf-side-turn:26deg;
+  --cf-side-scale:.84;
+  --cf-side-fade:.55;
+
+  /* stack */
+  --st-card-w:46%;
+  --st-step-x:52px;       /* offset per card down the pile */
+  --st-step-y:24px;
+  --st-step-turn:4deg;    /* fanned, so the pile reads as cards not a shadow */
+  --st-step-scale:.94;
+  --st-step-fade:.72;
 }
 
 .deck{ margin-top:var(--space-7); }
@@ -1780,8 +1798,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   perspective-origin:50% 45%;
   min-height:340px;
   touch-action:pan-y;      /* vertical scroll still belongs to the page */
-  /* the side cards run past the column edges by design; clipping keeps that
-     off the page rather than leaving it to the body */
+  /* cards run past the column edges by design; clipping keeps that off the
+     page rather than leaving it to the body */
   overflow:hidden;
 }
 
@@ -1789,8 +1807,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   position:absolute;
   top:0; bottom:0;
   left:50%;
-  width:var(--deck-card-w);
-  margin-left:calc(var(--deck-card-w) / -2);
   display:flex;
   flex-direction:column;
   align-items:flex-start;
@@ -1798,7 +1814,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   text-align:left;
   padding:var(--space-7) var(--space-6);
   border:1px solid var(--line);
-  background:linear-gradient(135deg, var(--cyan-soft), var(--mint-soft));
+  /* the tints are low-alpha, so they sit on an opaque base or the cards
+     behind show straight through the front one */
+  background:linear-gradient(135deg, var(--cyan-soft), var(--mint-soft)), var(--surface);
   color:inherit;
   cursor:pointer;
   transform-style:preserve-3d;
@@ -1808,38 +1826,76 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
              border-color var(--dur-fast) var(--ease);
   will-change:transform;
 }
-.deck:nth-of-type(2n) .deck-card{ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)); }
-.deck:nth-of-type(3n) .deck-card{ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)); }
+.deck:nth-of-type(2n) .deck-card{ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)), var(--surface); }
+.deck:nth-of-type(3n) .deck-card{ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)), var(--surface); }
 
-/* Centre: square on, in front, carrying the drag while a finger is down. */
-.deck-card.is-current{
-  transform:translate3d(var(--drag, 0px), 0, 0) rotateY(calc(var(--drag, 0px) * 0.02)) scale(1);
-  opacity:1;
-  z-index:3;
-  box-shadow:var(--shadow-3);
+/* Off-stage: parked, invisible, and out of the tab order. */
+.deck-card.is-hidden{
+  transform:translate3d(-50%, 0, -520px) scale(.7);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  z-index:0;
 }
-/* Sides: turned toward the middle, set back, and overlapped by the centre card
-   so roughly half of each is showing. */
-.deck-card.is-prev,
-.deck-card.is-next{
+/* The front card of either style is solid and on top. */
+.deck-card.is-current{ opacity:1; z-index:3; box-shadow:var(--shadow-3); }
+
+/* ---- coverflow ---- */
+.deck[data-style="coverflow"] .deck-card{
+  width:var(--cf-card-w);
+  margin-left:calc(var(--cf-card-w) / -2);
+}
+.deck[data-style="coverflow"] .deck-card[data-offset="0"]{
+  transform:translate3d(var(--drag, 0px), 0, 0) rotateY(calc(var(--drag, 0px) * 0.02)) scale(1);
+}
+.deck[data-style="coverflow"] .deck-card[data-offset="-1"],
+.deck[data-style="coverflow"] .deck-card[data-offset="1"]{
+  /* faded, so the centre card is plainly the one being offered */
+  opacity:var(--cf-side-fade);
   z-index:2;
-  opacity:1;
   box-shadow:var(--shadow-2);
 }
-.deck-card.is-prev{
-  transform:translate3d(calc(var(--deck-side-x) * -1 + var(--drag, 0px) * .3), 0, var(--deck-side-z))
-            rotateY(var(--deck-side-turn)) scale(var(--deck-side-scale));
+.deck[data-style="coverflow"] .deck-card[data-offset="-1"]{
+  transform:translate3d(calc(var(--cf-side-x) * -1 + var(--drag, 0px) * .3), 0, var(--cf-side-z))
+            rotateY(var(--cf-side-turn)) scale(var(--cf-side-scale));
 }
-.deck-card.is-next{
-  transform:translate3d(calc(var(--deck-side-x) + var(--drag, 0px) * .3), 0, var(--deck-side-z))
-            rotateY(calc(var(--deck-side-turn) * -1)) scale(var(--deck-side-scale));
+.deck[data-style="coverflow"] .deck-card[data-offset="1"]{
+  transform:translate3d(calc(var(--cf-side-x) + var(--drag, 0px) * .3), 0, var(--cf-side-z))
+            rotateY(calc(var(--cf-side-turn) * -1)) scale(var(--cf-side-scale));
 }
-/* Everything else waits further out, invisible and out of the tab order. */
-.deck-card.is-hidden{
-  transform:translate3d(0, 0, -520px) scale(.7);
-  opacity:0;
+
+/* ---- stack ----
+   Smaller cards, and the movement is a pile being dealt from rather than a
+   row sliding past. */
+.deck[data-style="stack"] .deck-stage{ min-height:300px; }
+.deck[data-style="stack"] .deck-card{
+  width:var(--st-card-w);
+  margin-left:calc(var(--st-card-w) / -2);
+  padding:var(--space-6) var(--space-5);
+}
+.deck[data-style="stack"] .deck-card[data-offset="0"]{
+  transform:translate3d(var(--drag, 0px), 0, 0) rotateZ(calc(var(--drag, 0px) * 0.012deg));
+}
+.deck[data-style="stack"] .deck-card[data-offset="1"]{
+  transform:translate3d(var(--st-step-x), var(--st-step-y), -60px)
+            rotateZ(var(--st-step-turn)) scale(var(--st-step-scale));
+  opacity:var(--st-step-fade);
+  z-index:2;
+  box-shadow:var(--shadow-2);
+}
+.deck[data-style="stack"] .deck-card[data-offset="2"]{
+  transform:translate3d(calc(var(--st-step-x) * 2), calc(var(--st-step-y) * 2), -120px)
+            rotateZ(calc(var(--st-step-turn) * 2)) scale(calc(var(--st-step-scale) * var(--st-step-scale)));
+  opacity:calc(var(--st-step-fade) * .62);
   z-index:1;
-  visibility:hidden;
+  box-shadow:var(--shadow-2);
+}
+/* The card just dealt away skims off to the left rather than shrinking back
+   into the pile, so forward and back read differently. */
+.deck[data-style="stack"] .deck-card[data-offset="-1"]{
+  transform:translate3d(-150%, 0, 40px) rotateZ(-9deg);
+  opacity:0;
+  z-index:4;
   pointer-events:none;
 }
 
@@ -1848,7 +1904,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 @media (hover: hover) and (pointer: fine){
   .deck-card.is-current:hover{ border-color:var(--accent); }
   .deck-card.is-current:hover .deck-cue{ background:var(--accent); color:#14100c; border-color:var(--accent); }
-  .deck-card.is-prev:hover, .deck-card.is-next:hover{ border-color:var(--accent); }
+  .deck-card:not(.is-current):not(.is-hidden):hover{ border-color:var(--accent); opacity:.85; }
 }
 
 .deck-meta{
@@ -1895,9 +1951,13 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   color:var(--accent-text);
   transition:background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-/* A side card is a step, not a destination — its call to action would lie. */
-.deck-card.is-prev .deck-cue,
-.deck-card.is-next .deck-cue{ visibility:hidden; }
+/* A card behind the front one is a step, not a destination — its call to
+   action would be a promise it does not keep. */
+.deck-card:not(.is-current) .deck-cue{ visibility:hidden; }
+
+/* The smaller stack cards need the type to come down with them. */
+.deck[data-style="stack"] .deck-title{ font-size:var(--fs-lg); }
+.deck[data-style="stack"] .deck-icon{ font-size:var(--fs-xl); }
 
 /* ---------- Deck controls ---------- */
 .deck-bar{
@@ -1938,23 +1998,30 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 }
 
 @media (max-width:900px){
-  :root{ --deck-card-w:74%; --deck-side-x:58%; --deck-side-z:-220px; }
+  :root{
+    --cf-card-w:74%; --cf-side-x:58%; --cf-side-z:-220px;
+    --st-card-w:62%; --st-step-x:38px; --st-step-y:18px;
+  }
 }
 @media (max-width:640px){
-  /* three cards will not read on a phone: the centre one fills the stage and
-     the sides only peek in at the edges */
-  :root{ --deck-card-w:86%; --deck-side-x:62%; --deck-side-z:-200px; --deck-side-scale:.8; }
+  /* three cards will not read on a phone: the front one fills the stage and
+     the rest only peek in at the edges */
+  :root{
+    --cf-card-w:86%; --cf-side-x:62%; --cf-side-z:-200px; --cf-side-scale:.8;
+    --st-card-w:80%; --st-step-x:22px; --st-step-y:12px; --st-step-turn:3deg;
+  }
   .deck-stage{ min-height:380px; }
+  .deck[data-style="stack"] .deck-stage{ min-height:330px; }
   .deck-card{ padding:var(--space-6) var(--space-5); }
   .deck-title{ font-size:var(--fs-lg); }
+  .deck[data-style="stack"] .deck-title{ font-size:var(--fs-base); }
 }
 
-/* Depth is the effect; without it the sides go away and the centre just fades. */
+/* Depth is the effect; without it, only the front card shows and it fades. */
 @media (prefers-reduced-motion: reduce){
   .deck-card{ transition:opacity var(--dur-mid) linear; }
-  .deck-card.is-current{ transform:none; }
-  .deck-card.is-prev, .deck-card.is-next{ transform:none; opacity:0; visibility:hidden; }
-  .deck-card.is-hidden{ transform:none; }
+  .deck-card[data-offset="0"]{ transform:none; }
+  .deck-card:not(.is-current){ transform:none; opacity:0; visibility:hidden; }
 }
 
 /* ---------- Footer dropdowns ----------

@@ -28,12 +28,21 @@ function initDecks(){
   document.querySelectorAll('.deck').forEach(deck => initDeck(deck));
 }
 
+/* How many cards either side of the centre each style keeps on the stage.
+   Coverflow shows one to each side; the stack piles two behind the front card
+   and nothing in front of it. */
+const DECK_RANGE = {
+  coverflow: { back:1, forward:1 },
+  stack:     { back:1, forward:2 },
+};
+
 function initDeck(deck){
   const items = deckItems(deck.dataset.deck);
   if(!items.length) return;
 
   const stage = deck.querySelector('.deck-stage');
   const dotsBox = deck.querySelector('.deck-dots');
+  const range = DECK_RANGE[deck.dataset.style] || DECK_RANGE.coverflow;
   let index = 0;
   let timer = null;
 
@@ -73,11 +82,14 @@ function initDeck(deck){
   function paint(){
     cards.forEach((card, i) => {
       const d = offsetOf(i);
+      /* The stylesheet positions each card from its offset, so one component
+         drives both the coverflow and the stack. */
+      const onStage = d >= -range.back && d <= range.forward;
+      if(onStage) card.dataset.offset = d;
+      else delete card.dataset.offset;
       card.classList.toggle('is-current', d === 0);
-      card.classList.toggle('is-prev', d === -1);
-      card.classList.toggle('is-next', d === 1);
-      card.classList.toggle('is-hidden', Math.abs(d) > 1);
-      // only the centre card is a real stop for the keyboard and a screen reader
+      card.classList.toggle('is-hidden', !onStage);
+      // only the front card is a real stop for the keyboard and a screen reader
       card.tabIndex = d === 0 ? 0 : -1;
       card.setAttribute('aria-hidden', String(d !== 0));
       card.setAttribute('aria-label',
