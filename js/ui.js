@@ -151,25 +151,6 @@ function toggleTheme(){
   }
 })();
 
-/* ---------------- Home reels: hold still while being dragged ---------------- */
-function initReelTouch(){
-  const reels = document.querySelectorAll('.marquee');
-  if(!reels.length) return;
-  reels.forEach(reel => {
-    let idle;
-    const hold = () => { clearTimeout(idle); reel.classList.add('is-touching'); };
-    const release = () => {
-      clearTimeout(idle);
-      idle = setTimeout(() => reel.classList.remove('is-touching'), 900);
-    };
-    reel.addEventListener('touchstart', hold, { passive:true });
-    reel.addEventListener('touchend', release, { passive:true });
-    reel.addEventListener('touchcancel', release, { passive:true });
-    // trackpad and momentum scrolling never fire touchend
-    reel.addEventListener('scroll', () => { hold(); release(); }, { passive:true });
-  });
-}
-
 /* ---------------- Scroll progress ---------------- */
 (function initScrollProgress(){
   const bar = document.getElementById('scrollProgress');

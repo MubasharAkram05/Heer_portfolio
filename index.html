@@ -129,10 +129,13 @@
       <p class="eyebrow">02 — Featured Work</p>
       <h2>A few <span class="outline">recent builds</span></h2>
     </div>
-    <div class="showreel">
+    <div class="deck" id="deckProjects" data-deck="projects" aria-roledescription="carousel" aria-label="Recent builds">
       <h3 class="reel-title"><a href="#work" onclick="goTo('work')"><span class="icon" aria-hidden="true">🗂</span> Shipped work</a></h3>
-      <div class="marquee" role="group" aria-label="Recent builds">
-        <div class="marquee-track" id="projectReel"></div>
+      <div class="deck-stage"></div>
+      <div class="deck-bar">
+        <button class="deck-nav" data-dir="-1" aria-label="Previous project">&lsaquo;</button>
+        <div class="deck-dots" role="tablist" aria-label="Choose a project"></div>
+        <button class="deck-nav" data-dir="1" aria-label="Next project">&rsaquo;</button>
       </div>
     </div>
     <div class="section-follow">
@@ -146,188 +149,24 @@
       <p class="eyebrow">03 — Tools &amp; Games</p>
       <h2>Things you can <span class="outline">actually play with</span></h2>
     </div>
-      <div class="showreel">
-        <h3 class="reel-title"><a href="#tools" onclick="goTo('tools')"><span class="icon">🛠</span> Tools</a></h3>
-        <div class="marquee" role="group" aria-label="Tools">
-          <div class="marquee-track">
-          <article class="mini-card">
-            <span class="icon">✎</span>
-            <h4>Word &amp; Character Counter</h4>
-            <p>Live word, character, and sentence counts.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-counter','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">◆</span>
-            <h4>Color Palette Generator</h4>
-            <p>Random 5-colour palettes, click to copy a hex.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-palette','genPalette')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">⚿</span>
-            <h4>Password Generator</h4>
-            <p>Build a password from the sets you choose.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-pass','genPassword')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">↔</span>
-            <h4>Unit Converter</h4>
-            <p>Length between metric and imperial.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-unit','convertUnit')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">Aa</span>
-            <h4>Text Case Converter</h4>
-            <p>Switch between sentence, title, camel and snake case.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-case','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">⧉</span>
-            <h4>Base64 Encoder / Decoder</h4>
-            <p>Encode text to Base64 or decode it back.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-b64','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">¶</span>
-            <h4>Lorem Ipsum Generator</h4>
-            <p>Placeholder paragraphs at the length you need.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-lorem','genLorem')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">◑</span>
-            <h4>Contrast Checker</h4>
-            <p>Check a colour pair against the WCAG levels.</p>
-            <button class="mini-open" onclick="openItem('tools','panel-contrast','checkContrast')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">✎</span>
-            <h4>Word &amp; Character Counter</h4>
-            <p>Live word, character, and sentence counts.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-counter','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">◆</span>
-            <h4>Color Palette Generator</h4>
-            <p>Random 5-colour palettes, click to copy a hex.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-palette','genPalette')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">⚿</span>
-            <h4>Password Generator</h4>
-            <p>Build a password from the sets you choose.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-pass','genPassword')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">↔</span>
-            <h4>Unit Converter</h4>
-            <p>Length between metric and imperial.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-unit','convertUnit')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">Aa</span>
-            <h4>Text Case Converter</h4>
-            <p>Switch between sentence, title, camel and snake case.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-case','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">⧉</span>
-            <h4>Base64 Encoder / Decoder</h4>
-            <p>Encode text to Base64 or decode it back.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-b64','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">¶</span>
-            <h4>Lorem Ipsum Generator</h4>
-            <p>Placeholder paragraphs at the length you need.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-lorem','genLorem')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">◑</span>
-            <h4>Contrast Checker</h4>
-            <p>Check a colour pair against the WCAG levels.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('tools','panel-contrast','checkContrast')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          </div>
-        </div>
+    <div class="deck" id="deckTools" data-deck="tools" aria-roledescription="carousel" aria-label="Tools">
+      <h3 class="reel-title"><a href="#tools" onclick="goTo('tools')"><span class="icon" aria-hidden="true">🛠</span> Tools</a></h3>
+      <div class="deck-stage"></div>
+      <div class="deck-bar">
+        <button class="deck-nav" data-dir="-1" aria-label="Previous tool">&lsaquo;</button>
+        <div class="deck-dots" role="tablist" aria-label="Choose a tool"></div>
+        <button class="deck-nav" data-dir="1" aria-label="Next tool">&rsaquo;</button>
       </div>
-      <div class="showreel">
-        <h3 class="reel-title"><a href="#games" onclick="goTo('games')"><span class="icon">🎮</span> Games</a></h3>
-        <div class="marquee" role="group" aria-label="Games">
-          <div class="marquee-track">
-          <article class="mini-card">
-            <span class="icon">✕</span>
-            <h4>Tic-Tac-Toe</h4>
-            <p>Local two-player. First to three in a row.</p>
-            <button class="mini-open" onclick="openItem('games','panel-ttt','initTTT')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">▦</span>
-            <h4>Memory Match</h4>
-            <p>Flip two at a time, match all the pairs.</p>
-            <button class="mini-open" onclick="openItem('games','panel-memory','initMemory')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">✊</span>
-            <h4>Rock, Paper, Scissors</h4>
-            <p>Play the computer. First to five wins.</p>
-            <button class="mini-open" onclick="openItem('games','panel-rps','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">⚡</span>
-            <h4>Reaction Timer</h4>
-            <p>Wait for the panel to turn, then hit it.</p>
-            <button class="mini-open" onclick="openItem('games','panel-reaction','resetReaction')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">?</span>
-            <h4>Guess the Number</h4>
-            <p>One to a hundred, higher or lower each time.</p>
-            <button class="mini-open" onclick="openItem('games','panel-guess','resetGuess')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card">
-            <span class="icon">◎</span>
-            <h4>Simon Says</h4>
-            <p>Watch the sequence, then repeat it back.</p>
-            <button class="mini-open" onclick="openItem('games','panel-simon','resetSimon')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">✕</span>
-            <h4>Tic-Tac-Toe</h4>
-            <p>Local two-player. First to three in a row.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-ttt','initTTT')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">▦</span>
-            <h4>Memory Match</h4>
-            <p>Flip two at a time, match all the pairs.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-memory','initMemory')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">✊</span>
-            <h4>Rock, Paper, Scissors</h4>
-            <p>Play the computer. First to five wins.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-rps','')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">⚡</span>
-            <h4>Reaction Timer</h4>
-            <p>Wait for the panel to turn, then hit it.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-reaction','resetReaction')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">?</span>
-            <h4>Guess the Number</h4>
-            <p>One to a hundred, higher or lower each time.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-guess','resetGuess')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          <article class="mini-card" aria-hidden="true">
-            <span class="icon">◎</span>
-            <h4>Simon Says</h4>
-            <p>Watch the sequence, then repeat it back.</p>
-            <button class="mini-open" tabindex="-1" onclick="openItem('games','panel-simon','resetSimon')">Open <span aria-hidden="true">↗</span></button>
-          </article>
-          </div>
-        </div>
+    </div>
+    <div class="deck" id="deckGames" data-deck="games" aria-roledescription="carousel" aria-label="Games">
+      <h3 class="reel-title"><a href="#games" onclick="goTo('games')"><span class="icon" aria-hidden="true">🎮</span> Games</a></h3>
+      <div class="deck-stage"></div>
+      <div class="deck-bar">
+        <button class="deck-nav" data-dir="-1" aria-label="Previous game">&lsaquo;</button>
+        <div class="deck-dots" role="tablist" aria-label="Choose a game"></div>
+        <button class="deck-nav" data-dir="1" aria-label="Next game">&rsaquo;</button>
       </div>
+    </div>
 
     <hr class="divider">
 
@@ -780,6 +619,7 @@
 <script src="js/router.js"></script>
 <script src="js/render.js"></script>
 <script src="js/modal.js"></script>
+<script src="js/deck.js"></script>
 <script src="js/tools.js"></script>
 <script src="js/games.js"></script>
 <script src="js/forms.js"></script>

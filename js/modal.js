@@ -4,11 +4,14 @@
    -> forms -> ui -> main. Nothing here needs a build step. */
 let modalPanel = null, modalReturnFocus = null;
 
-function openItem(page, panelId, initName){
+/* The panel is moved into the dialog, so it works from wherever you are — no
+   page change needed. That is deliberate: opening a tool from the home page
+   used to navigate to the Tools page first, which left you stranded there
+   when you closed it. Now closing puts you back exactly where you started. */
+function openItem(panelId, initName){
   const entry = CATALOG.find(it => it.panel === panelId);
   const panel = document.getElementById(panelId);
   if(!panel) return;
-  if(page && document.querySelector('.page.active').id !== 'page-' + page) goTo(page);
 
   modalReturnFocus = document.activeElement;
   document.getElementById('modalTitle').innerHTML = entry ? entry.title : '';
