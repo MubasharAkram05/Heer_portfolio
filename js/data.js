@@ -3,12 +3,12 @@
    from index.html: data -> router -> render -> modal -> tools -> games
    -> forms -> ui -> main. Nothing here needs a build step. */
 const PROJECTS = [
-  {tag:'Mobile Game', title:'Orbit Drift', desc:'A one-tap arcade game about steering a satellite through asteroid fields, with daily challenge runs.', stack:['Unity','C#','Firebase'], demo:'#', code:'#'},
-  {tag:'App', title:'Trailhead', desc:'A hiking companion app with offline maps and trail condition reports from the community.', stack:['Flutter','Firebase'], demo:'#', code:'#'},
-  {tag:'Puzzle Game', title:'Knot', desc:'A minimalist rope-untangling puzzle game with 150 hand-built levels and a level editor.', stack:['Unity','C#'], demo:'#', code:'#'},
-  {tag:'App', title:'Habitline', desc:'A habit tracker with streaks, gentle reminders, and week-over-week progress charts.', stack:['Kotlin','Room DB'], demo:'#', code:'#'},
-  {tag:'Multiplayer Game', title:'Party Grid', desc:'A local-multiplayer mini-game collection built for couch play, four players on one screen.', stack:['Unity','Photon'], demo:'#', code:'#'},
-  {tag:'Tool', title:'Colorway', desc:'A palette and contrast-checking tool for designers working in accessible color systems.', stack:['Vanilla JS','Canvas'], demo:'#', code:'#'},
+  {tag:'Mobile Game', title:'Orbit Drift', icon:'◈', desc:'A one-tap arcade game about steering a satellite through asteroid fields, with daily challenge runs.', stack:['Unity','C#','Firebase'], demo:'#', code:'#'},
+  {tag:'App', title:'Trailhead', icon:'▲', desc:'A hiking companion app with offline maps and trail condition reports from the community.', stack:['Flutter','Firebase'], demo:'#', code:'#'},
+  {tag:'Puzzle Game', title:'Knot', icon:'◇', desc:'A minimalist rope-untangling puzzle game with 150 hand-built levels and a level editor.', stack:['Unity','C#'], demo:'#', code:'#'},
+  {tag:'App', title:'Habitline', icon:'▤', desc:'A habit tracker with streaks, gentle reminders, and week-over-week progress charts.', stack:['Kotlin','Room DB'], demo:'#', code:'#'},
+  {tag:'Multiplayer Game', title:'Party Grid', icon:'◎', desc:'A local-multiplayer mini-game collection built for couch play, four players on one screen.', stack:['Unity','Photon'], demo:'#', code:'#'},
+  {tag:'Tool', title:'Colorway', icon:'◐', desc:'A palette and contrast-checking tool for designers working in accessible color systems.', stack:['Vanilla JS','Canvas'], demo:'#', code:'#'},
 ];
 
 const SERVICES = [
