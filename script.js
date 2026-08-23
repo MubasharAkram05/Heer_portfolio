@@ -311,6 +311,30 @@ renderQuotes('quoteGrid', TESTIMONIALS);
 renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
 renderProcess('homeProcess', PROCESS);
 renderProcess('servicesProcess', PROCESS);
+
+/* ---------------- Footer link columns ---------------- */
+function renderFooterLinks(){
+  const svc = document.getElementById('footerServices');
+  if(svc){
+    svc.innerHTML = SERVICES.slice(0,6).map(v =>
+      `<li><a href="#services" onclick="goTo('services')">${v.title}</a></li>`).join('');
+  }
+  // the reels already list every tool and game, so reuse them as the source
+  const fill = (id, page) => {
+    const box = document.getElementById(id);
+    if(!box) return;
+    const reel = document.querySelector(`.marquee[aria-label="${page}"]`);
+    if(!reel) return;
+    const seen = [...reel.querySelectorAll('.mini-card:not([aria-hidden]) h4')];
+    box.innerHTML = seen.map(h => {
+      const btn = h.parentElement.querySelector('.mini-open');
+      return `<li><a href="#${page.toLowerCase()}" onclick="${btn.getAttribute('onclick')}">${h.innerHTML}</a></li>`;
+    }).join('');
+  };
+  fill('footerTools', 'Tools');
+  fill('footerGames', 'Games');
+}
+renderFooterLinks();
 renderRating('homeRating', REVIEW_SCORE);
 
 initReveal();
@@ -692,3 +716,260 @@ document.getElementById('footDate').textContent = new Date().toLocaleDateString(
   addEventListener('resize', onScroll, { passive:true });
   update();
 })();
+
+/* ---------------- Shared: copy helper ---------------- */
+function copyFrom(id, btn){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const text = 'value' in el ? el.value : el.innerText;
+  if(!text) return;
+  const done = () => {
+    const was = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(() => { btn.textContent = was; }, 1200);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(() => {});
+  }
+}
+
+/* ---------------- Tool: text case ---------------- */
+let caseMode = 'upper';
+function setCase(mode){ caseMode = mode; convertCase(); }
+function convertCase(){
+  const src = document.getElementById('caseInput').value;
+  const words = src.trim().length ? src.trim().split(/\s+/) : [];
+  let out = src;
+  if(caseMode === 'upper') out = src.toUpperCase();
+  else if(caseMode === 'lower') out = src.toLowerCase();
+  else if(caseMode === 'sentence'){
+    out = src.toLowerCase().replace(/(^\s*\w|[.!?]\s+\w)/g, c => c.toUpperCase());
+  }
+  else if(caseMode === 'title'){
+    out = src.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  }
+  else if(caseMode === 'camel'){
+    out = words.map((w, i) => {
+      const clean = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return i === 0 ? clean : clean.charAt(0).toUpperCase() + clean.slice(1);
+    }).join('');
+  }
+  else if(caseMode === 'snake') out = words.map(w => w.toLowerCase().replace(/[^a-z0-9]/g,'')).join('_');
+  else if(caseMode === 'kebab') out = words.map(w => w.toLowerCase().replace(/[^a-z0-9]/g,'')).join('-');
+  document.getElementById('caseOutput').value = out;
+}
+
+/* ---------------- Tool: base64 ---------------- */
+let b64Mode = 'encode';
+function setB64Mode(mode){ b64Mode = mode; runBase64(); }
+function runBase64(){
+  const src = document.getElementById('b64Input').value;
+  const out = document.getElementById('b64Output');
+  const note = document.getElementById('b64Note');
+  note.textContent = b64Mode === 'encode' ? 'Encoding' : 'Decoding';
+  if(!src){ out.value = ''; return; }
+  try {
+    // the unescape/escape pair keeps non-ASCII working through btoa/atob
+    out.value = b64Mode === 'encode'
+      ? btoa(unescape(encodeURIComponent(src)))
+      : decodeURIComponent(escape(atob(src.trim())));
+  } catch(err){
+    out.value = '';
+    note.textContent = b64Mode === 'encode' ? 'Could not encode that' : 'That is not valid Base64';
+  }
+}
+
+/* ---------------- Tool: lorem ipsum ---------------- */
+const LOREM_WORDS = ('lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor '
+  + 'incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation '
+  + 'ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit '
+  + 'voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non '
+  + 'proident sunt culpa qui officia deserunt mollit anim id est laborum').split(' ');
+function genLorem(){
+  const paras = +document.getElementById('loremCount').value;
+  const out = document.getElementById('loremOut');
+  out.innerHTML = '';
+  for(let i = 0; i < paras; i++){
+    const sentences = 3 + Math.floor(Math.random() * 3);
+    let text = '';
+    for(let sIdx = 0; sIdx < sentences; sIdx++){
+      const len = 8 + Math.floor(Math.random() * 8);
+      const words = [];
+      for(let w = 0; w < len; w++) words.push(LOREM_WORDS[Math.floor(Math.random() * LOREM_WORDS.length)]);
+      words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+      text += words.join(' ') + '. ';
+    }
+    const p = document.createElement('p');
+    p.textContent = text.trim();
+    out.appendChild(p);
+  }
+}
+
+/* ---------------- Tool: contrast checker ---------------- */
+function relLuminance(hex){
+  const rgb = [1,3,5].map(i => parseInt(hex.substr(i,2),16)/255)
+    .map(c => c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4));
+  return 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2];
+}
+function checkContrast(){
+  const fg = document.getElementById('cFg').value;
+  const bg = document.getElementById('cBg').value;
+  const l1 = relLuminance(fg), l2 = relLuminance(bg);
+  const ratio = (Math.max(l1,l2) + 0.05) / (Math.min(l1,l2) + 0.05);
+  const shown = Math.round(ratio * 100) / 100;
+  const preview = document.getElementById('contrastPreview');
+  preview.style.color = fg;
+  preview.style.background = bg;
+  document.getElementById('contrastRatio').textContent = shown + ' : 1';
+  const levels = [
+    ['AA body', 4.5], ['AAA body', 7],
+    ['AA large', 3], ['AAA large', 4.5],
+  ];
+  document.getElementById('contrastBadges').innerHTML = levels.map(([label, need]) => {
+    const ok = ratio >= need;
+    return '<span class="pass-badge ' + (ok ? 'pass' : 'fail') + '">'
+      + label + ' ' + (ok ? 'pass' : 'fail') + '</span>';
+  }).join('');
+}
+
+/* ---------------- Game: reaction timer ---------------- */
+let reactionState = 'idle', reactionAt = 0, reactionTimer = null, reactionBest = null;
+function resetReaction(){
+  clearTimeout(reactionTimer);
+  reactionState = 'idle';
+  const pad = document.getElementById('reactionPad');
+  pad.className = 'reaction-pad';
+  pad.textContent = 'Click to start';
+}
+function reactionClick(){
+  const pad = document.getElementById('reactionPad');
+  if(reactionState === 'idle'){
+    reactionState = 'waiting';
+    pad.className = 'reaction-pad waiting';
+    pad.textContent = 'Wait for it…';
+    reactionTimer = setTimeout(() => {
+      reactionState = 'go';
+      reactionAt = performance.now();
+      pad.className = 'reaction-pad go';
+      pad.textContent = 'Now!';
+    }, 1200 + Math.random() * 2800);
+    return;
+  }
+  if(reactionState === 'waiting'){
+    clearTimeout(reactionTimer);
+    reactionState = 'idle';
+    pad.className = 'reaction-pad early';
+    pad.textContent = 'Too early — click to try again';
+    return;
+  }
+  if(reactionState === 'go'){
+    const ms = Math.round(performance.now() - reactionAt);
+    if(reactionBest === null || ms < reactionBest) reactionBest = ms;
+    reactionState = 'idle';
+    pad.className = 'reaction-pad';
+    pad.textContent = ms + ' ms — click to go again';
+    document.getElementById('reactionBest').textContent = 'Best: ' + reactionBest + ' ms';
+  }
+}
+
+/* ---------------- Game: guess the number ---------------- */
+let guessTarget = 0, guessCount = 0, guessLog = [];
+function resetGuess(){
+  guessTarget = 1 + Math.floor(Math.random() * 100);
+  guessCount = 0;
+  guessLog = [];
+  document.getElementById('guessInput').value = '';
+  document.getElementById('guessResult').textContent = 'Pick a number to begin.';
+  document.getElementById('guessHistory').textContent = '';
+}
+function submitGuess(){
+  const field = document.getElementById('guessInput');
+  const n = parseInt(field.value, 10);
+  const res = document.getElementById('guessResult');
+  if(!Number.isInteger(n) || n < 1 || n > 100){
+    res.textContent = 'Enter a whole number between 1 and 100.';
+    return;
+  }
+  guessCount++;
+  guessLog.push(n);
+  document.getElementById('guessHistory').textContent = 'Tried: ' + guessLog.join(', ');
+  if(n === guessTarget){
+    res.textContent = 'Got it — ' + n + ' in ' + guessCount + (guessCount === 1 ? ' guess.' : ' guesses.');
+  } else {
+    res.textContent = n < guessTarget ? n + ' is too low. Go higher.' : n + ' is too high. Go lower.';
+  }
+  field.value = '';
+  field.focus();
+}
+
+/* ---------------- Game: simon says ---------------- */
+const SIMON_PADS = 4;
+let simonSeq = [], simonStep = 0, simonAccepting = false;
+function resetSimon(){
+  simonSeq = [];
+  simonStep = 0;
+  simonAccepting = false;
+  const board = document.getElementById('simonBoard');
+  board.innerHTML = '';
+  for(let i = 0; i < SIMON_PADS; i++){
+    const pad = document.createElement('button');
+    pad.className = 'simon-pad p' + i;
+    pad.setAttribute('aria-label', 'pad ' + (i+1));
+    pad.onclick = () => simonPress(i);
+    board.appendChild(pad);
+  }
+  document.getElementById('simonStatus').textContent = 'Press start to play.';
+}
+function flashPad(i){
+  const pad = document.querySelectorAll('#simonBoard .simon-pad')[i];
+  if(!pad) return;
+  pad.classList.add('lit');
+  setTimeout(() => pad.classList.remove('lit'), 320);
+}
+function playSimonSeq(){
+  simonAccepting = false;
+  document.getElementById('simonStatus').textContent = 'Watch…';
+  simonSeq.forEach((v, idx) => setTimeout(() => flashPad(v), idx * 520 + 300));
+  setTimeout(() => {
+    simonAccepting = true;
+    simonStep = 0;
+    document.getElementById('simonStatus').textContent = 'Your turn — ' + simonSeq.length + ' to repeat.';
+  }, simonSeq.length * 520 + 400);
+}
+function startSimon(){
+  if(!document.querySelectorAll('#simonBoard .simon-pad').length) resetSimon();
+  simonSeq.push(Math.floor(Math.random() * SIMON_PADS));
+  playSimonSeq();
+}
+function simonPress(i){
+  if(!simonAccepting) return;
+  flashPad(i);
+  if(simonSeq[simonStep] === i){
+    simonStep++;
+    if(simonStep === simonSeq.length){
+      simonAccepting = false;
+      document.getElementById('simonStatus').textContent =
+        'Round ' + simonSeq.length + ' cleared. Press start for the next.';
+    }
+    return;
+  }
+  simonAccepting = false;
+  document.getElementById('simonStatus').textContent =
+    'Wrong pad — you reached round ' + simonSeq.length + '. Press start to try again.';
+  simonSeq = [];
+}
+
+/* ---------------- Open a specific tool or game from the home reels --------- */
+function openItem(page, panelId, initName){
+  goTo(page);
+  // goTo jumps to the top, so wait a frame before opening and scrolling
+  requestAnimationFrame(() => {
+    const panel = document.getElementById(panelId);
+    if(!panel) return;
+    panel.classList.add('open');
+    const init = window[initName];
+    if(typeof init === 'function') init();
+    const card = panel.closest('.util-card') || panel;
+    card.scrollIntoView({ behavior:'smooth', block:'center' });
+  });
+}
