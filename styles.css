@@ -62,7 +62,7 @@
 
   /* Elevation — three depths, nothing in between */
   --shadow-1:0 2px 6px rgba(20,29,46,.08);
-  --shadow-2:var(--shadow-2);
+  --shadow-2:0 8px 20px rgba(20,29,46,.15);
   --shadow-3:0 24px 60px -12px rgba(20,29,46,.35);
 
   /* Control heights — two sizes, nothing in between.
@@ -133,7 +133,16 @@ body, .page, .stat-card, header{
 *{box-sizing:border-box; margin:0; padding:0;}
 
 html{scroll-behavior:smooth;}
-html, body{ overflow-x:hidden; width:100%; }
+/* overflow-x:hidden forces overflow-y to `auto`, which makes <body> a scroll
+   container — and a sticky header inside a scroll container that is not the
+   one actually scrolling just scrolls away. `clip` trims the same overflow
+   without creating a scrollport, so the header sticks. The `hidden` line is
+   the fallback for browsers without `clip`. */
+html, body{ width:100%; }
+html, body{ overflow-x:hidden; }
+@supports (overflow-x: clip){
+  html, body{ overflow-x:clip; }
+}
 
 body{
   background:var(--bg);
@@ -800,17 +809,23 @@ nav.wrap{
 }
 
 /* ---------- Footer wordmark ---------- */
+/* The wordmark sits behind the footer rather than under it: anchored to the
+   bottom, clipped by the footer, and out of the flow entirely. */
 .footer-mark{
+  position:absolute;
+  left:0; right:0; bottom:-.12em;
+  z-index:0;
   font-family:var(--display);
   font-weight:700;
   font-size:clamp(4.5rem, 27vw, 21rem);
   line-height:.82;
   letter-spacing:-.03em;
+  text-align:center;
   color:var(--text);
-  opacity:.07;
-  margin-top:var(--space-7);
+  opacity:.055;
   user-select:none;
-  overflow:hidden;
+  pointer-events:none;
+  white-space:nowrap;
 }
 
 @media (max-width:900px){
@@ -1224,11 +1239,6 @@ label{ font-family:var(--mono); font-size:var(--fs-2xs); color:var(--muted); tex
 }
 .social-list a:hover{ color:var(--accent-text); }
 
-footer{
-  border-top:1px solid var(--line);
-  padding:var(--space-8) 0;
-  margin-top:var(--space-10);
-}
 .footer-row{
   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-3);
   font-family:var(--mono); font-size:var(--fs-xs); color:var(--muted); letter-spacing:.04em;
@@ -1328,7 +1338,15 @@ footer{
 }
 
 /* ---------- Footer ---------- */
-footer{ border-top:1px solid var(--line); margin-top:var(--space-10); padding-top:var(--space-14); }
+footer{
+  position:relative;
+  overflow:hidden;             /* clips the wordmark behind it */
+  border-top:1px solid var(--line);
+  margin-top:var(--space-10);
+  padding:var(--space-14) 0 var(--space-8);
+}
+/* everything real sits above the wordmark */
+footer > .wrap{ position:relative; z-index:1; }
 .footer-top{
   display:grid;
   grid-template-columns:minmax(240px, 1.3fr) 3fr;
@@ -1739,12 +1757,18 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
 }
 
 /* ---------- Card deck ----------
-   One card on screen at a time; the next one replaces it with a 3D swap.
-   The stage carries the perspective, so cards rotate through real depth
-   rather than looking like a flat slide. */
+   A coverflow: the centre card at full size, and one to each side turned away,
+   pushed back in Z and overlapped by the centre one, so only about half of
+   each shows and they read as sitting behind it. The stage carries the
+   perspective, so the depth is real rather than a flat scale. */
 :root{
-  --deck-swap:.7s;      /* keep in step with DECK_SWAP in js/deck.js */
-  --deck-depth:900px;
+  --deck-swap:.62s;
+  --deck-depth:1100px;
+  --deck-card-w:62%;     /* of the stage */
+  --deck-side-x:64%;     /* how far a side card slides, in its own width */
+  --deck-side-z:-260px;
+  --deck-side-turn:26deg;
+  --deck-side-scale:.84;
 }
 
 .deck{ margin-top:var(--space-7); }
@@ -1754,18 +1778,19 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   position:relative;
   perspective:var(--deck-depth);
   perspective-origin:50% 45%;
-  min-height:320px;
-  /* the cards are absolute, so the stage needs its own height */
-  display:grid;
+  min-height:340px;
   touch-action:pan-y;      /* vertical scroll still belongs to the page */
-  /* mid-swap a card sits 60% outside the stage; without this it spills across
-     the page and only the body's overflow-x:hidden saves it */
+  /* the side cards run past the column edges by design; clipping keeps that
+     off the page rather than leaving it to the body */
   overflow:hidden;
 }
 
 .deck-card{
   position:absolute;
-  inset:0;
+  top:0; bottom:0;
+  left:50%;
+  width:var(--deck-card-w);
+  margin-left:calc(var(--deck-card-w) / -2);
   display:flex;
   flex-direction:column;
   align-items:flex-start;
@@ -1777,38 +1802,54 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   color:inherit;
   cursor:pointer;
   transform-style:preserve-3d;
-  backface-visibility:hidden;
-  will-change:transform, opacity;
   transition:transform var(--deck-swap) var(--ease),
              opacity var(--deck-swap) var(--ease),
-             border-color var(--dur-fast) var(--ease),
-             box-shadow var(--dur-mid) var(--ease);
+             box-shadow var(--deck-swap) var(--ease),
+             border-color var(--dur-fast) var(--ease);
+  will-change:transform;
 }
 .deck:nth-of-type(2n) .deck-card{ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)); }
 .deck:nth-of-type(3n) .deck-card{ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)); }
 
-/* Resting card. --drag is set live while a finger is on it. */
+/* Centre: square on, in front, carrying the drag while a finger is down. */
 .deck-card.is-current{
-  transform:translate3d(var(--drag, 0px), 0, 0) rotateY(calc(var(--drag, 0px) * 0.04)) scale(1);
+  transform:translate3d(var(--drag, 0px), 0, 0) rotateY(calc(var(--drag, 0px) * 0.02)) scale(1);
   opacity:1;
+  z-index:3;
+  box-shadow:var(--shadow-3);
+}
+/* Sides: turned toward the middle, set back, and overlapped by the centre card
+   so roughly half of each is showing. */
+.deck-card.is-prev,
+.deck-card.is-next{
   z-index:2;
+  opacity:1;
   box-shadow:var(--shadow-2);
 }
-/* Waiting off to one side, turned away from the viewer and pushed back. */
-.deck-card.is-entering.from-right{ transform:translate3d(60%, 0, -320px) rotateY(-38deg) scale(.9); opacity:0; }
-.deck-card.is-entering.from-left { transform:translate3d(-60%, 0, -320px) rotateY(38deg) scale(.9); opacity:0; }
-/* Leaving: rotates away and drops behind the incoming card. */
-.deck-card.is-leaving{ z-index:1; pointer-events:none; }
-.deck-card.is-leaving.to-left { transform:translate3d(-55%, 0, -260px) rotateY(30deg) scale(.88); opacity:0; }
-.deck-card.is-leaving.to-right{ transform:translate3d(55%, 0, -260px) rotateY(-30deg) scale(.88); opacity:0; }
+.deck-card.is-prev{
+  transform:translate3d(calc(var(--deck-side-x) * -1 + var(--drag, 0px) * .3), 0, var(--deck-side-z))
+            rotateY(var(--deck-side-turn)) scale(var(--deck-side-scale));
+}
+.deck-card.is-next{
+  transform:translate3d(calc(var(--deck-side-x) + var(--drag, 0px) * .3), 0, var(--deck-side-z))
+            rotateY(calc(var(--deck-side-turn) * -1)) scale(var(--deck-side-scale));
+}
+/* Everything else waits further out, invisible and out of the tab order. */
+.deck-card.is-hidden{
+  transform:translate3d(0, 0, -520px) scale(.7);
+  opacity:0;
+  z-index:1;
+  visibility:hidden;
+  pointer-events:none;
+}
 
 /* Only where a real pointer hovers: after a tap, :hover sticks on touch and
    would leave the card looking permanently pressed. */
 @media (hover: hover) and (pointer: fine){
-  .deck-card:hover{ border-color:var(--accent); }
-  .deck-card:hover .deck-cue{ background:var(--accent); color:#14100c; border-color:var(--accent); }
+  .deck-card.is-current:hover{ border-color:var(--accent); }
+  .deck-card.is-current:hover .deck-cue{ background:var(--accent); color:#14100c; border-color:var(--accent); }
+  .deck-card.is-prev:hover, .deck-card.is-next:hover{ border-color:var(--accent); }
 }
-.deck-card:active{ transform:translate3d(0,0,0) scale(.99); }
 
 .deck-meta{
   font-family:var(--mono);
@@ -1854,6 +1895,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   color:var(--accent-text);
   transition:background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
+/* A side card is a step, not a destination — its call to action would lie. */
+.deck-card.is-prev .deck-cue,
+.deck-card.is-next .deck-cue{ visibility:hidden; }
 
 /* ---------- Deck controls ---------- */
 .deck-bar{
@@ -1893,18 +1937,55 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   transform:scale(1.3);
 }
 
+@media (max-width:900px){
+  :root{ --deck-card-w:74%; --deck-side-x:58%; --deck-side-z:-220px; }
+}
 @media (max-width:640px){
-  .deck-stage{ min-height:360px; }
+  /* three cards will not read on a phone: the centre one fills the stage and
+     the sides only peek in at the edges */
+  :root{ --deck-card-w:86%; --deck-side-x:62%; --deck-side-z:-200px; --deck-side-scale:.8; }
+  .deck-stage{ min-height:380px; }
   .deck-card{ padding:var(--space-6) var(--space-5); }
   .deck-title{ font-size:var(--fs-lg); }
 }
 
-/* Depth is the effect; without it, cross-fade in place. */
+/* Depth is the effect; without it the sides go away and the centre just fades. */
 @media (prefers-reduced-motion: reduce){
   .deck-card{ transition:opacity var(--dur-mid) linear; }
   .deck-card.is-current{ transform:none; }
-  .deck-card.is-entering.from-right,
-  .deck-card.is-entering.from-left{ transform:none; opacity:0; }
-  .deck-card.is-leaving.to-left,
-  .deck-card.is-leaving.to-right{ transform:none; opacity:0; }
+  .deck-card.is-prev, .deck-card.is-next{ transform:none; opacity:0; visibility:hidden; }
+  .deck-card.is-hidden{ transform:none; }
+}
+
+/* ---------- Footer dropdowns ----------
+   <details> gives the open/close behaviour, keyboard support and the right
+   announcement for free; the CSS only has to dress it. On a wide screen every
+   column is open and the summary reads as a plain heading. */
+.footer-col > summary{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:var(--space-3);
+  padding:var(--space-3) 0;
+  cursor:pointer;
+  list-style:none;
+  border-bottom:1px solid transparent;
+  transition:border-color var(--dur-fast) var(--ease);
+}
+.footer-col > summary::-webkit-details-marker{ display:none; }
+.footer-col > summary:hover .eyebrow{ color:var(--accent-text); }
+.footer-chevron{
+  color:var(--muted);
+  font-size:var(--fs-2xs);
+  transition:transform var(--dur-mid) var(--ease);
+}
+.footer-col[open] > summary .footer-chevron{ transform:rotate(180deg); }
+
+@media (min-width:901px){
+  /* open, and the toggle affordance is noise at this width */
+  .footer-col > summary{ padding-top:0; cursor:default; pointer-events:none; }
+  .footer-chevron{ display:none; }
+}
+@media (max-width:900px){
+  .footer-col{ border-bottom:1px solid var(--line); }
+  .footer-col > summary{ padding:var(--space-4) 0; }
+  .footer-col > ul{ padding-bottom:var(--space-3); }
 }
