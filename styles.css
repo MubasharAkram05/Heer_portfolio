@@ -18,7 +18,6 @@
   --hero-glow-a:#ff6b3521;
   --hero-glow-b:#0d8f831f;
   --hero-shadow:0 22px 45px -18px rgba(20,29,46,.28), 0 2px 6px rgba(20,29,46,.06);
-  --outline-stroke:#e04e18;
   --radius:2px;
   --display:'Space Grotesk', sans-serif;
   --body:'Inter', sans-serif;
@@ -45,7 +44,6 @@
   --hero-glow-a:#ff825726;
   --hero-glow-b:#2fc4b622;
   --hero-shadow:0 22px 48px -16px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.04);
-  --outline-stroke:#ff8257;
 }
 
 body, .page, .card, .util-card, .stat-card, header{
@@ -388,14 +386,7 @@ nav.wrap{
 }
 
 /* ---------- Two-tone headings ---------- */
-/* fallback fill for browsers without text-stroke */
-.outline{ color:var(--outline-stroke); }
-@supports (-webkit-text-stroke: 1px red){
-  .outline{
-    color:transparent;
-    -webkit-text-stroke:1.5px var(--outline-stroke);
-  }
-}
+.outline{ color:var(--accent); }
 
 /* ---------- Capability ticker ---------- */
 .ticker{
@@ -947,7 +938,7 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
   line-height:1.02;
   margin:18px 0 20px;
 }
-.hero h1 em{ font-style:normal; color:var(--accent); }
+.hero h1 em, .hero-name em{ font-style:normal; color:var(--accent); }
 .hero p.lede{
   max-width:560px;
   color:var(--muted);
