@@ -324,6 +324,76 @@ nav.wrap{
   .section-tint{ padding-left:16px; padding-right:16px; }
 }
 
+/* ---------- Home showreel: tools / games sliding right to left ---------- */
+.showreel{ margin-top:30px; }
+.showreel + .showreel{ margin-top:44px; }
+
+.marquee{
+  overflow:hidden;
+  /* soften the edges so cards enter and leave rather than get cut */
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.marquee-track{
+  display:flex;
+  width:max-content;
+  animation:reelRTL 36s linear infinite;
+}
+/* the card set is duplicated in the markup, so exactly half the track is
+   one full set and -50% lands back on an identical frame */
+@keyframes reelRTL{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track{ animation-play-state:paused; }
+
+.mini-card{
+  flex:0 0 auto;
+  width:252px;
+  /* spacing lives on the card, not as a track gap, so -50% stays exact */
+  margin-right:14px;
+  border:1px solid var(--line);
+  background:linear-gradient(135deg, var(--cyan-soft), var(--mint-soft));
+  padding:20px 18px;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.mini-card:nth-child(4n+2){ background:linear-gradient(135deg, var(--mint-soft), var(--gold-soft)); }
+.mini-card:nth-child(4n+3){ background:linear-gradient(135deg, var(--sky-soft), var(--surface-2)); }
+.mini-card:nth-child(4n+4){ background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft)); }
+.mini-card:hover{ border-color:var(--accent); transform:translateY(-3px); }
+.mini-card .icon{ font-size:1.1rem; color:var(--cyan); display:block; margin-bottom:10px; }
+.mini-card h4{ font-family:var(--display); font-size:.98rem; font-weight:600; margin-bottom:6px; }
+.mini-card p{ color:var(--muted); font-size:.85rem; line-height:1.5; }
+
+.reel-title{
+  margin-top:16px;
+  font-family:var(--display);
+  font-size:1.2rem;
+}
+.reel-title a{
+  display:inline-flex; align-items:center; gap:9px;
+  border-bottom:1px solid var(--accent);
+  padding-bottom:3px;
+  transition:color .18s ease;
+}
+.reel-title a:hover{ color:var(--accent); }
+.reel-title .icon{ font-size:1rem; }
+
+@media (max-width:800px){
+  .mini-card{ width:220px; padding:16px 14px; }
+  .marquee-track{ animation-duration:28s; }
+}
+@media (max-width:480px){
+  .mini-card{ width:196px; margin-right:10px; }
+  .reel-title{ font-size:1.05rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  .marquee{ overflow-x:auto; -webkit-mask-image:none; mask-image:none; }
+  .marquee-track{ animation:none; }
+  .marquee-track > [aria-hidden="true"]{ display:none; }
+}
+
 /* ---------- Sub-section split (used inside Tools page) ---------- */
 .subsection{ padding:56px 0; }
 .subsection + .subsection{ padding-top:8px; }
