@@ -1,5 +1,5 @@
 /* ---------------- Routing ---------------- */
-const pageOrder = ['home','about','work','tools','games','contact'];
+const pageOrder = ['home','about','work','tools','games','services','contact'];
 
 function goTo(id){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -151,6 +151,32 @@ function renderProjectCards(containerId, list){
 }
 renderProjectCards('projectGrid', PROJECTS);
 renderProjectCards('homeProjectGrid', PROJECTS.slice(0,3));
+
+/* ---------------- Services ---------------- */
+const SERVICES = [
+  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release.', points:['Native and cross-platform','Offline-first where it matters','Store submission handled']},
+  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and performance that holds up on real devices.', points:['Unity and C#','Gameplay and level tooling','Tested on low-end hardware']},
+  {icon:'◐', title:'UI / UX Design', desc:'Interfaces designed around how people actually use them, handed over ready to build.', points:['Wireframes to final screens','Design systems and tokens','Accessible by default']},
+  {icon:'⬡', title:'Web Development', desc:'Fast, responsive sites and web apps built on web standards rather than page builders.', points:['Hand-written HTML, CSS, JS','Responsive to the smallest screen','Fast on a slow connection']},
+  {icon:'✦', title:'MVP & Prototyping', desc:'A working slice of the idea in weeks, so you can put it in front of people before committing.', points:['Scoped to one core loop','Real data, not mockups','Built to be thrown away or grown']},
+  {icon:'⟳', title:'Maintenance & Support', desc:'The work after launch: updates, fixes, and keeping up with what the stores require.', points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+];
+function renderServiceCards(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach(sv => {
+    const card = document.createElement('div');
+    card.className = 'util-card service-card';
+    card.innerHTML = `
+      <h3><span class="icon">${sv.icon}</span> ${sv.title}</h3>
+      <p>${sv.desc}</p>
+      <ul class="service-points">${sv.points.map(pt=>`<li>${pt}</li>`).join('')}</ul>`;
+    container.appendChild(card);
+  });
+}
+renderServiceCards('servicesGrid', SERVICES);
+renderServiceCards('homeServicesGrid', SERVICES);
+
 initReveal();
 initCounters();
 

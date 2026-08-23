@@ -324,6 +324,61 @@ nav.wrap{
   .section-tint{ padding-left:16px; padding-right:16px; }
 }
 
+/* ---------- Services ---------- */
+.service-card h3{ margin-bottom:10px; }
+.service-card > p{ color:var(--muted); font-size:.92rem; }
+.service-points{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px dashed var(--line);
+  display:grid;
+  gap:7px;
+}
+.service-points li{
+  font-family:var(--mono);
+  font-size:.7rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  padding-left:16px;
+  position:relative;
+}
+.service-points li::before{
+  content:'+';
+  position:absolute; left:0; top:-1px;
+  color:var(--accent);
+}
+
+/* ---------- Process steps ---------- */
+.process-list{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  /* the reset only clears ul; this is an ol and carries its own numbers */
+  list-style:none;
+}
+.process-list li{
+  position:relative;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+}
+.process-list .step-num{
+  font-family:var(--mono);
+  font-size:.72rem;
+  color:var(--accent);
+  letter-spacing:.08em;
+  display:block;
+  margin-bottom:10px;
+}
+.process-list h3{ font-size:1.05rem; margin-bottom:8px; }
+.process-list p{ color:var(--muted); font-size:.88rem; line-height:1.6; }
+@media (max-width:900px){
+  .process-list{ grid-template-columns:repeat(2,1fr); gap:26px; }
+}
+@media (max-width:520px){
+  .process-list{ grid-template-columns:1fr; gap:22px; }
+}
+
 /* ---------- Home showreel: tools / games sliding right to left ---------- */
 .showreel{ margin-top:30px; }
 .showreel + .showreel{ margin-top:44px; }
