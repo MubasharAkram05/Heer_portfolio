@@ -17,6 +17,8 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
   <span class="mode-icon">🌙</span>
 </button>
@@ -32,17 +34,19 @@
     <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileNav()">☰</button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#home" data-page="home" onclick="goTo('home')">Home</a></li>
-      <li><a href="#about" data-page="about" onclick="goTo('about')">About</a></li>
-      <li><a href="#work" data-page="work" onclick="goTo('work')">Work</a></li>
+      <li><a href="#home" data-page="home" onclick="goTo('home')"><i class="slash">/</i>home</a></li>
+      <li><a href="#about" data-page="about" onclick="goTo('about')"><i class="slash">/</i>about</a></li>
+      <li><a href="#work" data-page="work" onclick="goTo('work')"><i class="slash">/</i>work</a></li>
       <li class="has-dropdown" id="utilDropdown">
-        <button class="nav-link" onclick="toggleDropdown(event)">Tools &amp; Games <span class="chevron">▾</span></button>
+        <button class="nav-link" onclick="toggleDropdown(event)"><i class="slash">/</i>play <span class="chevron">▾</span></button>
         <div class="dropdown">
           <a href="#tools" data-page="tools" onclick="goTo('tools')">Tools<small>Little utilities, no install</small></a>
           <a href="#games" data-page="games" onclick="goTo('games')">Games<small>Quick breaks, all local</small></a>
         </div>
       </li>
-      <li><a href="#contact" data-page="contact" onclick="goTo('contact')">Contact</a></li>
+      <li><a href="#services" data-page="services" onclick="goTo('services')"><i class="slash">/</i>services</a></li>
+      <li><a href="#contact" data-page="contact" onclick="goTo('contact')"><i class="slash">/</i>contact</a></li>
+      <li class="nav-cta-item"><a href="#contact" class="nav-cta" onclick="goTo('contact')">Let's talk <span aria-hidden="true">→</span></a></li>
     </ul>
   </nav>
 </header>
@@ -63,6 +67,8 @@
       <a href="#contact" class="btn ghost" onclick="goTo('contact')">Get in touch</a>
     </div>
     </div><!-- /.hero-panel -->
+
+    <div class="ticker ticker-band" id="heroTicker" role="group" aria-label="Capabilities"></div>
 
     <div class="stats">
       <div class="stat-card">
@@ -93,7 +99,7 @@
     <!-- About preview -->
     <div class="section-head">
       <p class="eyebrow">01 — About</p>
-      <h2>A little about me</h2>
+      <h2>A little <span class="outline">about me</span></h2>
     </div>
     <div class="about-grid">
       <div>
@@ -121,7 +127,7 @@
     <!-- Featured work preview -->
     <div class="section-head">
       <p class="eyebrow">02 — Featured Work</p>
-      <h2>A few recent builds</h2>
+      <h2>A few <span class="outline">recent builds</span></h2>
     </div>
     <div class="grid-cards row-scroll" id="homeProjectGrid"></div>
     <div style="margin-top:28px;">
@@ -133,7 +139,7 @@
     <!-- Tools & Games preview -->
     <div class="section-head">
       <p class="eyebrow">03 — Tools &amp; Games</p>
-      <h2>Things you can actually play with</h2>
+      <h2>Things you can <span class="outline">actually play with</span></h2>
     </div>
       <div class="showreel">
         <h3 class="reel-title"><a href="#tools" onclick="goTo('tools')"><span class="icon">🛠</span> Tools</a></h3>
@@ -222,9 +228,40 @@
 
     <hr class="divider" style="margin:80px 0;">
 
+    <!-- Services preview -->
+    <div class="section-head">
+      <p class="eyebrow">04 — Services</p>
+      <h2>What I can <span class="outline">build for you</span></h2>
+    </div>
+    <div class="grid-cards" id="homeServicesGrid"></div>
+    <div class="btn-row" style="margin-top:28px;">
+      <a href="#services" class="btn ghost" onclick="goTo('services')">See how I work</a>
+    </div>
+
+    <hr class="divider" style="margin:80px 0;">
+
+    <!-- How it works -->
+    <div class="section-head">
+      <p class="eyebrow dot">05 — How I work</p>
+      <h2>The <span class="outline">design thinking process</span></h2>
+    </div>
+    <ol class="process-cards" id="homeProcess"></ol>
+
+    <hr class="divider" style="margin:80px 0;">
+
+    <!-- Client reviews -->
+    <div class="section-head">
+      <p class="eyebrow dot">06 — Client reviews</p>
+      <h2>What people say <span class="outline">afterwards</span></h2>
+      <div class="rating-pill" id="homeRating"></div>
+    </div>
+    <div class="quote-grid" id="homeQuoteGrid"></div>
+
+    <hr class="divider" style="margin:80px 0;">
+
     <!-- Contact CTA -->
     <div class="section-head">
-      <p class="eyebrow">04 — Contact</p>
+      <p class="eyebrow">07 — Contact</p>
       <h2>Let's build something</h2>
     </div>
     <p class="lede" style="margin-bottom:28px;">Have a project, a role, or just a question? I usually reply within 24 hours.</p>
@@ -268,7 +305,7 @@
   <section class="page section-tint tint-b" id="page-work">
     <div class="section-head">
       <p class="eyebrow">02 — Selected Work</p>
-      <h2>Projects worth a look</h2>
+      <h2>Projects <span class="outline">worth a look</span></h2>
     </div>
     <div class="grid-cards" id="projectGrid"></div>
   </section>
@@ -447,9 +484,70 @@
   </section>
 
   <!-- CONTACT -->
+  <!-- SERVICES -->
+  <section class="page section-tint tint-c" id="page-services">
+    <div class="section-head">
+      <p class="eyebrow">05 — Services</p>
+      <h2>What I can <span class="outline">build for you</span></h2>
+    </div>
+    <p class="lede" style="margin-bottom:32px;">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
+
+    <div class="ticker" id="capTicker" role="group" aria-label="Capabilities"></div>
+
+    <ol class="service-rows" id="serviceRows"></ol>
+
+    <hr class="divider" style="margin:72px 0;">
+
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Four steps, <span class="outline">no surprises</span></h2>
+    </div>
+    <ol class="process-list">
+      <li>
+        <span class="step-num">01</span>
+        <h3>Discover</h3>
+        <p>We talk through the goal, who it is for, and what has to be true for it to work. You get a written scope and a fixed quote.</p>
+      </li>
+      <li>
+        <span class="step-num">02</span>
+        <h3>Design</h3>
+        <p>Wireframes first, then a visual direction. Nothing gets built until you have signed off on how it should look and behave.</p>
+      </li>
+      <li>
+        <span class="step-num">03</span>
+        <h3>Build</h3>
+        <p>Weekly builds you can actually open and try on a real device, so course corrections happen early rather than at the end.</p>
+      </li>
+      <li>
+        <span class="step-num">04</span>
+        <h3>Launch</h3>
+        <p>Store submission, release, and a support window afterwards for the fixes that only turn up once real people are using it.</p>
+      </li>
+    </ol>
+
+    <hr class="divider" style="margin:72px 0;">
+
+    <div class="section-head">
+      <p class="eyebrow">Client reviews</p>
+      <h2>What it is like to <span class="outline">work together</span></h2>
+    </div>
+    <div class="quote-grid" id="quoteGrid"></div>
+
+    <hr class="divider" style="margin:72px 0;">
+
+    <div class="section-head">
+      <h2>Have something in mind?</h2>
+    </div>
+    <p class="lede" style="margin-bottom:28px;">Tell me what you are trying to build and I will come back with a scope, a timeline, and a price.</p>
+    <div class="btn-row">
+      <a href="#contact" class="btn" onclick="goTo('contact')">Start a project</a>
+      <a href="#work" class="btn ghost" onclick="goTo('work')">See past work</a>
+    </div>
+  </section>
+
   <section class="page section-tint tint-d" id="page-contact">
     <div class="section-head">
-      <p class="eyebrow">05 — Contact</p>
+      <p class="eyebrow">06 — Contact</p>
       <h2>Let's build something</h2>
     </div>
     <div class="contact-grid">
@@ -491,6 +589,7 @@
     </div>
     <div>© <span id="footYear"></span> Heer — Built with plain HTML, CSS &amp; JS.</div>
   </div>
+  <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
 
 <script src="script.js"></script>

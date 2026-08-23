@@ -1,5 +1,5 @@
 /* ---------------- Routing ---------------- */
-const pageOrder = ['home','about','work','tools','games','contact'];
+const pageOrder = ['home','about','work','tools','games','services','contact'];
 
 function goTo(id){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -151,6 +151,159 @@ function renderProjectCards(containerId, list){
 }
 renderProjectCards('projectGrid', PROJECTS);
 renderProjectCards('homeProjectGrid', PROJECTS.slice(0,3));
+
+/* ---------------- Services ---------------- */
+const SERVICES = [
+  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release. Native where it earns its keep and cross-platform where it does not, with offline behaviour and performance treated as features rather than afterthoughts.',
+   tags:['Swift','Kotlin','Flutter','React Native'],
+   points:['Native and cross-platform','Offline-first where it matters','Store submission handled']},
+  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and a frame rate that holds up on the phones people actually own, not just the newest one. Gameplay, level tooling and the build pipeline that lets you keep shipping content after release.',
+   tags:['Unity','C#','Shaders','Level tooling'],
+   points:['Unity and C#','Gameplay and level tooling','Tested on low-end hardware']},
+  {icon:'◐', title:'UI / UX Design', desc:'Interfaces designed around how people actually use them — research, wireframes and final screens, handed over ready to build.',
+   tags:['Figma','Design systems','Prototyping','Accessibility'],
+   points:['Wireframes to final screens','Design systems and tokens','Accessible by default']},
+  {icon:'⬡', title:'Web Development', desc:'Fast, responsive sites and web apps built on web standards rather than page builders, so they stay cheap to change later.',
+   tags:['HTML','CSS','JavaScript','Performance'],
+   points:['Hand-written HTML, CSS, JS','Responsive to the smallest screen','Fast on a slow connection']},
+  {icon:'✦', title:'MVP & Prototyping', desc:'A working slice of the idea in weeks, so you can put it in front of real people before committing a full budget to it.',
+   tags:['Scoping','Rapid build','User testing'],
+   points:['Scoped to one core loop','Real data, not mockups','Built to be thrown away or grown']},
+  {icon:'⟳', title:'Maintenance & Support', desc:'The work that starts after launch. Updates, bug fixes, performance passes and keeping up with everything the app stores and operating systems keep changing underneath you. Available as an ongoing retainer or on demand, whichever suits how often your product moves.',
+   tags:['Bug fixes','OS updates','Store compliance','Performance'],
+   points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+  {icon:'◈', title:'AI Chatbots', desc:'Intelligent chatbots that handle customer support, qualify leads and keep conversations moving while you sleep. Built on natural language models and wired into your website, mobile app or WhatsApp, so people get answers where they already are.',
+   tags:['Natural language','Website widget','WhatsApp','Lead capture','Handover to human'],
+   points:['Trained on your own content','Works across web and mobile','Analytics on every conversation']},
+  {icon:'⬢', title:'Business Automation', desc:'Workflows that run themselves instead of eating your week. CRM updates, lead routing, reporting and the integrations between the tools you already pay for, so the repetitive parts stop needing a person in the middle.',
+   tags:['Workflow automation','CRM integration','Lead routing','Reporting','APIs'],
+   points:['Mapped before it is built','Connects existing tools','Handover docs included']},
+  {icon:'◑', title:'Graphic Designing', desc:'Brand identity and the artwork around your product — logos, icon sets, key art, store screenshots and social assets. Everything is built to a system rather than as one-off files, so the next piece stays on brand without starting from scratch.',
+   tags:['Brand identity','Logo design','Icon sets','Key art','Social assets'],
+   points:['Source files handed over','Brand guidelines included','Print and screen ready']},
+  {icon:'◭', title:'Digital Marketing', desc:'Getting the build in front of the people it was made for. App store optimisation, launch campaigns, and the analytics underneath them, so you can see what is actually working instead of guessing at it.',
+   tags:['App store optimisation','Launch campaigns','Analytics','Social','Email'],
+   points:['Store listing optimised','Campaigns set up and tracked','Monthly reporting']},
+];
+
+const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','AI Chatbots','Business Automation','Graphic Design','Digital Marketing','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
+
+const PROCESS = [
+  {title:'User research &amp; discovery', desc:'We start by understanding the product, the people who will use it, and the market it lands in. Research and analysis surface the real needs, the pain points, and where the growth actually is.'},
+  {title:'Problem definition &amp; strategy', desc:'The core challenges and project goals get written down and agreed. That turns into a focused plan aligned with what the business is trying to achieve, not a wish list.'},
+  {title:'Design &amp; prototyping', desc:'Wireframes first, then interactive prototypes and final screens. You get to click through the experience and change your mind before a line of production code exists.'},
+  {title:'Development &amp; integration', desc:'The build itself — apps, games and web, wired into whatever services they need. Written for speed, security and for the next person who has to change it.'},
+  {title:'Testing &amp; optimisation', desc:'Every build goes through functional testing, performance passes and a real-device sweep. Speed, usability and cross-device behaviour all get tuned before release.'},
+  {title:'Launch &amp; deployment', desc:'Once you approve it, we ship — store submission, release and monitoring. The goal is that everything works properly from day one, not day thirty.'},
+];
+
+const REVIEW_SCORE = {score:'4.9/5', stars:5, note:'Based on 12 client reviews'};
+
+const TESTIMONIALS = [
+  {quote:'We came in with a rough idea and a deadline. Heer scoped it down to something we could actually ship, then shipped it — the first build was in our hands inside three weeks.', name:'Amara Okafor', role:'Founder, Trailhead', feature:true},
+  {quote:'The handover was the best part. Clean code, a real README, and a walkthrough call. Our own team picked it up without a single question.', name:'Daniel Reyes', role:'CTO, Northbeam'},
+  {quote:'Our game finally feels good to play on cheap Android phones. That was the whole brief and it got solved properly rather than patched over.', name:'Priya Nair', role:'Producer, Sunbreak Studio'},
+  {quote:'Weekly builds meant we caught a bad assumption in week two instead of at launch. That alone paid for the project.', name:'Tomas Lindqvist', role:'Product Lead, Habitline'},
+];
+function renderServiceCards(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach(sv => {
+    const card = document.createElement('div');
+    card.className = 'util-card service-card';
+    card.innerHTML = `
+      <h3><span class="icon">${sv.icon}</span> ${sv.title}</h3>
+      <p>${sv.desc}</p>
+      <ul class="service-points">${sv.points.map(pt=>`<li>${pt}</li>`).join('')}</ul>`;
+    container.appendChild(card);
+  });
+}
+
+function renderServiceRows(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach((sv, i) => {
+    const row = document.createElement('li');
+    row.className = 'service-row';
+    row.innerHTML = `
+      <span class="row-num">${String(i+1).padStart(2,'0')}.</span>
+      <div class="row-main">
+        <h3>${sv.title}</h3>
+        <p>${sv.desc}</p>
+        <a href="#contact" class="row-cta" onclick="goTo('contact')">
+          See more &mdash; pricing <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <ul class="row-tags">${sv.tags.map(t=>`<li>${t}</li>`).join('')}</ul>
+      </div>
+      <div class="row-spec">
+        <p class="eyebrow">Deliverables</p>
+        <ul>${sv.points.map(pt=>`<li>${pt}</li>`).join('')}</ul>
+      </div>`;
+    container.appendChild(row);
+  });
+}
+
+function renderTicker(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  const set = list.map(c=>`<li>${c}</li>`).join('');
+  // duplicated so the track loops seamlessly at -50%, same as the home reels
+  container.innerHTML = `<ul class="ticker-track">${set}${list.map(c=>`<li aria-hidden="true">${c}</li>`).join('')}</ul>`;
+}
+
+function renderProcess(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach((st, i) => {
+    const card = document.createElement('li');
+    card.className = 'process-card';
+    card.innerHTML = `
+      <span class="step-oval">${String(i+1).padStart(2,'0')}</span>
+      <h3>${st.title}</h3>
+      <p>${st.desc}</p>`;
+    container.appendChild(card);
+  });
+}
+
+function renderRating(containerId, r){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = `
+    <strong>${r.score}</strong>
+    <span class="stars" aria-hidden="true">${'\u2605'.repeat(r.stars)}</span>
+    <span class="note">${r.note}</span>`;
+  container.setAttribute('aria-label', r.score + ' — ' + r.note);
+}
+
+function initials(name){
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
+function renderQuotes(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  list.forEach(q => {
+    const card = document.createElement('figure');
+    card.className = 'quote-card' + (q.feature ? ' featured' : '');
+    card.innerHTML = `
+      <blockquote>${q.quote}</blockquote>
+      <figcaption>
+        <span class="avatar" aria-hidden="true">${initials(q.name)}</span>
+        <span class="who"><strong>${q.name}</strong><span>${q.role}</span></span>
+      </figcaption>`;
+    container.appendChild(card);
+  });
+}
+
+renderServiceCards('homeServicesGrid', SERVICES);
+renderServiceRows('serviceRows', SERVICES);
+renderTicker('capTicker', CAPABILITIES);
+renderTicker('heroTicker', CAPABILITIES);
+renderQuotes('quoteGrid', TESTIMONIALS);
+renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
+renderProcess('homeProcess', PROCESS);
+renderRating('homeRating', REVIEW_SCORE);
+
 initReveal();
 initCounters();
 
@@ -509,4 +662,24 @@ document.getElementById('footDate').textContent = new Date().toLocaleDateString(
     // trackpad and momentum scrolling never fire touchend
     reel.addEventListener('scroll', () => { hold(); release(); }, { passive:true });
   });
+})();
+
+/* ---------------- Scroll progress ---------------- */
+(function initScrollProgress(){
+  const bar = document.getElementById('scrollProgress');
+  if(!bar) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrollY / max, 1) : 0) + ')';
+  };
+  const onScroll = () => {
+    if(queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  addEventListener('scroll', onScroll, { passive:true });
+  addEventListener('resize', onScroll, { passive:true });
+  update();
 })();
