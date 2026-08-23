@@ -1,7 +1,28 @@
 /* ---------------- Routing ---------------- */
 const pageOrder = ['home','about','work','tools','games','services','contact'];
 
-function goTo(id){
+/* Pages visited this session, so Back steps through them instead of
+   leaving the site the way the browser's own back button does. */
+const pageTrail = [];
+
+function goBack(){
+  const prev = pageTrail.pop();
+  goTo(prev || 'home', true);
+}
+
+function updateBackBtn(){
+  const btn = document.getElementById('backBtn');
+  if(btn) btn.hidden = pageTrail.length === 0;
+}
+
+function goTo(id, isBack){
+  const current = document.querySelector('.page.active');
+  const currentId = current && current.id.replace('page-','');
+  if(!isBack && currentId && currentId !== id){
+    pageTrail.push(currentId);
+    if(pageTrail.length > 20) pageTrail.shift();
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-'+id);
   if(target) target.classList.add('active');
@@ -28,6 +49,7 @@ function goTo(id){
   document.getElementById('utilDropdown').classList.remove('open');
   const mt = document.getElementById('menuToggle');
   if(mt) mt.setAttribute('aria-expanded', 'false');
+  updateBackBtn();
   document.body.style.overflow = '';
   window.scrollTo({top:0, behavior:'auto'});
   try { history.replaceState(null,'','#'+id); } catch(err) { /* sandboxed preview: ignore */ }
@@ -205,20 +227,6 @@ const TESTIMONIALS = [
   {quote:'Our game finally feels good to play on cheap Android phones. That was the whole brief and it got solved properly rather than patched over.', name:'Priya Nair', role:'Producer, Sunbreak Studio'},
   {quote:'Weekly builds meant we caught a bad assumption in week two instead of at launch. That alone paid for the project.', name:'Tomas Lindqvist', role:'Product Lead, Habitline'},
 ];
-function renderServiceCards(containerId, list){
-  const container = document.getElementById(containerId);
-  if(!container) return;
-  list.forEach(sv => {
-    const card = document.createElement('div');
-    card.className = 'util-card service-card';
-    card.innerHTML = `
-      <h3><span class="icon">${sv.icon}</span> ${sv.title}</h3>
-      <p>${sv.desc}</p>
-      <ul class="service-points">${sv.points.map(pt=>`<li>${pt}</li>`).join('')}</ul>`;
-    container.appendChild(card);
-  });
-}
-
 function renderServiceRows(containerId, list){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -295,13 +303,14 @@ function renderQuotes(containerId, list){
   });
 }
 
-renderServiceCards('homeServicesGrid', SERVICES);
 renderServiceRows('serviceRows', SERVICES);
+renderServiceRows('homeServiceRows', SERVICES);
 renderTicker('capTicker', CAPABILITIES);
 renderTicker('heroTicker', CAPABILITIES);
 renderQuotes('quoteGrid', TESTIMONIALS);
 renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
 renderProcess('homeProcess', PROCESS);
+renderProcess('servicesProcess', PROCESS);
 renderRating('homeRating', REVIEW_SCORE);
 
 initReveal();
