@@ -548,7 +548,13 @@ nav.wrap{
   transition:border-color .25s ease;
 }
 .service-row:last-child{ border-bottom:1px solid var(--line); }
-.service-row:hover{ border-top-color:var(--accent); }
+/* Lit by scroll position (see initRowHighlight), and by hover only where a
+   real pointer exists — on touch :hover sticks after a tap. */
+.service-row{ transition:border-color var(--dur-slow) var(--ease); }
+.service-row.in-view{ border-top-color:var(--accent); }
+@media (hover: hover) and (pointer: fine){
+  .service-row:hover{ border-top-color:var(--accent); }
+}
 .row-num{
   font-family:var(--mono);
   font-size:var(--fs-base);
@@ -1232,12 +1238,6 @@ label{ font-family:var(--mono); font-size:var(--fs-2xs); color:var(--muted); tex
 /* ---------- Contact ---------- */
 .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12); }
 @media (max-width:800px){ .contact-grid{ grid-template-columns:1fr; } }
-.social-list a{
-  display:flex; justify-content:space-between; padding:var(--space-3) 0;
-  border-bottom:1px solid var(--line);
-  font-family:var(--mono); font-size:var(--fs-sm);
-}
-.social-list a:hover{ color:var(--accent-text); }
 
 .footer-row{
   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-3);
@@ -2064,4 +2064,135 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   letter-spacing:.04em;
   color:var(--muted);
   margin-bottom:var(--space-6);
+}
+
+/* ---------- Two-tone row titles ---------- */
+.row-main h3 .tone-a{ color:var(--text); }
+.row-main h3 .tone-b{ color:var(--accent-text); }
+
+/* ---------- Contact ----------
+   The form is the page's one real transaction, so it gets the weight: a raised
+   panel with a rule of accent along the top, roomier fields, and a quiet
+   footnote instead of a wall of text. */
+.contact-aside{ display:flex; flex-direction:column; align-items:flex-start; }
+
+.contact-direct{
+  display:block;
+  width:100%;
+  padding:var(--space-5) var(--space-6);
+  margin-bottom:var(--space-8);
+  border:1px solid var(--line);
+  background:var(--surface);
+  transition:border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.contact-direct:hover{ border-color:var(--accent); transform:translateY(-2px); }
+.contact-direct:active{ transform:translateY(0); }
+.contact-direct-value{
+  display:block;
+  margin-top:var(--space-2);
+  font-family:var(--display);
+  font-size:var(--fs-lg);
+  color:var(--accent-text);
+  word-break:break-all;
+}
+
+.contact-social-label{ margin-bottom:var(--space-3); }
+.contact-social{ margin:0 0 var(--space-8); }
+
+.contact-facts{
+  width:100%;
+  border-top:1px dashed var(--line);
+  padding-top:var(--space-5);
+}
+.contact-facts > div{
+  display:flex; justify-content:space-between; gap:var(--space-4);
+  padding:var(--space-2) 0;
+}
+.contact-facts dt{
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.contact-facts dd{ font-size:var(--fs-sm); text-align:right; }
+
+.contact-form{
+  position:relative;
+  padding:var(--space-8) var(--space-7) var(--space-7);
+  border:1px solid var(--line);
+  background:var(--surface);
+  box-shadow:var(--shadow-3);
+}
+/* the accent rule along the top edge */
+.contact-form::before{
+  content:'';
+  position:absolute; left:0; right:0; top:0;
+  height:3px;
+  background:linear-gradient(90deg, var(--accent), var(--cyan));
+}
+.contact-form-head{ margin-bottom:var(--space-7); }
+.contact-form-head h3{
+  font-family:var(--display);
+  font-size:var(--fs-xl);
+  margin-top:var(--space-2);
+}
+.contact-form .field{ margin-bottom:var(--space-5); }
+.contact-form label{
+  display:block;
+  margin-bottom:var(--space-2);
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea{
+  padding:var(--space-3) var(--space-4);
+  font-size:var(--fs-base);
+}
+.contact-form input::placeholder,
+.contact-form textarea::placeholder{ color:var(--muted); opacity:.7; }
+.contact-send{ width:100%; margin-top:var(--space-2); gap:var(--space-2); }
+.contact-fineprint{
+  margin-top:var(--space-3);
+  font-family:var(--mono);
+  font-size:var(--fs-2xs);
+  letter-spacing:.06em;
+  color:var(--muted);
+  text-align:center;
+}
+
+/* A select needs its own chevron once the native one is suppressed. */
+.select-wrap{ position:relative; display:block; }
+.select-wrap select{
+  width:100%;
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:var(--space-10);
+  cursor:pointer;
+}
+.select-chevron{
+  position:absolute;
+  right:var(--space-4); top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  color:var(--muted);
+  font-size:var(--fs-xs);
+}
+/* a brief flash so an arriving choice is visibly already made */
+.select-wrap select.is-prefilled{ animation:prefill 1.2s var(--ease) 1; }
+@keyframes prefill{
+  0%, 60%{ border-color:var(--accent); background:var(--accent-soft); }
+  100%{ border-color:var(--line); background:transparent; }
+}
+@media (prefers-reduced-motion: reduce){
+  .select-wrap select.is-prefilled{ animation:none; border-color:var(--accent); }
+}
+
+@media (max-width:800px){
+  .contact-form{ padding:var(--space-6) var(--space-5); }
+  .field-row{ flex-direction:column; gap:0; }
 }
