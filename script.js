@@ -160,7 +160,10 @@ function initCounters(){
   if(!nums.length) return;
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const animateNum = (el) => {
+  const REPEAT_AFTER = 4000;
+  const onScreen = new WeakSet();
+
+  const animateNum = (el, done) => {
     if(el.dataset.static){ el.textContent = el.dataset.static; return; }
     const target = +el.dataset.target;
     const suffix = el.dataset.suffix || '';
@@ -172,8 +175,24 @@ function initCounters(){
       const eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(eased * target) + suffix;
       if(progress < 1) requestAnimationFrame(tick);
+      else if(done) done();
     }
     requestAnimationFrame(tick);
+  };
+
+  // Run the count again every few seconds, but only while the figures are
+  // actually on screen and the tab is in front.
+  const queueRepeat = (el) => {
+    setTimeout(() => {
+      if(!onScreen.has(el) || document.hidden){ queueRepeat(el); return; }
+      el.textContent = '0' + (el.dataset.suffix || '');
+      animateNum(el, () => queueRepeat(el));
+    }, REPEAT_AFTER);
+  };
+
+  const runAndRepeat = (el) => {
+    if(reduceMotion || el.dataset.static){ animateNum(el); return; }
+    animateNum(el, () => queueRepeat(el));
   };
 
   // The cards fade in on a stagger, so counting straight away would run
@@ -182,25 +201,29 @@ function initCounters(){
   const countAfterEntrance = (el) => {
     const card = el.closest('.stat-card');
     if(reduceMotion || !card || typeof card.getAnimations !== 'function'){
-      animateNum(el);
+      runAndRepeat(el);
       return;
     }
     const pending = card.getAnimations().filter(a => a.playState !== 'finished');
-    if(!pending.length){ animateNum(el); return; }
+    if(!pending.length){ runAndRepeat(el); return; }
     Promise.all(pending.map(a => a.finished))
-      .then(() => animateNum(el))
-      .catch(() => animateNum(el));
+      .then(() => runAndRepeat(el))
+      .catch(() => runAndRepeat(el));
   };
 
   if(!('IntersectionObserver' in window)){
-    nums.forEach(countAfterEntrance);
+    nums.forEach(el => { onScreen.add(el); countAfterEntrance(el); });
     return;
   }
+  const started = new WeakSet();
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if(entry.isIntersecting){
+      // keep observing: the repeat loop needs to know when we scroll away
+      if(entry.isIntersecting) onScreen.add(entry.target);
+      else onScreen.delete(entry.target);
+      if(entry.isIntersecting && !started.has(entry.target)){
+        started.add(entry.target);
         countAfterEntrance(entry.target);
-        io.unobserve(entry.target);
       }
     });
   }, { threshold:0.4 });
@@ -468,3 +491,22 @@ function toggleTheme(){
 /* ---------------- Footer ---------------- */
 document.getElementById('footYear').textContent = new Date().getFullYear();
 document.getElementById('footDate').textContent = new Date().toLocaleDateString('en-US',{month:'short', year:'numeric'});
+
+/* ---------------- Home reels: hold still while being dragged ---------------- */
+(function initReelTouch(){
+  const reels = document.querySelectorAll('.marquee');
+  if(!reels.length) return;
+  reels.forEach(reel => {
+    let idle;
+    const hold = () => { clearTimeout(idle); reel.classList.add('is-touching'); };
+    const release = () => {
+      clearTimeout(idle);
+      idle = setTimeout(() => reel.classList.remove('is-touching'), 900);
+    };
+    reel.addEventListener('touchstart', hold, { passive:true });
+    reel.addEventListener('touchend', release, { passive:true });
+    reel.addEventListener('touchcancel', release, { passive:true });
+    // trackpad and momentum scrolling never fire touchend
+    reel.addEventListener('scroll', () => { hold(); release(); }, { passive:true });
+  });
+})();

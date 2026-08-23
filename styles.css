@@ -329,11 +329,18 @@ nav.wrap{
 .showreel + .showreel{ margin-top:44px; }
 
 .marquee{
-  overflow:hidden;
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  /* the row moves on its own, so a scrollbar would never match it */
+  scrollbar-width:none;
+  -ms-overflow-style:none;
   /* soften the edges so cards enter and leave rather than get cut */
   -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
   mask-image:linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
 }
+.marquee::-webkit-scrollbar{ display:none; }
 .marquee-track{
   display:flex;
   width:max-content;
@@ -345,8 +352,13 @@ nav.wrap{
   from{ transform:translateX(0); }
   to{ transform:translateX(-50%); }
 }
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track{ animation-play-state:paused; }
+.marquee:focus-within .marquee-track,
+.marquee.is-touching .marquee-track{ animation-play-state:paused; }
+/* Only where a real pointer hovers: on touch, :hover sticks after a tap and
+   would leave the row frozen for good. */
+@media (hover: hover) and (pointer: fine){
+  .marquee:hover .marquee-track{ animation-play-state:paused; }
+}
 
 .mini-card{
   flex:0 0 auto;
@@ -367,7 +379,7 @@ nav.wrap{
 .mini-card p{ color:var(--muted); font-size:.85rem; line-height:1.5; }
 
 .reel-title{
-  margin-top:16px;
+  margin-bottom:14px;
   font-family:var(--display);
   font-size:1.2rem;
 }
@@ -389,7 +401,7 @@ nav.wrap{
   .reel-title{ font-size:1.05rem; }
 }
 @media (prefers-reduced-motion: reduce){
-  .marquee{ overflow-x:auto; -webkit-mask-image:none; mask-image:none; }
+  .marquee{ -webkit-mask-image:none; mask-image:none; }
   .marquee-track{ animation:none; }
   .marquee-track > [aria-hidden="true"]{ display:none; }
 }
