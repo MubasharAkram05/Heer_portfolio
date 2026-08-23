@@ -360,15 +360,7 @@ nav.wrap{
   pointer-events:none;
 }
 
-/* ---------- Nav: path-style links and a talk CTA ---------- */
-.nav-links .slash{
-  font-style:normal;
-  color:var(--accent);
-  margin-right:1px;
-  opacity:.75;
-}
-.nav-links a:hover .slash, .nav-links a.active .slash,
-.nav-links button.nav-link:hover .slash{ opacity:1; }
+/* ---------- Nav: talk CTA ---------- */
 .nav-links a.nav-cta{
   background:var(--accent);
   color:#14100c;
