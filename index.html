@@ -4,25 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Heer — App & Games Developer Portfolio</title>
-<!--
-  HOW TO MAKE THIS YOURS
-  1. This is already set up for Heer — App & Games Developer. Search "Heer" if you want to change the name.
-  2. Edit the PROJECTS array in script.js to swap in your own work.
-  3. Update the email / social links inside the #contact section.
-  4. Swap the initials "JB" in the nav logo and footer title block.
--->
+<meta name="description" content="Hira Iqbal — app and games developer. Mobile apps, Unity games, UI/UX and the design work in between, from first sketch to shipped build.">
+<meta name="theme-color" content="#f7f9fc">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<a class="skip-link" href="#page-home" onclick="focusMain(event)">Skip to content</a>
+
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-
-<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-  <span class="mode-icon">🌙</span>
-</button>
 
 <div class="sheet-info" aria-hidden="true">
   <div>SHEET<span id="sheetNum">01/05</span></div>
@@ -33,14 +27,17 @@
 <header>
   <nav class="wrap">
     <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileNav()">☰</button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks" onclick="toggleMobileNav()">☰</button>
     <ul class="nav-links" id="navLinks">
+      <li class="nav-close-row">
+        <button class="nav-close" aria-label="Close menu" onclick="closeMobileNav()">&times;</button>
+      </li>
       <li><a href="#home" data-page="home" onclick="goTo('home')">Home</a></li>
       <li><a href="#about" data-page="about" onclick="goTo('about')">About</a></li>
       <li><a href="#work" data-page="work" onclick="goTo('work')">Work</a></li>
       <li class="has-dropdown" id="utilDropdown">
-        <button class="nav-link" onclick="toggleDropdown(event)">Tools and Games <span class="chevron">▾</span></button>
-        <div class="dropdown">
+        <button class="nav-link" id="utilDropdownBtn" aria-expanded="false" aria-haspopup="true" aria-controls="utilDropdownMenu" onclick="toggleDropdown(event)">Tools and Games <span class="chevron" aria-hidden="true">▾</span></button>
+        <div class="dropdown" id="utilDropdownMenu">
           <a href="#tools" data-page="tools" onclick="goTo('tools')">Tools</a>
           <a href="#games" data-page="games" onclick="goTo('games')">Games</a>
         </div>
@@ -59,13 +56,13 @@
   <!-- HOME -->
   <section class="page active hero section-tint" id="page-home">
     <div class="hero-panel">
-    <div class="badge hero-anim" style="animation-delay:0s;"><span class="dot"></span> Available for freelance projects</div>
-    <p class="eyebrow hero-anim" style="animation-delay:.06s;">Portfolio — Drawing No. JB‑001</p>
-    <p class="hero-name hero-anim" style="animation-delay:.12s;">Hira <em>Iqbal</em></p>
-    <p class="role-line hero-anim" id="roleLine" style="animation-delay:.18s;">&nbsp;</p>
-    <h1 class="hero-anim" style="animation-delay:.24s;">I build things that<br>work like they <em>should.</em></h1>
-    <p class="lede hero-anim" style="animation-delay:.32s;">App and games developer focused on smooth gameplay, clean interfaces, and builds that feel great to play. Based on Earth, working everywhere.</p>
-    <div class="btn-row hero-anim" style="animation-delay:.38s;">
+    <div class="badge hero-anim"><span class="dot"></span> Available for freelance projects</div>
+    <p class="eyebrow hero-anim">Portfolio — Drawing No. JB‑001</p>
+    <p class="hero-name hero-anim">Hira <em>Iqbal</em></p>
+    <p class="role-line hero-anim" id="roleLine">&nbsp;</p>
+    <h1 class="hero-anim">I build things that<br>work like they <em>should.</em></h1>
+    <p class="lede hero-anim">App and games developer focused on smooth gameplay, clean interfaces, and builds that feel great to play. Based on Earth, working everywhere.</p>
+    <div class="btn-row hero-anim">
       <a href="#work" class="btn" onclick="goTo('work')">View the work</a>
       <a href="#contact" class="btn ghost" onclick="goTo('contact')">Get in touch</a>
     </div>
@@ -97,7 +94,7 @@
       <span class="scroll-cue-line"></span>
     </button>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- About preview -->
     <div class="section-head">
@@ -121,11 +118,11 @@
         </div>
       </div>
     </div>
-    <div style="margin-top:28px;">
+    <div class="section-follow">
       <a href="#about" class="btn ghost" onclick="goTo('about')">Read the full bio</a>
     </div>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- Featured work preview -->
     <div class="section-head">
@@ -133,11 +130,11 @@
       <h2>A few <span class="outline">recent builds</span></h2>
     </div>
     <ol class="service-rows" id="homeProjectGrid"></ol>
-    <div style="margin-top:28px;">
+    <div class="section-follow">
       <a href="#work" class="btn ghost" onclick="goTo('work')">View all projects</a>
     </div>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- Tools & Games preview -->
     <div class="section-head">
@@ -327,7 +324,7 @@
         </div>
       </div>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- Services preview -->
     <div class="section-head">
@@ -335,11 +332,11 @@
       <h2>What I can <span class="outline">build for you</span></h2>
     </div>
     <ol class="service-rows" id="homeServiceRows"></ol>
-    <div class="btn-row" style="margin-top:28px;">
+    <div class="btn-row section-follow">
       <a href="#services" class="btn ghost" onclick="goTo('services')">See how I work</a>
     </div>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- How it works -->
     <div class="section-head">
@@ -348,7 +345,7 @@
     </div>
     <ol class="process-cards" id="homeProcess"></ol>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- Client reviews -->
     <div class="section-head">
@@ -358,14 +355,14 @@
     </div>
     <div class="quote-grid" id="homeQuoteGrid"></div>
 
-    <hr class="divider" style="margin:80px 0;">
+    <hr class="divider">
 
     <!-- Contact CTA -->
     <div class="section-head">
       <p class="eyebrow">07 — Contact</p>
       <h2>Let's build something</h2>
     </div>
-    <p class="lede" style="margin-bottom:28px;">Have a project, a role, or just a question? I usually reply within 24 hours.</p>
+    <p class="lede section-intro">Have a project, a role, or just a question? I usually reply within 24 hours.</p>
     <div class="btn-row">
       <a href="#contact" class="btn" onclick="goTo('contact')">Get in touch</a>
       <a href="mailto:hello@hiraiqbal.dev" class="btn ghost">Email directly</a>
@@ -396,8 +393,8 @@
           <span class="tag">Figma</span>
           <span class="tag">Git</span>
         </div>
-        <p class="eyebrow" style="margin-top:28px;">Currently</p>
-        <p style="color:var(--muted); margin-top:8px;">Open to freelance app and game projects, and select full-time roles. Reply time: usually under 24 hours.</p>
+        <p class="eyebrow section-follow">Currently</p>
+        <p class="muted-note">Open to freelance app and game projects, and select full-time roles. Reply time: usually under 24 hours.</p>
       </div>
     </div>
   </section>
@@ -417,7 +414,7 @@
       <p class="eyebrow">03 — Tools</p>
       <h2>Small <span class="outline">utilities</span></h2>
     </div>
-    <p class="lede" style="margin-bottom:40px;">Little browser utilities that do one job each. Nothing to install, and nothing leaves your machine.</p>
+    <p class="lede section-intro wide">Little browser utilities that do one job each. Nothing to install, and nothing leaves your machine.</p>
     <ol class="service-rows" id="toolRows"></ol>
   </section>
 
@@ -426,7 +423,7 @@
       <p class="eyebrow">04 — Games</p>
       <h2>Quick <span class="outline">breaks</span></h2>
     </div>
-    <p class="lede" style="margin-bottom:40px;">Small games built by hand, all running locally in the page. Good for two minutes between things.</p>
+    <p class="lede section-intro wide">Small games built by hand, all running locally in the page. Good for two minutes between things.</p>
     <ol class="service-rows" id="gameRows"></ol>
   </section>
 
@@ -436,13 +433,13 @@
       <p class="eyebrow">05 — Services</p>
       <h2>What I can <span class="outline">build for you</span></h2>
     </div>
-    <p class="lede" style="margin-bottom:32px;">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
+    <p class="lede section-intro">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
 
     <div class="ticker" id="capTicker" role="group" aria-label="Capabilities"></div>
 
     <ol class="service-rows" id="serviceRows"></ol>
 
-    <hr class="divider" style="margin:72px 0;">
+    <hr class="divider">
 
     <div class="section-head">
       <p class="eyebrow">How it works</p>
@@ -450,7 +447,7 @@
     </div>
 <ol class="process-cards" id="servicesProcess"></ol>
 
-    <hr class="divider" style="margin:72px 0;">
+    <hr class="divider">
 
     <div class="section-head">
       <p class="eyebrow">Client reviews</p>
@@ -458,12 +455,12 @@
     </div>
     <div class="quote-grid" id="quoteGrid"></div>
 
-    <hr class="divider" style="margin:72px 0;">
+    <hr class="divider">
 
     <div class="section-head">
       <h2>Have something in mind?</h2>
     </div>
-    <p class="lede" style="margin-bottom:28px;">Tell me what you are trying to build and I will come back with a scope, a timeline, and a price.</p>
+    <p class="lede section-intro">Tell me what you are trying to build and I will come back with a scope, a timeline, and a price.</p>
     <div class="btn-row">
       <a href="#contact" class="btn" onclick="goTo('contact')">Start a project</a>
       <a href="#work" class="btn ghost" onclick="goTo('work')">See past work</a>
@@ -477,7 +474,7 @@
     </div>
     <div class="contact-grid">
       <div>
-        <p style="color:var(--muted); margin-bottom:24px;">Have a project, a role, or just a question? The form sends straight to my inbox, or reach me directly through any of these.</p>
+        <p class="muted-note lead-out">Have a project, a role, or just a question? The form sends straight to my inbox, or reach me directly through any of these.</p>
         <ul class="social-list">
           <li><a href="mailto:hello@hiraiqbal.dev">Email <span>hello@hiraiqbal.dev</span></a></li>
           <li><a href="https://github.com" target="_blank" rel="noopener">GitHub <span>↗</span></a></li>
@@ -485,7 +482,7 @@
           <li><a href="https://twitter.com" target="_blank" rel="noopener">Twitter / X <span>↗</span></a></li>
         </ul>
       </div>
-      <form onsubmit="return sendMail(event)">
+      <form onsubmit="return sendMail(event)" novalidate>
         <div class="field">
           <label for="cName">Name</label>
           <input type="text" id="cName" dir="auto" required>
@@ -511,6 +508,12 @@
       <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
       <p>App and games developer. Apps, games and the design work in between — from the first sketch to the shipped build.</p>
       <a href="#contact" class="btn ghost small" onclick="goTo('contact')">Start a project</a>
+      <ul class="social-icons">
+        <li><a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.18-.89-1.18-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.23 1.88.87 2.34.67.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.83-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.52.56.83 1.28.83 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg></a></li>
+        <li><a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.6 5.4H.9V15h2.7V5.4ZM2.25 1a1.57 1.57 0 1 0 0 3.14 1.57 1.57 0 0 0 0-3.14ZM15.1 9.53c0-2.6-1.39-3.8-3.24-3.8-1.5 0-2.17.82-2.54 1.4V5.4H6.63c.04.76 0 9.6 0 9.6h2.69V9.64c0-.24.02-.48.09-.65.19-.48.63-.98 1.37-.98.97 0 1.36.74 1.36 1.81V15h2.96V9.53Z"/></svg></a></li>
+        <li><a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter / X"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.36 6.9 14.7 1h-1.27L8.8 6.12 5.1 1H.85l5.6 7.79L.85 15h1.27l4.9-5.41L10.93 15h4.25L9.36 6.9Zm-1.73 1.92-.57-.79L2.58 1.9h1.94l3.65 5.03.57.79 4.74 6.53h-1.95L7.63 8.82Z"/></svg></a></li>
+        <li><a href="https://dribbble.com" target="_blank" rel="noopener" aria-label="Dribbble"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm5.28 3.69a6.78 6.78 0 0 1 1.54 4.24c-.22-.05-2.46-.5-4.71-.22-.05-.11-.1-.23-.15-.35-.14-.33-.29-.65-.45-.96 2.5-1.02 3.63-2.48 3.77-2.71ZM8 1.19c1.6 0 3.06.6 4.17 1.58-.12.17-1.14 1.54-3.55 2.44a35.1 35.1 0 0 0-2.55-3.97A6.9 6.9 0 0 1 8 1.19ZM4.75 1.7a41.4 41.4 0 0 1 2.52 3.92c-3.18.85-5.98.83-6.29.83A6.83 6.83 0 0 1 4.75 1.7ZM1.18 8.01v-.21c.3.01 3.6.05 6.99-.97.2.38.38.76.55 1.14l-.27.08c-3.5 1.13-5.36 4.21-5.52 4.47A6.78 6.78 0 0 1 1.18 8ZM8 14.83a6.78 6.78 0 0 1-4.19-1.44c.12-.26 1.53-2.96 5.36-4.29l.05-.02a28.3 28.3 0 0 1 1.46 5.19A6.75 6.75 0 0 1 8 14.83Zm3.84-1.2a29.5 29.5 0 0 0-1.33-4.98c2.12-.34 3.98.21 4.21.29a6.8 6.8 0 0 1-2.88 4.69Z"/></svg></a></li>
+      </ul>
     </div>
 
     <nav class="footer-cols" aria-label="Footer">
@@ -563,6 +566,16 @@
   <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
 
+<button class="to-top" id="toTop" hidden onclick="scrollToTop()" aria-label="Back to top">
+  <span aria-hidden="true">↑</span>
+</button>
+
+<div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="false"></div>
+
+
+<button class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode" aria-pressed="false" onclick="toggleTheme()">
+  <span class="mode-icon">🌙</span>
+</button>
 
 <!-- panel bodies live here and move into the modal when opened -->
 <div id="panelStore" hidden>
@@ -580,7 +593,7 @@
             <div class="util-panel-inner">
               <button class="small-btn" onclick="genPalette()">Generate new palette</button>
               <div class="swatches" id="swatchRow"></div>
-              <p class="eyebrow" id="copyMsg" style="margin-top:10px; min-height:1em;"></p>
+              <p class="eyebrow copy-msg" id="copyMsg" role="status" aria-live="polite"></p>
             </div>
           </div>
 <div class="util-panel" id="panel-pass">
@@ -589,13 +602,13 @@
                 <label for="passLength">Length: <span id="passLenVal">14</span></label>
                 <input type="range" id="passLength" min="6" max="32" value="14" oninput="document.getElementById('passLenVal').textContent=this.value">
               </div>
-              <div class="field-row" style="margin-bottom:14px;">
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passUpper" checked style="width:auto;"> Uppercase</label>
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passNum" checked style="width:auto;"> Numbers</label>
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passSym" checked style="width:auto;"> Symbols</label>
+              <div class="field-row check-row">
+                <label class="check-label"><input type="checkbox" id="passUpper" checked> Uppercase</label>
+                <label class="check-label"><input type="checkbox" id="passNum" checked> Numbers</label>
+                <label class="check-label"><input type="checkbox" id="passSym" checked> Symbols</label>
               </div>
               <button class="small-btn" onclick="genPassword()">Generate</button>
-              <div class="field" style="margin-top:14px;">
+              <div class="field section-follow">
                 <input type="text" id="passOutput" readonly placeholder="Your password will appear here">
               </div>
             </div>
@@ -631,7 +644,7 @@
                 </select>
               </div>
               <p class="eyebrow">Result</p>
-              <p id="unitResult" style="font-family:var(--display); font-size:1.6rem; color:var(--accent);">—</p>
+              <p id="unitResult" class="result-figure" role="status" aria-live="polite">—</p>
             </div>
           </div>
 <div class="util-panel" id="panel-case">
@@ -758,6 +771,15 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="js/data.js"></script>
+<script src="js/router.js"></script>
+<script src="js/render.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/games.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/feedback.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
