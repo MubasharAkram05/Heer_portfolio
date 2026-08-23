@@ -7,7 +7,7 @@ const pageTrail = [];
 
 function goBack(){
   const prev = pageTrail.pop();
-  goTo(prev || 'home', true);
+  goTo(prev ? prev.id : 'home', true, prev ? prev.scrollY : 0);
 }
 
 function updateBackBtn(){
@@ -15,11 +15,12 @@ function updateBackBtn(){
   if(btn) btn.hidden = pageTrail.length === 0;
 }
 
-function goTo(id, isBack){
+function goTo(id, isBack, restoreY){
   const current = document.querySelector('.page.active');
   const currentId = current && current.id.replace('page-','');
   if(!isBack && currentId && currentId !== id){
-    pageTrail.push(currentId);
+    // remember where we were on that page, not just which page it was
+    pageTrail.push({ id: currentId, scrollY: window.scrollY });
     if(pageTrail.length > 20) pageTrail.shift();
   }
 
@@ -51,7 +52,9 @@ function goTo(id, isBack){
   if(mt) mt.setAttribute('aria-expanded', 'false');
   updateBackBtn();
   document.body.style.overflow = '';
-  window.scrollTo({top:0, behavior:'auto'});
+  // 'auto' resolves to the CSS scroll-behavior, which is smooth here, so the
+  // jump never happened; 'instant' forces it
+  window.scrollTo({ top: isBack ? (restoreY || 0) : 0, behavior:'instant' });
   try { history.replaceState(null,'','#'+id); } catch(err) { /* sandboxed preview: ignore */ }
 }
 
@@ -156,19 +159,25 @@ const grid = document.getElementById('projectGrid');
 function renderProjectCards(containerId, list){
   const container = document.getElementById(containerId);
   if(!container) return;
-  list.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <p class="tag-mini">${p.tag}</p>
-      <h3>${p.title}</h3>
-      <p>${p.desc}</p>
-      <div class="stack">${p.stack.map(s=>`<span>${s}</span>`).join('')}</div>
-      <div class="links">
-        <a href="${p.demo}" target="_blank" rel="noopener">Live demo</a>
-        <a href="${p.code}" target="_blank" rel="noopener">Source</a>
+  list.forEach((p, i) => {
+    const row = document.createElement('li');
+    row.className = 'service-row';
+    row.innerHTML = `
+      <span class="row-num">${String(i+1).padStart(2,'0')}.</span>
+      <div class="row-main">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="row-links">
+          <a href="${p.demo}" class="row-cta" target="_blank" rel="noopener">Live demo <span class="arrow" aria-hidden="true">↗</span></a>
+          <a href="${p.code}" class="row-link" target="_blank" rel="noopener">Source</a>
+        </div>
+        <ul class="row-tags">${p.stack.map(t=>`<li>${t}</li>`).join('')}</ul>
+      </div>
+      <div class="row-spec">
+        <p class="eyebrow">Type</p>
+        <p class="row-glyph-text">${p.tag}</p>
       </div>`;
-    container.appendChild(card);
+    container.appendChild(row);
   });
 }
 renderProjectCards('projectGrid', PROJECTS);
@@ -959,17 +968,98 @@ function simonPress(i){
   simonSeq = [];
 }
 
-/* ---------------- Open a specific tool or game from the home reels --------- */
-function openItem(page, panelId, initName){
-  goTo(page);
-  // goTo jumps to the top, so wait a frame before opening and scrolling
-  requestAnimationFrame(() => {
-    const panel = document.getElementById(panelId);
-    if(!panel) return;
-    panel.classList.add('open');
-    const init = window[initName];
-    if(typeof init === 'function') init();
-    const card = panel.closest('.util-card') || panel;
-    card.scrollIntoView({ behavior:'smooth', block:'center' });
+/* ---------------- Tools and games catalog ---------------- */
+const CATALOG = [
+  {page:'tools', panel:'panel-counter', icon:'✎', title:'Word &amp; Character Counter', desc:'Paste text, get live word, character, and sentence counts.', init:'', tags:["Live counts", "Words", "Sentences"]},
+  {page:'tools', panel:'panel-palette', icon:'◆', title:'Color Palette Generator', desc:'Generate a random 5-color palette. Click a swatch to copy its hex.', init:'genPalette', tags:["Random palettes", "Copy hex", "5 colours"]},
+  {page:'tools', panel:'panel-pass', icon:'⚿', title:'Password Generator', desc:'Build a random password with the character sets you choose.', init:'', tags:["Character sets", "Adjustable length", "Copy"]},
+  {page:'tools', panel:'panel-unit', icon:'↔', title:'Unit Converter', desc:'Convert length between metric and imperial units.', init:'', tags:["Metric", "Imperial", "Length"]},
+  {page:'tools', panel:'panel-case', icon:'Aa', title:'Text Case Converter', desc:'Switch text between sentence, title, camel, snake and kebab case.', init:'', tags:["7 cases", "camelCase", "kebab-case"]},
+  {page:'tools', panel:'panel-b64', icon:'⧉', title:'Base64 Encoder / Decoder', desc:'Encode text to Base64 or decode it back, entirely in your browser.', init:'', tags:["Encode", "Decode", "Unicode safe"]},
+  {page:'tools', panel:'panel-lorem', icon:'¶', title:'Lorem Ipsum Generator', desc:'Placeholder paragraphs for mockups, at the length you need.', init:'genLorem', tags:["1\u20138 paragraphs", "Regenerate", "Copy"]},
+  {page:'tools', panel:'panel-contrast', icon:'◑', title:'Contrast Checker', desc:'Check a text and background pair against the WCAG contrast levels.', init:'checkContrast', tags:["WCAG AA", "WCAG AAA", "Live preview"]},
+  {page:'games', panel:'panel-ttt', icon:'✕', title:'Tic-Tac-Toe', desc:'Local two-player. First to three in a row wins.', init:'initTTT', tags:["Two player", "Local", "Win detection"]},
+  {page:'games', panel:'panel-memory', icon:'▦', title:'Memory Match', desc:'Flip two cards at a time. Match all pairs in the fewest moves.', init:'initMemory', tags:["16 cards", "Pairs", "Move counter"]},
+  {page:'games', panel:'panel-rps', icon:'✊', title:'Rock, Paper, Scissors', desc:'Play against the computer. First to five wins the round.', init:'', tags:["vs computer", "First to five", "Running score"]},
+  {page:'games', panel:'panel-reaction', icon:'⚡', title:'Reaction Timer', desc:'Wait for the panel to turn, then hit it. How fast are you really?', init:'resetReaction', tags:["Milliseconds", "Best time", "Early-click guard"]},
+  {page:'games', panel:'panel-guess', icon:'?', title:'Guess the Number', desc:'One to a hundred. Every guess tells you higher or lower.', init:'resetGuess', tags:["1\u2013100", "Higher / lower", "Guess history"]},
+  {page:'games', panel:'panel-simon', icon:'◎', title:'Simon Says', desc:'Watch the sequence, repeat it back. It gets one longer each round.', init:'resetSimon', tags:["Four pads", "Growing sequence", "Round counter"]},
+];
+
+function renderItemRows(containerId, page){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  CATALOG.filter(it => it.page === page).forEach((it, i) => {
+    const row = document.createElement('li');
+    row.className = 'service-row item-row';
+    row.tabIndex = 0;
+    row.setAttribute('role', 'button');
+    row.setAttribute('aria-label', 'Open ' + it.title.replace(/&amp;/g,'&'));
+    row.innerHTML = `
+      <span class="row-num">${String(i+1).padStart(2,'0')}.</span>
+      <div class="row-main">
+        <h3>${it.title}</h3>
+        <p>${it.desc}</p>
+        <span class="row-cta">Open <span class="arrow" aria-hidden="true">↗</span></span>
+        <ul class="row-tags">${it.tags.map(t=>`<li>${t}</li>`).join('')}</ul>
+      </div>
+      <div class="row-spec">
+        <p class="eyebrow">${page === 'tools' ? 'Utility' : 'Game'}</p>
+        <p class="row-glyph" aria-hidden="true">${it.icon}</p>
+      </div>`;
+    // the whole row opens the item, not just the button
+    row.addEventListener('click', () => openItem(it.page, it.panel, it.init));
+    row.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openItem(it.page, it.panel, it.init); }
+    });
+    container.appendChild(row);
   });
 }
+renderItemRows('toolRows', 'tools');
+renderItemRows('gameRows', 'games');
+
+/* ---------------- Item modal ---------------- */
+let modalPanel = null, modalReturnFocus = null;
+
+function openItem(page, panelId, initName){
+  const entry = CATALOG.find(it => it.panel === panelId);
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  if(page && document.querySelector('.page.active').id !== 'page-' + page) goTo(page);
+
+  modalReturnFocus = document.activeElement;
+  document.getElementById('modalTitle').innerHTML = entry ? entry.title : '';
+  const body = document.getElementById('modalBody');
+  body.innerHTML = '';
+  // move the live panel in, so its ids and handlers keep working
+  panel.classList.add('open');
+  body.appendChild(panel);
+  modalPanel = panel;
+
+  const backdrop = document.getElementById('itemModal');
+  backdrop.hidden = false;
+  document.body.style.overflow = 'hidden';
+
+  const init = window[initName];
+  if(typeof init === 'function') init();
+  const focusable = body.querySelector('input, textarea, select, button');
+  if(focusable) focusable.focus();
+}
+
+function closeItem(){
+  const backdrop = document.getElementById('itemModal');
+  if(backdrop.hidden) return;
+  backdrop.hidden = true;
+  document.body.style.overflow = '';
+  if(modalPanel){
+    modalPanel.classList.remove('open');
+    document.getElementById('panelStore').appendChild(modalPanel);
+    modalPanel = null;
+  }
+  if(modalReturnFocus && modalReturnFocus.focus) modalReturnFocus.focus();
+  modalReturnFocus = null;
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeItem();
+});

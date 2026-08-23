@@ -337,15 +337,13 @@ nav.wrap{
 
 /* ---------- In-site back button ---------- */
 .back-btn{
-  position:fixed;
-  top:80px; left:18px;
-  z-index:70;
+  /* in the flow at the top of the page, so it scrolls away with the content */
+  margin:18px 0 4px;
   display:inline-flex; align-items:center; gap:7px;
   padding:7px 13px;
   border:1px solid var(--line);
   border-radius:999px;
-  background:var(--header-bg);
-  backdrop-filter:blur(6px);
+  background:var(--surface);
   color:var(--text);
   font-family:var(--mono);
   font-size:.66rem;
@@ -356,7 +354,7 @@ nav.wrap{
 .back-btn[hidden]{ display:none; }
 .back-btn:hover{ border-color:var(--accent); color:var(--accent); transform:translateX(-2px); }
 @media (max-width:480px){
-  .back-btn{ top:76px; left:12px; padding:6px 11px; font-size:.6rem; }
+  .back-btn{ margin:14px 0 2px; padding:6px 11px; font-size:.6rem; }
 }
 @media (prefers-reduced-motion: reduce){
   .back-btn:hover{ transform:none; }
@@ -1464,4 +1462,88 @@ footer{ border-top:1px solid var(--line); margin-top:40px; padding-top:56px; }
 @media (max-width:560px){
   .footer-cols{ grid-template-columns:repeat(2, 1fr); }
   .footer-meta{ justify-content:flex-start; }
+}
+
+/* ---------- Tool / game rows ---------- */
+.item-row{ cursor:pointer; }
+.item-row:focus-visible{ outline:2px dashed var(--accent); outline-offset:4px; }
+.item-row .row-cta{ cursor:pointer; }
+.row-glyph{
+  font-size:2.4rem;
+  line-height:1;
+  color:var(--cyan);
+}
+.row-glyph-text{
+  font-family:var(--mono);
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  color:var(--text);
+}
+.row-links{ display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin-bottom:26px; }
+.row-links .row-cta{ margin-bottom:0; }
+.row-link{
+  font-family:var(--mono);
+  font-size:.7rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+  padding-bottom:2px;
+  transition:color .18s ease, border-color .18s ease;
+}
+.row-link:hover{ color:var(--accent); border-color:var(--accent); }
+
+/* ---------- Item modal ---------- */
+.modal-backdrop{
+  position:fixed; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  background:rgba(10,14,22,.62);
+  backdrop-filter:blur(4px);
+  animation:modalIn .18s ease;
+}
+.modal-backdrop[hidden]{ display:none; }
+@keyframes modalIn{ from{ opacity:0; } to{ opacity:1; } }
+.modal{
+  width:100%;
+  max-width:620px;
+  max-height:88vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--surface);
+  border:1px solid var(--line);
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.55);
+  animation:modalRise .22s ease;
+}
+@keyframes modalRise{ from{ transform:translateY(12px); } to{ transform:none; } }
+.modal-head{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:20px 22px;
+  border-bottom:1px solid var(--line);
+}
+.modal-head h3{ font-size:1.05rem; }
+.modal-close{
+  background:none;
+  border:1px solid var(--line);
+  border-radius:50%;
+  width:32px; height:32px;
+  color:var(--text);
+  font-size:1.2rem;
+  line-height:1;
+  flex:0 0 auto;
+  transition:border-color .18s ease, color .18s ease;
+}
+.modal-close:hover{ border-color:var(--accent); color:var(--accent); }
+.modal-body{ padding:22px; overflow-y:auto; }
+/* inside the modal the panel is always shown, so drop the accordion collapse */
+.modal-body .util-panel{ max-height:none; opacity:1; overflow:visible; }
+.modal-body .util-panel-inner{ margin-top:0; padding-top:0; border-top:none; }
+@media (max-width:560px){
+  .modal-backdrop{ padding:14px; }
+  .modal-head{ padding:16px 18px; }
+  .modal-body{ padding:18px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .modal-backdrop, .modal{ animation:none; }
 }

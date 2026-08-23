@@ -19,7 +19,6 @@
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<button class="back-btn" id="backBtn" hidden onclick="goBack()"><span aria-hidden="true">←</span> Back</button>
 
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
   <span class="mode-icon">🌙</span>
@@ -54,6 +53,8 @@
 </header>
 
 <main class="wrap">
+
+  <button class="back-btn" id="backBtn" hidden onclick="goBack()"><span aria-hidden="true">←</span> Back</button>
 
   <!-- HOME -->
   <section class="page active hero section-tint" id="page-home">
@@ -131,7 +132,7 @@
       <p class="eyebrow">02 — Featured Work</p>
       <h2>A few <span class="outline">recent builds</span></h2>
     </div>
-    <div class="grid-cards row-scroll" id="homeProjectGrid"></div>
+    <ol class="service-rows" id="homeProjectGrid"></ol>
     <div style="margin-top:28px;">
       <a href="#work" class="btn ghost" onclick="goTo('work')">View all projects</a>
     </div>
@@ -407,305 +408,28 @@
       <p class="eyebrow">02 — Selected Work</p>
       <h2>Projects <span class="outline">worth a look</span></h2>
     </div>
-    <div class="grid-cards" id="projectGrid"></div>
+    <ol class="service-rows" id="projectGrid"></ol>
   </section>
 
   <!-- TOOLS -->
-  <section class="page" id="page-tools">
-
-    <!-- TOOLS — sub-section 1 -->
-    <div class="subsection section-tint tint-a">
-      <div class="section-head">
-        <p class="eyebrow">03 — Tools</p>
-        <h2>Small utilities</h2>
-      </div>
-      <div class="grid-cards">
-
-        <div class="util-card">
-          <h3><span class="icon">✎</span> Word &amp; Character Counter</h3>
-          <p>Paste text, get live word, character, and sentence counts.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-counter')">Open</button>
-          <div class="util-panel" id="panel-counter">
-            <div class="util-panel-inner">
-              <textarea rows="5" id="counterInput" dir="auto" placeholder="Start typing or paste text here…" oninput="updateCounter()"></textarea>
-              <div class="counter-stats">
-                <div><strong id="cWords">0</strong><span>Words</span></div>
-                <div><strong id="cChars">0</strong><span>Characters</span></div>
-                <div><strong id="cSentences">0</strong><span>Sentences</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="util-card">
-          <h3><span class="icon">◆</span> Color Palette Generator</h3>
-          <p>Generate a random 5-color palette. Click a swatch to copy its hex.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-palette'); genPalette();">Open</button>
-          <div class="util-panel" id="panel-palette">
-            <div class="util-panel-inner">
-              <button class="small-btn" onclick="genPalette()">Generate new palette</button>
-              <div class="swatches" id="swatchRow"></div>
-              <p class="eyebrow" id="copyMsg" style="margin-top:10px; min-height:1em;"></p>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <section class="page section-tint tint-a" id="page-tools">
+    <div class="section-head">
+      <p class="eyebrow">03 — Tools</p>
+      <h2>Small <span class="outline">utilities</span></h2>
     </div>
-
-    <!-- TOOLS — sub-section 2 -->
-    <div class="subsection section-tint tint-c">
-      <div class="section-head">
-        <p class="eyebrow">03b — More Tools</p>
-        <h2>Generators &amp; converters</h2>
-      </div>
-      <div class="grid-cards">
-
-        <div class="util-card">
-          <h3><span class="icon">⚿</span> Password Generator</h3>
-          <p>Build a random password with the character sets you choose.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-pass')">Open</button>
-          <div class="util-panel" id="panel-pass">
-            <div class="util-panel-inner">
-              <div class="field">
-                <label for="passLength">Length: <span id="passLenVal">14</span></label>
-                <input type="range" id="passLength" min="6" max="32" value="14" oninput="document.getElementById('passLenVal').textContent=this.value">
-              </div>
-              <div class="field-row" style="margin-bottom:14px;">
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passUpper" checked style="width:auto;"> Uppercase</label>
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passNum" checked style="width:auto;"> Numbers</label>
-                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passSym" checked style="width:auto;"> Symbols</label>
-              </div>
-              <button class="small-btn" onclick="genPassword()">Generate</button>
-              <div class="field" style="margin-top:14px;">
-                <input type="text" id="passOutput" readonly placeholder="Your password will appear here">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="util-card">
-          <h3><span class="icon">↔</span> Unit Converter</h3>
-          <p>Convert length between metric and imperial units.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-unit')">Open</button>
-          <div class="util-panel" id="panel-unit">
-            <div class="util-panel-inner">
-              <div class="field-row">
-                <div class="field">
-                  <label for="unitInput">Value</label>
-                  <input type="number" id="unitInput" value="1" oninput="convertUnit()">
-                </div>
-                <div class="field">
-                  <label for="unitFrom">From</label>
-                  <select id="unitFrom" onchange="convertUnit()">
-                    <option value="m">Meters</option>
-                    <option value="km">Kilometers</option>
-                    <option value="cm">Centimeters</option>
-                    <option value="in">Inches</option>
-                    <option value="ft">Feet</option>
-                    <option value="mi">Miles</option>
-                  </select>
-                </div>
-              </div>
-              <div class="field">
-                <label for="unitTo">To</label>
-                <select id="unitTo" onchange="convertUnit()">
-                  <option value="ft">Feet</option>
-                  <option value="m">Meters</option>
-                  <option value="km">Kilometers</option>
-                  <option value="cm">Centimeters</option>
-                  <option value="in">Inches</option>
-                  <option value="mi">Miles</option>
-                </select>
-              </div>
-              <p class="eyebrow">Result</p>
-              <p id="unitResult" style="font-family:var(--display); font-size:1.6rem; color:var(--accent);">—</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="util-card">
-          <h3><span class="icon">Aa</span> Text Case Converter</h3>
-          <p>Switch text between sentence, title, camel, snake and kebab case.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-case')">Open</button>
-          <div class="util-panel" id="panel-case">
-            <div class="util-panel-inner">
-              <textarea rows="3" id="caseInput" dir="auto" placeholder="Type or paste text here…" oninput="convertCase()"></textarea>
-              <div class="chip-row">
-                <button class="small-btn" onclick="setCase('upper')">UPPER</button>
-                <button class="small-btn" onclick="setCase('lower')">lower</button>
-                <button class="small-btn" onclick="setCase('sentence')">Sentence</button>
-                <button class="small-btn" onclick="setCase('title')">Title</button>
-                <button class="small-btn" onclick="setCase('camel')">camelCase</button>
-                <button class="small-btn" onclick="setCase('snake')">snake_case</button>
-                <button class="small-btn" onclick="setCase('kebab')">kebab-case</button>
-              </div>
-              <textarea rows="3" id="caseOutput" readonly placeholder="Result appears here"></textarea>
-              <button class="small-btn" onclick="copyFrom('caseOutput', this)">Copy result</button>
-            </div>
-          </div>
-        </div>
-        <div class="util-card">
-          <h3><span class="icon">⧉</span> Base64 Encoder / Decoder</h3>
-          <p>Encode text to Base64 or decode it back, entirely in your browser.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-b64')">Open</button>
-          <div class="util-panel" id="panel-b64">
-            <div class="util-panel-inner">
-              <textarea rows="3" id="b64Input" dir="auto" placeholder="Text or Base64…" oninput="runBase64()"></textarea>
-              <div class="chip-row">
-                <button class="small-btn" onclick="setB64Mode('encode')" id="b64EncodeBtn">Encode</button>
-                <button class="small-btn" onclick="setB64Mode('decode')" id="b64DecodeBtn">Decode</button>
-              </div>
-              <textarea rows="3" id="b64Output" readonly placeholder="Result appears here"></textarea>
-              <p class="eyebrow" id="b64Note">Encoding</p>
-              <button class="small-btn" onclick="copyFrom('b64Output', this)">Copy result</button>
-            </div>
-          </div>
-        </div>
-        <div class="util-card">
-          <h3><span class="icon">¶</span> Lorem Ipsum Generator</h3>
-          <p>Placeholder paragraphs for mockups, at the length you need.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-lorem'); genLorem();">Open</button>
-          <div class="util-panel" id="panel-lorem">
-            <div class="util-panel-inner">
-              <div class="field">
-                <label for="loremCount">Paragraphs: <span id="loremCountVal">3</span></label>
-                <input type="range" id="loremCount" min="1" max="8" value="3" oninput="document.getElementById('loremCountVal').textContent=this.value; genLorem();">
-              </div>
-              <button class="small-btn" onclick="genLorem()">Generate again</button>
-              <div id="loremOut" class="lorem-out"></div>
-              <button class="small-btn" onclick="copyFrom('loremOut', this)">Copy text</button>
-            </div>
-          </div>
-        </div>
-        <div class="util-card">
-          <h3><span class="icon">◑</span> Contrast Checker</h3>
-          <p>Check a text and background pair against the WCAG contrast levels.</p>
-          <button class="btn ghost" onclick="togglePanel('panel-contrast'); checkContrast();">Open</button>
-          <div class="util-panel" id="panel-contrast">
-            <div class="util-panel-inner">
-              <div class="field-row">
-                <div class="field">
-                  <label for="cFg">Text colour</label>
-                  <input type="color" id="cFg" value="#141d2e" oninput="checkContrast()">
-                </div>
-                <div class="field">
-                  <label for="cBg">Background</label>
-                  <input type="color" id="cBg" value="#f7f9fc" oninput="checkContrast()">
-                </div>
-              </div>
-              <div class="contrast-preview" id="contrastPreview">Sample text at this pairing</div>
-              <p class="contrast-ratio" id="contrastRatio">—</p>
-              <div class="chip-row" id="contrastBadges"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <p class="lede" style="margin-bottom:40px;">Little browser utilities that do one job each. Nothing to install, and nothing leaves your machine.</p>
+    <ol class="service-rows" id="toolRows"></ol>
   </section>
 
-  <!-- GAMES -->
   <section class="page section-tint tint-b" id="page-games">
     <div class="section-head">
       <p class="eyebrow">04 — Games</p>
-      <h2>Quick breaks</h2>
+      <h2>Quick <span class="outline">breaks</span></h2>
     </div>
-    <div class="grid-cards">
-
-      <div class="util-card">
-        <h3><span class="icon">✕</span> Tic-Tac-Toe</h3>
-        <p>Local two-player. First to three in a row wins.</p>
-        <button class="btn ghost" onclick="togglePanel('panel-ttt'); initTTT();">Open</button>
-        <div class="util-panel" id="panel-ttt">
-          <div class="util-panel-inner">
-            <p class="ttt-status" id="tttStatus">Player X's turn</p>
-            <div class="ttt-board" id="tttBoard"></div>
-            <button class="small-btn" onclick="initTTT()">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="util-card">
-        <h3><span class="icon">▦</span> Memory Match</h3>
-        <p>Flip two cards at a time. Match all pairs in the fewest moves.</p>
-        <button class="btn ghost" onclick="togglePanel('panel-memory'); initMemory();">Open</button>
-        <div class="util-panel" id="panel-memory">
-          <div class="util-panel-inner">
-            <p class="ttt-status" id="memoryStatus">Moves: 0</p>
-            <div class="memory-board" id="memoryBoard"></div>
-            <button class="small-btn" onclick="initMemory()">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="util-card">
-        <h3><span class="icon">✊</span> Rock, Paper, Scissors</h3>
-        <p>Play against the computer. First to five wins the round.</p>
-        <button class="btn ghost" onclick="togglePanel('panel-rps')">Open</button>
-        <div class="util-panel" id="panel-rps">
-          <div class="util-panel-inner">
-            <p class="rps-score" id="rpsScore">You: 0 — Computer: 0</p>
-            <div class="rps-row">
-              <button class="small-btn rps-choice" onclick="playRPS('rock')">🪨 Rock</button>
-              <button class="small-btn rps-choice" onclick="playRPS('paper')">📄 Paper</button>
-              <button class="small-btn rps-choice" onclick="playRPS('scissors')">✂️ Scissors</button>
-            </div>
-            <p class="eyebrow" id="rpsResult">Make the first move.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="util-card">
-        <h3><span class="icon">⚡</span> Reaction Timer</h3>
-        <p>Wait for the panel to turn, then hit it. How fast are you really?</p>
-        <button class="btn ghost" onclick="togglePanel('panel-reaction'); resetReaction();">Open</button>
-        <div class="util-panel" id="panel-reaction">
-          <div class="util-panel-inner">
-            <button class="reaction-pad" id="reactionPad" onclick="reactionClick()">Click to start</button>
-            <p class="eyebrow" id="reactionBest">Best: —</p>
-          </div>
-        </div>
-      </div>
-      <div class="util-card">
-        <h3><span class="icon">?</span> Guess the Number</h3>
-        <p>One to a hundred. Every guess tells you higher or lower.</p>
-        <button class="btn ghost" onclick="togglePanel('panel-guess'); resetGuess();">Open</button>
-        <div class="util-panel" id="panel-guess">
-          <div class="util-panel-inner">
-            <div class="field-row">
-              <div class="field">
-                <label for="guessInput">Your guess</label>
-                <input type="number" id="guessInput" min="1" max="100" placeholder="1 – 100" onkeydown="if(event.key==='Enter'){event.preventDefault();submitGuess();}">
-              </div>
-            </div>
-            <div class="chip-row">
-              <button class="small-btn" onclick="submitGuess()">Guess</button>
-              <button class="small-btn" onclick="resetGuess()">New number</button>
-            </div>
-            <p class="eyebrow" id="guessResult">Pick a number to begin.</p>
-            <p class="eyebrow" id="guessHistory"></p>
-          </div>
-        </div>
-      </div>
-      <div class="util-card">
-        <h3><span class="icon">◎</span> Simon Says</h3>
-        <p>Watch the sequence, repeat it back. It gets one longer each round.</p>
-        <button class="btn ghost" onclick="togglePanel('panel-simon'); resetSimon();">Open</button>
-        <div class="util-panel" id="panel-simon">
-          <div class="util-panel-inner">
-            <div class="simon-board" id="simonBoard"></div>
-            <div class="chip-row">
-              <button class="small-btn" onclick="startSimon()">Start round</button>
-            </div>
-            <p class="eyebrow" id="simonStatus">Press start to play.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p class="lede" style="margin-bottom:40px;">Small games built by hand, all running locally in the page. Good for two minutes between things.</p>
+    <ol class="service-rows" id="gameRows"></ol>
   </section>
 
-  <!-- CONTACT -->
   <!-- SERVICES -->
   <section class="page section-tint tint-c" id="page-services">
     <div class="section-head">
@@ -838,6 +562,201 @@
   </div>
   <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
+
+
+<!-- panel bodies live here and move into the modal when opened -->
+<div id="panelStore" hidden>
+<div class="util-panel" id="panel-counter">
+            <div class="util-panel-inner">
+              <textarea rows="5" id="counterInput" dir="auto" placeholder="Start typing or paste text here…" oninput="updateCounter()"></textarea>
+              <div class="counter-stats">
+                <div><strong id="cWords">0</strong><span>Words</span></div>
+                <div><strong id="cChars">0</strong><span>Characters</span></div>
+                <div><strong id="cSentences">0</strong><span>Sentences</span></div>
+              </div>
+            </div>
+          </div>
+<div class="util-panel" id="panel-palette">
+            <div class="util-panel-inner">
+              <button class="small-btn" onclick="genPalette()">Generate new palette</button>
+              <div class="swatches" id="swatchRow"></div>
+              <p class="eyebrow" id="copyMsg" style="margin-top:10px; min-height:1em;"></p>
+            </div>
+          </div>
+<div class="util-panel" id="panel-pass">
+            <div class="util-panel-inner">
+              <div class="field">
+                <label for="passLength">Length: <span id="passLenVal">14</span></label>
+                <input type="range" id="passLength" min="6" max="32" value="14" oninput="document.getElementById('passLenVal').textContent=this.value">
+              </div>
+              <div class="field-row" style="margin-bottom:14px;">
+                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passUpper" checked style="width:auto;"> Uppercase</label>
+                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passNum" checked style="width:auto;"> Numbers</label>
+                <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" id="passSym" checked style="width:auto;"> Symbols</label>
+              </div>
+              <button class="small-btn" onclick="genPassword()">Generate</button>
+              <div class="field" style="margin-top:14px;">
+                <input type="text" id="passOutput" readonly placeholder="Your password will appear here">
+              </div>
+            </div>
+          </div>
+<div class="util-panel" id="panel-unit">
+            <div class="util-panel-inner">
+              <div class="field-row">
+                <div class="field">
+                  <label for="unitInput">Value</label>
+                  <input type="number" id="unitInput" value="1" oninput="convertUnit()">
+                </div>
+                <div class="field">
+                  <label for="unitFrom">From</label>
+                  <select id="unitFrom" onchange="convertUnit()">
+                    <option value="m">Meters</option>
+                    <option value="km">Kilometers</option>
+                    <option value="cm">Centimeters</option>
+                    <option value="in">Inches</option>
+                    <option value="ft">Feet</option>
+                    <option value="mi">Miles</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="unitTo">To</label>
+                <select id="unitTo" onchange="convertUnit()">
+                  <option value="ft">Feet</option>
+                  <option value="m">Meters</option>
+                  <option value="km">Kilometers</option>
+                  <option value="cm">Centimeters</option>
+                  <option value="in">Inches</option>
+                  <option value="mi">Miles</option>
+                </select>
+              </div>
+              <p class="eyebrow">Result</p>
+              <p id="unitResult" style="font-family:var(--display); font-size:1.6rem; color:var(--accent);">—</p>
+            </div>
+          </div>
+<div class="util-panel" id="panel-case">
+            <div class="util-panel-inner">
+              <textarea rows="3" id="caseInput" dir="auto" placeholder="Type or paste text here…" oninput="convertCase()"></textarea>
+              <div class="chip-row">
+                <button class="small-btn" onclick="setCase('upper')">UPPER</button>
+                <button class="small-btn" onclick="setCase('lower')">lower</button>
+                <button class="small-btn" onclick="setCase('sentence')">Sentence</button>
+                <button class="small-btn" onclick="setCase('title')">Title</button>
+                <button class="small-btn" onclick="setCase('camel')">camelCase</button>
+                <button class="small-btn" onclick="setCase('snake')">snake_case</button>
+                <button class="small-btn" onclick="setCase('kebab')">kebab-case</button>
+              </div>
+              <textarea rows="3" id="caseOutput" readonly placeholder="Result appears here"></textarea>
+              <button class="small-btn" onclick="copyFrom('caseOutput', this)">Copy result</button>
+            </div>
+          </div>
+<div class="util-panel" id="panel-b64">
+            <div class="util-panel-inner">
+              <textarea rows="3" id="b64Input" dir="auto" placeholder="Text or Base64…" oninput="runBase64()"></textarea>
+              <div class="chip-row">
+                <button class="small-btn" onclick="setB64Mode('encode')" id="b64EncodeBtn">Encode</button>
+                <button class="small-btn" onclick="setB64Mode('decode')" id="b64DecodeBtn">Decode</button>
+              </div>
+              <textarea rows="3" id="b64Output" readonly placeholder="Result appears here"></textarea>
+              <p class="eyebrow" id="b64Note">Encoding</p>
+              <button class="small-btn" onclick="copyFrom('b64Output', this)">Copy result</button>
+            </div>
+          </div>
+<div class="util-panel" id="panel-lorem">
+            <div class="util-panel-inner">
+              <div class="field">
+                <label for="loremCount">Paragraphs: <span id="loremCountVal">3</span></label>
+                <input type="range" id="loremCount" min="1" max="8" value="3" oninput="document.getElementById('loremCountVal').textContent=this.value; genLorem();">
+              </div>
+              <button class="small-btn" onclick="genLorem()">Generate again</button>
+              <div id="loremOut" class="lorem-out"></div>
+              <button class="small-btn" onclick="copyFrom('loremOut', this)">Copy text</button>
+            </div>
+          </div>
+<div class="util-panel" id="panel-contrast">
+            <div class="util-panel-inner">
+              <div class="field-row">
+                <div class="field">
+                  <label for="cFg">Text colour</label>
+                  <input type="color" id="cFg" value="#141d2e" oninput="checkContrast()">
+                </div>
+                <div class="field">
+                  <label for="cBg">Background</label>
+                  <input type="color" id="cBg" value="#f7f9fc" oninput="checkContrast()">
+                </div>
+              </div>
+              <div class="contrast-preview" id="contrastPreview">Sample text at this pairing</div>
+              <p class="contrast-ratio" id="contrastRatio">—</p>
+              <div class="chip-row" id="contrastBadges"></div>
+            </div>
+          </div>
+<div class="util-panel" id="panel-ttt">
+          <div class="util-panel-inner">
+            <p class="ttt-status" id="tttStatus">Player X's turn</p>
+            <div class="ttt-board" id="tttBoard"></div>
+            <button class="small-btn" onclick="initTTT()">Reset</button>
+          </div>
+        </div>
+<div class="util-panel" id="panel-memory">
+          <div class="util-panel-inner">
+            <p class="ttt-status" id="memoryStatus">Moves: 0</p>
+            <div class="memory-board" id="memoryBoard"></div>
+            <button class="small-btn" onclick="initMemory()">Reset</button>
+          </div>
+        </div>
+<div class="util-panel" id="panel-rps">
+          <div class="util-panel-inner">
+            <p class="rps-score" id="rpsScore">You: 0 — Computer: 0</p>
+            <div class="rps-row">
+              <button class="small-btn rps-choice" onclick="playRPS('rock')">🪨 Rock</button>
+              <button class="small-btn rps-choice" onclick="playRPS('paper')">📄 Paper</button>
+              <button class="small-btn rps-choice" onclick="playRPS('scissors')">✂️ Scissors</button>
+            </div>
+            <p class="eyebrow" id="rpsResult">Make the first move.</p>
+          </div>
+        </div>
+<div class="util-panel" id="panel-reaction">
+          <div class="util-panel-inner">
+            <button class="reaction-pad" id="reactionPad" onclick="reactionClick()">Click to start</button>
+            <p class="eyebrow" id="reactionBest">Best: —</p>
+          </div>
+        </div>
+<div class="util-panel" id="panel-guess">
+          <div class="util-panel-inner">
+            <div class="field-row">
+              <div class="field">
+                <label for="guessInput">Your guess</label>
+                <input type="number" id="guessInput" min="1" max="100" placeholder="1 – 100" onkeydown="if(event.key==='Enter'){event.preventDefault();submitGuess();}">
+              </div>
+            </div>
+            <div class="chip-row">
+              <button class="small-btn" onclick="submitGuess()">Guess</button>
+              <button class="small-btn" onclick="resetGuess()">New number</button>
+            </div>
+            <p class="eyebrow" id="guessResult">Pick a number to begin.</p>
+            <p class="eyebrow" id="guessHistory"></p>
+          </div>
+        </div>
+<div class="util-panel" id="panel-simon">
+          <div class="util-panel-inner">
+            <div class="simon-board" id="simonBoard"></div>
+            <div class="chip-row">
+              <button class="small-btn" onclick="startSimon()">Start round</button>
+            </div>
+            <p class="eyebrow" id="simonStatus">Press start to play.</p>
+          </div>
+        </div>
+</div>
+
+<div class="modal-backdrop" id="itemModal" hidden onclick="if(event.target===this) closeItem()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h3 id="modalTitle"></h3>
+      <button class="modal-close" onclick="closeItem()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
