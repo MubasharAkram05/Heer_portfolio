@@ -19,6 +19,8 @@
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
+<button class="back-btn" id="backBtn" hidden onclick="goBack()"><span aria-hidden="true">←</span> Back</button>
+
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
   <span class="mode-icon">🌙</span>
 </button>
@@ -38,10 +40,10 @@
       <li><a href="#about" data-page="about" onclick="goTo('about')">About</a></li>
       <li><a href="#work" data-page="work" onclick="goTo('work')">Work</a></li>
       <li class="has-dropdown" id="utilDropdown">
-        <button class="nav-link" onclick="toggleDropdown(event)">Play <span class="chevron">▾</span></button>
+        <button class="nav-link" onclick="toggleDropdown(event)">Tools and Games <span class="chevron">▾</span></button>
         <div class="dropdown">
-          <a href="#tools" data-page="tools" onclick="goTo('tools')">Tools<small>Little utilities, no install</small></a>
-          <a href="#games" data-page="games" onclick="goTo('games')">Games<small>Quick breaks, all local</small></a>
+          <a href="#tools" data-page="tools" onclick="goTo('tools')">Tools</a>
+          <a href="#games" data-page="games" onclick="goTo('games')">Games</a>
         </div>
       </li>
       <li><a href="#services" data-page="services" onclick="goTo('services')">Services</a></li>
@@ -60,7 +62,7 @@
     <p class="eyebrow hero-anim" style="animation-delay:.06s;">Portfolio — Drawing No. JB‑001</p>
     <p class="hero-name hero-anim" style="animation-delay:.12s;">Hira <em>Iqbal</em></p>
     <p class="role-line hero-anim" id="roleLine" style="animation-delay:.18s;">&nbsp;</p>
-    <h1 class="hero-anim" style="animation-delay:.24s;">I build <em>things</em> that<br>work like they <em>should.</em></h1>
+    <h1 class="hero-anim" style="animation-delay:.24s;">I build things that<br>work like they <em>should.</em></h1>
     <p class="lede hero-anim" style="animation-delay:.32s;">App and games developer focused on smooth gameplay, clean interfaces, and builds that feel great to play. Based on Earth, working everywhere.</p>
     <div class="btn-row hero-anim" style="animation-delay:.38s;">
       <a href="#work" class="btn" onclick="goTo('work')">View the work</a>
@@ -149,41 +151,49 @@
             <span class="icon">✎</span>
             <h4>Word &amp; Character Counter</h4>
             <p>Live word, character, and sentence counts.</p>
+            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card">
             <span class="icon">◆</span>
             <h4>Color Palette Generator</h4>
             <p>Random 5-colour palettes, click to copy a hex.</p>
+            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card">
             <span class="icon">⚿</span>
             <h4>Password Generator</h4>
             <p>Build a password from the sets you choose.</p>
+            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card">
             <span class="icon">↔</span>
             <h4>Unit Converter</h4>
             <p>Length between metric and imperial.</p>
+            <a href="#tools" class="mini-open" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✎</span>
             <h4>Word &amp; Character Counter</h4>
             <p>Live word, character, and sentence counts.</p>
+            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">◆</span>
             <h4>Color Palette Generator</h4>
             <p>Random 5-colour palettes, click to copy a hex.</p>
+            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">⚿</span>
             <h4>Password Generator</h4>
             <p>Build a password from the sets you choose.</p>
+            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">↔</span>
             <h4>Unit Converter</h4>
             <p>Length between metric and imperial.</p>
+            <a href="#tools" class="mini-open" tabindex="-1" onclick="goTo('tools')">Open <span aria-hidden="true">↗</span></a>
           </article>
           </div>
         </div>
@@ -196,31 +206,37 @@
             <span class="icon">✕</span>
             <h4>Tic-Tac-Toe</h4>
             <p>Local two-player. First to three in a row.</p>
+            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card">
             <span class="icon">▦</span>
             <h4>Memory Match</h4>
             <p>Flip two at a time, match all the pairs.</p>
+            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card">
             <span class="icon">✊</span>
             <h4>Rock, Paper, Scissors</h4>
             <p>Play the computer. First to five wins.</p>
+            <a href="#games" class="mini-open" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✕</span>
             <h4>Tic-Tac-Toe</h4>
             <p>Local two-player. First to three in a row.</p>
+            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">▦</span>
             <h4>Memory Match</h4>
             <p>Flip two at a time, match all the pairs.</p>
+            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           <article class="mini-card" aria-hidden="true">
             <span class="icon">✊</span>
             <h4>Rock, Paper, Scissors</h4>
             <p>Play the computer. First to five wins.</p>
+            <a href="#games" class="mini-open" tabindex="-1" onclick="goTo('games')">Open <span aria-hidden="true">↗</span></a>
           </article>
           </div>
         </div>
@@ -233,7 +249,7 @@
       <p class="eyebrow">04 — Services</p>
       <h2>What I can <span class="outline">build for you</span></h2>
     </div>
-    <div class="grid-cards" id="homeServicesGrid"></div>
+    <ol class="service-rows" id="homeServiceRows"></ol>
     <div class="btn-row" style="margin-top:28px;">
       <a href="#services" class="btn ghost" onclick="goTo('services')">See how I work</a>
     </div>
@@ -500,30 +516,9 @@
 
     <div class="section-head">
       <p class="eyebrow">How it works</p>
-      <h2>Four steps, <span class="outline">no surprises</span></h2>
+      <h2>The <span class="outline">design thinking process</span></h2>
     </div>
-    <ol class="process-list">
-      <li>
-        <span class="step-num">01</span>
-        <h3>Discover</h3>
-        <p>We talk through the goal, who it is for, and what has to be true for it to work. You get a written scope and a fixed quote.</p>
-      </li>
-      <li>
-        <span class="step-num">02</span>
-        <h3>Design</h3>
-        <p>Wireframes first, then a visual direction. Nothing gets built until you have signed off on how it should look and behave.</p>
-      </li>
-      <li>
-        <span class="step-num">03</span>
-        <h3>Build</h3>
-        <p>Weekly builds you can actually open and try on a real device, so course corrections happen early rather than at the end.</p>
-      </li>
-      <li>
-        <span class="step-num">04</span>
-        <h3>Launch</h3>
-        <p>Store submission, release, and a support window afterwards for the fixes that only turn up once real people are using it.</p>
-      </li>
-    </ol>
+<ol class="process-cards" id="servicesProcess"></ol>
 
     <hr class="divider" style="margin:72px 0;">
 

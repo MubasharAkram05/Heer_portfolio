@@ -231,7 +231,6 @@ nav.wrap{
   border-left:2px solid transparent;
 }
 .dropdown a:hover{ color:var(--text); border-left-color:var(--accent); background:var(--surface-2); }
-.dropdown small{ display:block; color:var(--muted); font-family:var(--body); font-size:.68rem; margin-top:2px; }
 
 .menu-toggle{
   display:none;
@@ -324,30 +323,6 @@ nav.wrap{
   .section-tint{ padding-left:16px; padding-right:16px; }
 }
 
-/* ---------- Services ---------- */
-.service-card h3{ margin-bottom:10px; }
-.service-card > p{ color:var(--muted); font-size:.92rem; }
-.service-points{
-  margin-top:14px;
-  padding-top:14px;
-  border-top:1px dashed var(--line);
-  display:grid;
-  gap:7px;
-}
-.service-points li{
-  font-family:var(--mono);
-  font-size:.7rem;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  padding-left:16px;
-  position:relative;
-}
-.service-points li::before{
-  content:'+';
-  position:absolute; left:0; top:-1px;
-  color:var(--accent);
-}
 
 /* ---------- Scroll progress ---------- */
 .scroll-progress{
@@ -358,6 +333,33 @@ nav.wrap{
   transform-origin:left;
   will-change:transform;
   pointer-events:none;
+}
+
+/* ---------- In-site back button ---------- */
+.back-btn{
+  position:fixed;
+  top:80px; left:18px;
+  z-index:70;
+  display:inline-flex; align-items:center; gap:7px;
+  padding:7px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--header-bg);
+  backdrop-filter:blur(6px);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.66rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  transition:border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.back-btn[hidden]{ display:none; }
+.back-btn:hover{ border-color:var(--accent); color:var(--accent); transform:translateX(-2px); }
+@media (max-width:480px){
+  .back-btn{ top:76px; left:12px; padding:6px 11px; font-size:.6rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  .back-btn:hover{ transform:none; }
 }
 
 /* ---------- Nav: talk CTA ---------- */
@@ -739,34 +741,9 @@ nav.wrap{
   overflow:hidden;
 }
 
-/* ---------- Process steps ---------- */
-.process-list{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-  /* the reset only clears ul; this is an ol and carries its own numbers */
-  list-style:none;
-}
-.process-list li{
-  position:relative;
-  padding-top:22px;
-  border-top:1px solid var(--line);
-}
-.process-list .step-num{
-  font-family:var(--mono);
-  font-size:.72rem;
-  color:var(--accent);
-  letter-spacing:.08em;
-  display:block;
-  margin-bottom:10px;
-}
-.process-list h3{ font-size:1.05rem; margin-bottom:8px; }
-.process-list p{ color:var(--muted); font-size:.88rem; line-height:1.6; }
 @media (max-width:900px){
-  .process-list{ grid-template-columns:repeat(2,1fr); gap:26px; }
 }
 @media (max-width:520px){
-  .process-list{ grid-template-columns:1fr; gap:22px; }
 }
 
 /* ---------- Home showreel: tools / games sliding right to left ---------- */
@@ -822,6 +799,19 @@ nav.wrap{
 .mini-card .icon{ font-size:1.1rem; color:var(--cyan); display:block; margin-bottom:10px; }
 .mini-card h4{ font-family:var(--display); font-size:.98rem; font-weight:600; margin-bottom:6px; }
 .mini-card p{ color:var(--muted); font-size:.85rem; line-height:1.5; }
+.mini-open{
+  display:inline-flex; align-items:center; gap:7px;
+  margin-top:14px;
+  padding:7px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  font-family:var(--mono);
+  font-size:.63rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  transition:border-color .18s ease, color .18s ease;
+}
+.mini-open:hover{ border-color:var(--accent); color:var(--accent); }
 
 .reel-title{
   margin-bottom:14px;
