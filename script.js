@@ -154,10 +154,10 @@ renderProjectCards('homeProjectGrid', PROJECTS.slice(0,3));
 
 /* ---------------- Services ---------------- */
 const SERVICES = [
-  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release — native where it earns its keep, cross-platform where it does not.',
+  {icon:'▢', title:'Mobile App Development', desc:'iOS and Android builds, from a first prototype through to a store-ready release. Native where it earns its keep and cross-platform where it does not, with offline behaviour and performance treated as features rather than afterthoughts.',
    tags:['Swift','Kotlin','Flutter','React Native'],
    points:['Native and cross-platform','Offline-first where it matters','Store submission handled']},
-  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and performance that holds up on the phones people actually own, not just the newest one.',
+  {icon:'◈', title:'Game Development', desc:'2D and 3D games with controls that feel right and a frame rate that holds up on the phones people actually own, not just the newest one. Gameplay, level tooling and the build pipeline that lets you keep shipping content after release.',
    tags:['Unity','C#','Shaders','Level tooling'],
    points:['Unity and C#','Gameplay and level tooling','Tested on low-end hardware']},
   {icon:'◐', title:'UI / UX Design', desc:'Interfaces designed around how people actually use them — research, wireframes and final screens, handed over ready to build.',
@@ -169,12 +169,18 @@ const SERVICES = [
   {icon:'✦', title:'MVP & Prototyping', desc:'A working slice of the idea in weeks, so you can put it in front of real people before committing a full budget to it.',
    tags:['Scoping','Rapid build','User testing'],
    points:['Scoped to one core loop','Real data, not mockups','Built to be thrown away or grown']},
-  {icon:'⟳', title:'Maintenance & Support', desc:'The work after launch: updates, fixes, and keeping up with what the app stores and operating systems keep changing.',
-   tags:['Bug fixes','OS updates','Store compliance'],
+  {icon:'⟳', title:'Maintenance & Support', desc:'The work that starts after launch. Updates, bug fixes, performance passes and keeping up with everything the app stores and operating systems keep changing underneath you. Available as an ongoing retainer or on demand, whichever suits how often your product moves.',
+   tags:['Bug fixes','OS updates','Store compliance','Performance'],
    points:['Bug fixes and OS updates','Store compliance','Ongoing or on demand']},
+  {icon:'◑', title:'Graphic Designing', desc:'Brand identity and the artwork around your product — logos, icon sets, key art, store screenshots and social assets. Everything is built to a system rather than as one-off files, so the next piece stays on brand without starting from scratch.',
+   tags:['Brand identity','Logo design','Icon sets','Key art','Social assets'],
+   points:['Source files handed over','Brand guidelines included','Print and screen ready']},
+  {icon:'◭', title:'Digital Marketing', desc:'Getting the build in front of the people it was made for. App store optimisation, launch campaigns, and the analytics underneath them, so you can see what is actually working instead of guessing at it.',
+   tags:['App store optimisation','Launch campaigns','Analytics','Social','Email'],
+   points:['Store listing optimised','Campaigns set up and tracked','Monthly reporting']},
 ];
 
-const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
+const CAPABILITIES = ['App Development','Game Development','UI / UX Design','Web Development','Graphic Design','Digital Marketing','Prototyping','Design Systems','Unity','Flutter','Accessibility','Performance','Store Release','Maintenance'];
 
 const TESTIMONIALS = [
   {quote:'We came in with a rough idea and a deadline. Heer scoped it down to something we could actually ship, then shipped it — the first build was in our hands inside three weeks.', name:'Amara Okafor', role:'Founder, Trailhead', feature:true},
@@ -203,12 +209,14 @@ function renderServiceRows(containerId, list){
     const row = document.createElement('li');
     row.className = 'service-row';
     row.innerHTML = `
-      <span class="row-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="row-num">${String(i+1).padStart(2,'0')}.</span>
       <div class="row-main">
-        <h3><span class="icon">${sv.icon}</span> ${sv.title}</h3>
+        <h3>${sv.title}</h3>
         <p>${sv.desc}</p>
+        <a href="#contact" class="row-cta" onclick="goTo('contact')">
+          See more &mdash; pricing <span class="arrow" aria-hidden="true">↗</span>
+        </a>
         <ul class="row-tags">${sv.tags.map(t=>`<li>${t}</li>`).join('')}</ul>
-        <a href="#contact" class="btn ghost small" onclick="goTo('contact')">Start a project</a>
       </div>
       <div class="row-spec">
         <p class="eyebrow">Deliverables</p>
