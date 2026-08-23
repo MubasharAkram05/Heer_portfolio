@@ -347,6 +347,7 @@
 </main>
 
 <footer>
+  <span class="footer-mark" aria-hidden="true">Heer</span>
   <div class="wrap footer-top">
     <div class="footer-brand">
       <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
@@ -361,38 +362,29 @@
     </div>
 
     <nav class="footer-cols" aria-label="Footer">
-      <div class="footer-col">
-        <p class="eyebrow">Pages</p>
+      <details class="footer-col">
+        <summary><span class="eyebrow">Pages</span><span class="footer-chevron" aria-hidden="true">▾</span></summary>
         <ul>
           <li><a href="#home" onclick="goTo('home')">Home</a></li>
           <li><a href="#about" onclick="goTo('about')">About</a></li>
           <li><a href="#work" onclick="goTo('work')">Work</a></li>
           <li><a href="#services" onclick="goTo('services')">Services</a></li>
           <li><a href="#contact" onclick="goTo('contact')">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <p class="eyebrow">Services</p>
-        <ul id="footerServices"></ul>
-      </div>
-      <div class="footer-col">
-        <p class="eyebrow">Tools</p>
-        <ul id="footerTools"></ul>
-      </div>
-      <div class="footer-col">
-        <p class="eyebrow">Games</p>
-        <ul id="footerGames"></ul>
-      </div>
-      <div class="footer-col">
-        <p class="eyebrow">Elsewhere</p>
-        <ul>
           <li><a href="mailto:hello@hiraiqbal.dev">Email</a></li>
-          <li><a href="https://github.com" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://twitter.com" target="_blank" rel="noopener">Twitter / X <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble <span aria-hidden="true">↗</span></a></li>
         </ul>
-      </div>
+      </details>
+      <details class="footer-col">
+        <summary><span class="eyebrow">Services</span><span class="footer-chevron" aria-hidden="true">▾</span></summary>
+        <ul id="footerServices"></ul>
+      </details>
+      <details class="footer-col">
+        <summary><span class="eyebrow">Tools</span><span class="footer-chevron" aria-hidden="true">▾</span></summary>
+        <ul id="footerTools"></ul>
+      </details>
+      <details class="footer-col">
+        <summary><span class="eyebrow">Games</span><span class="footer-chevron" aria-hidden="true">▾</span></summary>
+        <ul id="footerGames"></ul>
+      </details>
     </nav>
   </div>
 
@@ -407,7 +399,6 @@
       <span class="footer-status"><span class="dot"></span> Available for freelance projects</span>
     </div>
   </div>
-  <div class="footer-mark wrap" aria-hidden="true">Heer</div>
 </footer>
 
 <button class="to-top" id="toTop" hidden onclick="scrollToTop()" aria-label="Back to top">

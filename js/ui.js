@@ -171,3 +171,21 @@ function toggleTheme(){
   update();
 })();
 
+
+/* ---------------- Footer dropdowns ----------------
+   Open on a wide screen, collapsed on a narrow one. The stylesheet makes the
+   summary inert above 900px, so the state has to be corrected here or a
+   column closed on a phone would stay stuck shut after a resize. */
+function syncFooterDropdowns(){
+  const wide = window.matchMedia('(min-width: 901px)');
+  const apply = () => {
+    document.querySelectorAll('details.footer-col').forEach(col => {
+      col.open = wide.matches;
+    });
+  };
+  apply();
+  // addEventListener on a MediaQueryList is the modern form; older Safari
+  // only has addListener
+  if(wide.addEventListener) wide.addEventListener('change', apply);
+  else if(wide.addListener) wide.addListener(apply);
+}

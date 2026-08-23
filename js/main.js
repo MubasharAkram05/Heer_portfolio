@@ -20,6 +20,7 @@ renderFooterLinks();
 
 /* Behaviour */
 initDecks();
+syncFooterDropdowns();
 initReveal();
 initCounters();
 tickRole();

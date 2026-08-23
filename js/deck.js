@@ -1,14 +1,14 @@
-/* The home page card decks: one card on screen at a time, replaced by the next
-   with a 3D swap. Drives Recent builds, Tools and Games from the same code.
+/* The home page card decks: a coverflow of three cards — one centred and full
+   size, one falling away to each side, turned and pushed back so they read as
+   sitting behind it. Drives Recent builds, Tools and Games from the same code.
    Part of the portfolio's plain-JS bundle. Files load in dependency order
    from index.html: data -> router -> render -> modal -> deck -> tools -> games
    -> forms -> ui -> feedback -> main. Nothing here needs a build step. */
 
-const DECK_INTERVAL = 5000;   /* how long a card holds before the next replaces it */
-const DECK_SWAP = 700;        /* must match --deck-swap in the stylesheet */
+const DECK_INTERVAL = 5000;   /* how long a card holds before the deck moves on */
 const SWIPE_MIN = 40;         /* px of travel before a drag counts as a swipe */
 
-/* What each deck shows, and what clicking a card does. */
+/* What each deck shows, and what opening a card does. */
 function deckItems(key){
   if(key === 'projects'){
     return PROJECTS.map((p, i) => ({
@@ -36,15 +36,14 @@ function initDeck(deck){
   const dotsBox = deck.querySelector('.deck-dots');
   let index = 0;
   let timer = null;
-  let busy = false;
 
-  /* One card. The whole card is the control — there is no separate Open
-     button — so it is a <button> rather than a div with a click handler. */
-  const build = (item, i) => {
+  /* Every card is built once and stays in the DOM; moving the deck only
+     re-labels them, so the browser transitions the same elements between
+     positions instead of animating elements in and out. */
+  const cards = items.map((item, i) => {
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'deck-card';
-    card.setAttribute('aria-label', 'Open ' + item.title.replace(/&amp;/g, '&'));
     card.innerHTML = `
       <span class="deck-meta">${String(i+1).padStart(2,'0')} / ${String(items.length).padStart(2,'0')} — ${item.meta}</span>
       <span class="deck-icon" aria-hidden="true">${item.icon}</span>
@@ -52,52 +51,39 @@ function initDeck(deck){
       <span class="deck-desc">${item.desc}</span>
       <span class="deck-tags">${item.tags.map(t => `<span>${t}</span>`).join('')}</span>
       <span class="deck-cue">Open <span aria-hidden="true">↗</span></span>`;
-    card.addEventListener('click', item.open);
-    return card;
-  };
-
-  /* Swap `index` out and `next` in. `dir` is 1 for forward, -1 for back, and
-     decides which side each card rotates through. */
-  function go(next, dir){
-    if(busy || next === index) return;
-    busy = true;
-    const outgoing = stage.querySelector('.deck-card.is-current');
-    /* Read this before anything below touches the outgoing card: disabling a
-       button drops focus immediately, so checking later always says false. */
-    const hadFocus = outgoing && document.activeElement === outgoing;
-    const incoming = build(items[next], next);
-    incoming.classList.add('is-entering', dir > 0 ? 'from-right' : 'from-left');
-    stage.appendChild(incoming);
-
-    if(outgoing){
-      outgoing.classList.remove('is-current');
-      outgoing.classList.add('is-leaving', dir > 0 ? 'to-left' : 'to-right');
-      outgoing.disabled = true;
-    }
-
-    // next frame, so the browser has the entering transform to animate from
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        incoming.classList.remove('is-entering', 'from-right', 'from-left');
-        incoming.classList.add('is-current');
-      });
+    /* The centre card opens its item; a side card steps across to the centre
+       first, the way a coverflow is expected to behave. */
+    card.addEventListener('click', () => {
+      if(i === index) item.open();
+      else { go(i); play(); }
     });
+    stage.appendChild(card);
+    return card;
+  });
 
-    // if the outgoing card held focus, hand it to the card replacing it, or the
-    // next arrow key lands on the body instead of inside the deck
-    setTimeout(() => {
-      if(outgoing) outgoing.remove();
-      if(hadFocus) incoming.focus();
-      busy = false;
-    }, DECK_SWAP);
-
-    index = next;
-    paintDots();
+  /* Shortest way round the loop, so stepping past the last card slides the
+     first one in from the right rather than rewinding through the whole set. */
+  function offsetOf(i){
+    const n = items.length;
+    let d = (i - index + n) % n;
+    if(d > n / 2) d -= n;
+    return d;
   }
 
-  const step = (dir) => go((index + dir + items.length) % items.length, dir);
-
-  function paintDots(){
+  function paint(){
+    cards.forEach((card, i) => {
+      const d = offsetOf(i);
+      card.classList.toggle('is-current', d === 0);
+      card.classList.toggle('is-prev', d === -1);
+      card.classList.toggle('is-next', d === 1);
+      card.classList.toggle('is-hidden', Math.abs(d) > 1);
+      // only the centre card is a real stop for the keyboard and a screen reader
+      card.tabIndex = d === 0 ? 0 : -1;
+      card.setAttribute('aria-hidden', String(d !== 0));
+      card.setAttribute('aria-label',
+        d === 0 ? 'Open ' + items[i].title.replace(/&amp;/g, '&')
+                : 'Show ' + items[i].title.replace(/&amp;/g, '&'));
+    });
     [...dotsBox.children].forEach((dot, i) => {
       const on = i === index;
       dot.classList.toggle('on', on);
@@ -105,6 +91,13 @@ function initDeck(deck){
       dot.tabIndex = on ? 0 : -1;
     });
   }
+
+  function go(next){
+    const n = items.length;
+    index = ((next % n) + n) % n;
+    paint();
+  }
+  const step = (dir) => go(index + dir);
 
   /* Auto-advance, paused whenever someone is actually looking at or touching
      this deck — and never running at all when the page is hidden. */
@@ -124,7 +117,7 @@ function initDeck(deck){
     dot.className = 'deck-dot';
     dot.setAttribute('role', 'tab');
     dot.setAttribute('aria-label', item.title.replace(/&amp;/g, '&'));
-    dot.addEventListener('click', () => { go(i, i > index ? 1 : -1); play(); });
+    dot.addEventListener('click', () => { go(i); play(); });
     dotsBox.appendChild(dot);
   });
 
@@ -135,15 +128,19 @@ function initDeck(deck){
 
   // --- keyboard, once focus is anywhere inside the deck
   deck.addEventListener('keydown', e => {
-    if(e.key === 'ArrowRight'){ e.preventDefault(); step(1); play(); }
-    else if(e.key === 'ArrowLeft'){ e.preventDefault(); step(-1); play(); }
+    if(e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const onCard = document.activeElement && document.activeElement.classList.contains('deck-card');
+    step(e.key === 'ArrowRight' ? 1 : -1);
+    play();
+    // the card that was focused is no longer the centre one, so follow it over
+    if(onCard) cards[index].focus();
   });
 
   // --- swipe. Pointer events cover touch, pen and mouse-drag in one path.
-  let startX = null, startY = null, dragging = false, swiped = false;
+  let startX = 0, startY = 0, dragging = false, swiped = false;
   stage.addEventListener('pointerdown', e => {
-    startX = e.clientX; startY = e.clientY; dragging = true;
-    swiped = false;
+    startX = e.clientX; startY = e.clientY; dragging = true; swiped = false;
     stop();
   });
   stage.addEventListener('pointermove', e => {
@@ -151,17 +148,15 @@ function initDeck(deck){
     const dx = e.clientX - startX;
     // a mostly-vertical drag is the page scrolling, not a swipe
     if(Math.abs(dx) < Math.abs(e.clientY - startY)) return;
-    const card = stage.querySelector('.deck-card.is-current');
-    if(card) card.style.setProperty('--drag', dx + 'px');
+    stage.style.setProperty('--drag', dx + 'px');
   });
   const endDrag = (e) => {
     if(!dragging) return;
     dragging = false;
-    const card = stage.querySelector('.deck-card.is-current');
-    if(card) card.style.removeProperty('--drag');
+    stage.style.removeProperty('--drag');
     const dx = (e.clientX || 0) - startX;
     // pointerup is followed by a click, and the card IS the open button — so a
-    // swipe would both turn the card and open the item underneath it
+    // swipe would both turn the deck and open the item underneath it
     if(Math.abs(dx) > 8) swiped = true;
     if(Math.abs(dx) >= SWIPE_MIN && Math.abs(dx) > Math.abs((e.clientY || 0) - startY)){
       step(dx < 0 ? 1 : -1);
@@ -169,15 +164,15 @@ function initDeck(deck){
     play();
   };
   stage.addEventListener('pointerup', endDrag);
-  /* Capture phase, so it runs before the card's own click handler. */
+  stage.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('pointerleave', endDrag);
+  /* Capture phase, so it runs before a card's own click handler. */
   stage.addEventListener('click', e => {
     if(!swiped) return;
     swiped = false;
     e.preventDefault();
     e.stopPropagation();
   }, true);
-  stage.addEventListener('pointercancel', endDrag);
-  stage.addEventListener('pointerleave', endDrag);
 
   // --- hold still while someone is reading or tabbing through it
   deck.addEventListener('mouseenter', stop);
@@ -188,10 +183,6 @@ function initDeck(deck){
   });
   document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
 
-  // --- first card, no animation
-  const first = build(items[0], 0);
-  first.classList.add('is-current');
-  stage.appendChild(first);
-  paintDots();
+  paint();
   play();
 }
