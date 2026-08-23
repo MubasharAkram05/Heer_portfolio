@@ -332,10 +332,10 @@ nav.wrap{
 /* ---------- Extra hover motion ---------- */
 .nav-links a, .nav-links button.nav-link{ transition:color .15s ease, transform .15s ease; }
 .logo{ transition:transform .2s ease; }
-.stat-card, .card{ transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
-.stat-card:hover, .card:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(0,0,0,.3); }
+.card{ transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.card:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(0,0,0,.3); }
 @media (prefers-reduced-motion: reduce){
-  .stat-card:hover, .card:hover{ transform:none; }
+  .card:hover{ transform:none; }
 }
 
 /* ---------- Ambient decorative motion ---------- */
@@ -479,30 +479,34 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
 }
 .stat-card{
   position:relative;
-  overflow:hidden;
-  border:1px solid var(--line);
-  background:linear-gradient(135deg, var(--gold-soft), var(--sky-soft));
-  padding:22px 18px;
+  padding:0;
   text-align:left;
-  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  transition:transform .2s ease;
+  /* backwards, not both: the card returns to its own styles once the
+     entrance finishes, so :hover can still move it */
+  animation:statIn .6s cubic-bezier(.22,.61,.36,1) backwards;
 }
-.stat-card::before{
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg, var(--accent), var(--cyan));
-  transform:scaleX(0); transform-origin:left;
-  transition:transform .3s ease;
+.stat-card:nth-child(1){ animation-delay:.44s; }
+.stat-card:nth-child(2){ animation-delay:.52s; }
+.stat-card:nth-child(3){ animation-delay:.60s; }
+.stat-card:nth-child(4){ animation-delay:.68s; }
+@keyframes statIn{
+  from{ opacity:0; transform:translateY(16px); }
+  to{ opacity:1; transform:translateY(0); }
 }
-.stat-card:hover{ border-color:var(--accent); transform:translateY(-4px); box-shadow:0 14px 28px rgba(20,29,46,.1); }
-.stat-card:hover::before{ transform:scaleX(1); }
+.stat-card:hover{ transform:translateY(-3px); }
+.stat-card:hover span{ color:var(--text); }
+@media (prefers-reduced-motion: reduce){
+  .stat-card{ animation:none; }
+  .stat-card:hover{ transform:none; }
+}
 .stat-num{ display:block; font-family:var(--display); font-size:2rem; color:var(--accent); line-height:1; }
 .stat-card span{ font-family:var(--mono); font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; display:block; margin-top:8px; }
-@media (max-width:800px){ .stats{ gap:10px; } .stat-card{ padding:16px 12px; } .stat-num{ font-size:1.5rem; } }
+@media (max-width:800px){ .stats{ gap:12px; } .stat-num{ font-size:1.5rem; } }
 @media (max-width:480px){
-  .stats{ gap:7px; }
-  .stat-card{ padding:12px 8px; }
-  .stat-num{ font-size:1.05rem; }
-  .stat-card span{ font-size:.5rem; letter-spacing:.03em; margin-top:5px; }
+  .stats{ gap:10px; }
+  .stat-num{ font-size:1.25rem; }
+  .stat-card span{ font-size:.53rem; letter-spacing:.03em; margin-top:6px; }
 }
 
 /* ---------- Scroll cue ---------- */
@@ -572,13 +576,13 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
 .card .links a{ font-family:var(--mono); font-size:.75rem; color:var(--text); border-bottom:1px solid var(--accent); padding-bottom:2px; }
 
 /* ---------- Box gradient variety ---------- */
-.stat-card:nth-of-type(4n+2), .card:nth-of-type(4n+2), .util-card:nth-of-type(4n+2){
+.card:nth-of-type(4n+2), .util-card:nth-of-type(4n+2){
   background:linear-gradient(135deg, var(--mint-soft), var(--gold-soft));
 }
-.stat-card:nth-of-type(4n+3), .card:nth-of-type(4n+3), .util-card:nth-of-type(4n+3){
+.card:nth-of-type(4n+3), .util-card:nth-of-type(4n+3){
   background:linear-gradient(135deg, var(--sky-soft), var(--surface-2));
 }
-.stat-card:nth-of-type(4n+4), .card:nth-of-type(4n+4), .util-card:nth-of-type(4n+4){
+.card:nth-of-type(4n+4), .util-card:nth-of-type(4n+4){
   background:linear-gradient(135deg, var(--gold-soft), var(--cyan-soft));
 }
 
