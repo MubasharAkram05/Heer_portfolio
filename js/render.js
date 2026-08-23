@@ -44,6 +44,15 @@ function renderProjectCards(containerId, list){
   });
 }
 
+/* Two-tone title: everything but the last word in the text colour, the last
+   word in the accent — the same treatment the section headings use. */
+function twoToneTitle(title){
+  const words = title.trim().split(/\s+/);
+  if(words.length < 2) return `<span class="tone-b">${title}</span>`;
+  const last = words.pop();
+  return `<span class="tone-a">${words.join(' ')}</span> <span class="tone-b">${last}</span>`;
+}
+
 function renderServiceRows(containerId, list){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -53,10 +62,10 @@ function renderServiceRows(containerId, list){
     row.innerHTML = `
       <span class="row-num">${String(i+1).padStart(2,'0')}.</span>
       <div class="row-main">
-        <h3>${sv.title}</h3>
+        <h3>${twoToneTitle(sv.title)}</h3>
         <p>${sv.desc}</p>
-        <a href="#contact" class="row-cta" onclick="goTo('contact')">
-          See more &mdash; pricing <span class="arrow" aria-hidden="true">↗</span>
+        <a href="#contact" class="row-cta" onclick="return startEnquiry('${sv.title.replace(/'/g, "\\'")}')">
+          Contact us <span class="arrow" aria-hidden="true">↗</span>
         </a>
         <ul class="row-tags">${sv.tags.map(t=>`<li>${t}</li>`).join('')}</ul>
       </div>

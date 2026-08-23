@@ -4,7 +4,7 @@
    -> forms -> ui -> main. Nothing here needs a build step. */
 /* ---------------- Scroll reveal ---------------- */
 function initReveal(){
-  const selectors = '.section-head, .about-grid > div, .contact-grid > div, .social-list, .titleblock';
+  const selectors = '.section-head, .about-grid > div, .contact-grid > div, .titleblock';
   document.querySelectorAll(selectors).forEach(el => el.classList.add('reveal'));
 
   if(!('IntersectionObserver' in window)){
@@ -199,4 +199,44 @@ function syncFooterDropdowns(){
   // only has addListener
   if(wide.addEventListener) wide.addEventListener('change', apply);
   else if(wide.addListener) wide.addListener(apply);
+}
+
+/* ---------------- Row highlight on scroll ----------------
+   The rows' accent line was driven by :hover. On a phone there is no hover —
+   the line only lit after a tap and then stuck there, which is why it looked
+   like it changed sometimes and not others. The row crossing the middle of the
+   screen now carries it instead, so it hands over as you scroll. */
+function initRowHighlight(){
+  const rows = [...document.querySelectorAll('.service-row')];
+  if(!rows.length || !('IntersectionObserver' in window)) return;
+
+  /* Which rows are anywhere near the middle right now. Two can qualify at the
+     moment one hands over to the next, so the nearest to the centre wins and
+     exactly one row is ever lit. */
+  const near = new Set();
+  let queued = false;
+
+  const paint = () => {
+    queued = false;
+    const middle = window.innerHeight / 2;
+    let best = null, bestGap = Infinity;
+    near.forEach(row => {
+      const box = row.getBoundingClientRect();
+      const gap = Math.abs(box.top + box.height / 2 - middle);
+      if(gap < bestGap){ bestGap = gap; best = row; }
+    });
+    rows.forEach(row => row.classList.toggle('in-view', row === best));
+  };
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting ? near.add(e.target) : near.delete(e.target));
+    paint();
+  }, { rootMargin: '-42% 0px -42% 0px', threshold: 0 });
+
+  rows.forEach(row => io.observe(row));
+  addEventListener('scroll', () => {
+    if(queued || !near.size) return;
+    queued = true;
+    requestAnimationFrame(paint);
+  }, { passive:true });
 }

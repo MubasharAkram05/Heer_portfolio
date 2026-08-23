@@ -67,8 +67,16 @@ function sendMail(e){
   const name = document.getElementById('cName').value.trim();
   const email = document.getElementById('cEmail').value.trim();
   const msg = document.getElementById('cMsg').value.trim();
-  const subject = encodeURIComponent('Portfolio contact from ' + name);
-  const body = encodeURIComponent(msg + '\n\n— ' + name + ' (' + email + ')');
+  const select = document.getElementById('cService');
+  let service = select ? select.value : '';
+  if(service === CUSTOM_SERVICE){
+    const custom = document.getElementById('cCustom').value.trim();
+    service = custom ? custom : service;
+  }
+  const subject = encodeURIComponent(
+    service ? `${service} — enquiry from ${name}` : 'Portfolio contact from ' + name);
+  const body = encodeURIComponent(
+    (service ? 'Service: ' + service + '\n\n' : '') + msg + '\n\n— ' + name + ' (' + email + ')');
 
   setSubmitting(button, true);
   window.location.href = `mailto:hello@hiraiqbal.dev?subject=${subject}&body=${body}`;
@@ -90,7 +98,46 @@ function setSubmitting(button, busy){
   }
 }
 
+/* The service dropdown is built from the same SERVICES list the page renders,
+   so it can never drift from what is on offer. */
+const CUSTOM_SERVICE = 'Something else';
+
+function buildServiceOptions(){
+  const select = document.getElementById('cService');
+  if(!select) return;
+  const options = ['', ...SERVICES.map(s => s.title), CUSTOM_SERVICE];
+  select.innerHTML = options.map(v =>
+    `<option value="${v}"${v ? '' : ' disabled selected'}>${v || 'Choose a service…'}</option>`).join('');
+  // the free-text box only earns its space once "Something else" is chosen
+  select.addEventListener('change', () => {
+    const custom = select.value === CUSTOM_SERVICE;
+    const field = document.getElementById('cCustomField');
+    field.hidden = !custom;
+    if(custom) document.getElementById('cCustom').focus();
+  });
+}
+
+/* Arriving from a service row: open Contact with that service already chosen,
+   so nobody has to say twice what they came for. */
+function startEnquiry(serviceTitle){
+  goTo('contact');
+  const select = document.getElementById('cService');
+  if(select){
+    const match = [...select.options].find(o => o.value === serviceTitle);
+    select.value = match ? serviceTitle : CUSTOM_SERVICE;
+    select.dispatchEvent(new Event('change'));
+    if(!match) document.getElementById('cCustom').value = serviceTitle;
+    select.classList.remove('is-prefilled');
+    void select.offsetWidth;
+    select.classList.add('is-prefilled');
+  }
+  const name = document.getElementById('cName');
+  if(name) name.focus();
+  return false;
+}
+
 (function initContactValidation(){
   if(!document.getElementById('cName')) return;
   CONTACT_RULES.forEach(attachInlineValidation);
+  buildServiceOptions();
 })();
