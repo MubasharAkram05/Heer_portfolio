@@ -242,6 +242,7 @@ function renderQuotes(containerId, list){
 renderServiceCards('homeServicesGrid', SERVICES);
 renderServiceRows('serviceRows', SERVICES);
 renderTicker('capTicker', CAPABILITIES);
+renderTicker('heroTicker', CAPABILITIES);
 renderQuotes('quoteGrid', TESTIMONIALS);
 renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
 
@@ -603,4 +604,24 @@ document.getElementById('footDate').textContent = new Date().toLocaleDateString(
     // trackpad and momentum scrolling never fire touchend
     reel.addEventListener('scroll', () => { hold(); release(); }, { passive:true });
   });
+})();
+
+/* ---------------- Scroll progress ---------------- */
+(function initScrollProgress(){
+  const bar = document.getElementById('scrollProgress');
+  if(!bar) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrollY / max, 1) : 0) + ')';
+  };
+  const onScroll = () => {
+    if(queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  addEventListener('scroll', onScroll, { passive:true });
+  addEventListener('resize', onScroll, { passive:true });
+  update();
 })();

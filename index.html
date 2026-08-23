@@ -17,6 +17,8 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
   <span class="mode-icon">🌙</span>
 </button>
@@ -32,18 +34,19 @@
     <a href="#home" class="logo" onclick="goTo('home')"><span class="mark"><span>H</span></span> Heer</a>
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileNav()">☰</button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#home" data-page="home" onclick="goTo('home')">Home</a></li>
-      <li><a href="#about" data-page="about" onclick="goTo('about')">About</a></li>
-      <li><a href="#work" data-page="work" onclick="goTo('work')">Work</a></li>
+      <li><a href="#home" data-page="home" onclick="goTo('home')"><i class="slash">/</i>home</a></li>
+      <li><a href="#about" data-page="about" onclick="goTo('about')"><i class="slash">/</i>about</a></li>
+      <li><a href="#work" data-page="work" onclick="goTo('work')"><i class="slash">/</i>work</a></li>
       <li class="has-dropdown" id="utilDropdown">
-        <button class="nav-link" onclick="toggleDropdown(event)">Tools &amp; Games <span class="chevron">▾</span></button>
+        <button class="nav-link" onclick="toggleDropdown(event)"><i class="slash">/</i>play <span class="chevron">▾</span></button>
         <div class="dropdown">
           <a href="#tools" data-page="tools" onclick="goTo('tools')">Tools<small>Little utilities, no install</small></a>
           <a href="#games" data-page="games" onclick="goTo('games')">Games<small>Quick breaks, all local</small></a>
         </div>
       </li>
-      <li><a href="#services" data-page="services" onclick="goTo('services')">Services</a></li>
-      <li><a href="#contact" data-page="contact" onclick="goTo('contact')">Contact</a></li>
+      <li><a href="#services" data-page="services" onclick="goTo('services')"><i class="slash">/</i>services</a></li>
+      <li><a href="#contact" data-page="contact" onclick="goTo('contact')"><i class="slash">/</i>contact</a></li>
+      <li class="nav-cta-item"><a href="#contact" class="nav-cta" onclick="goTo('contact')">Let's talk <span aria-hidden="true">→</span></a></li>
     </ul>
   </nav>
 </header>
@@ -64,6 +67,8 @@
       <a href="#contact" class="btn ghost" onclick="goTo('contact')">Get in touch</a>
     </div>
     </div><!-- /.hero-panel -->
+
+    <div class="ticker ticker-band" id="heroTicker" role="group" aria-label="Capabilities"></div>
 
     <div class="stats">
       <div class="stat-card">
@@ -94,7 +99,7 @@
     <!-- About preview -->
     <div class="section-head">
       <p class="eyebrow">01 — About</p>
-      <h2>A little about me</h2>
+      <h2>A little <span class="outline">about me</span></h2>
     </div>
     <div class="about-grid">
       <div>
@@ -122,7 +127,7 @@
     <!-- Featured work preview -->
     <div class="section-head">
       <p class="eyebrow">02 — Featured Work</p>
-      <h2>A few recent builds</h2>
+      <h2>A few <span class="outline">recent builds</span></h2>
     </div>
     <div class="grid-cards row-scroll" id="homeProjectGrid"></div>
     <div style="margin-top:28px;">
@@ -134,7 +139,7 @@
     <!-- Tools & Games preview -->
     <div class="section-head">
       <p class="eyebrow">03 — Tools &amp; Games</p>
-      <h2>Things you can actually play with</h2>
+      <h2>Things you can <span class="outline">actually play with</span></h2>
     </div>
       <div class="showreel">
         <h3 class="reel-title"><a href="#tools" onclick="goTo('tools')"><span class="icon">🛠</span> Tools</a></h3>
@@ -226,7 +231,7 @@
     <!-- Services preview -->
     <div class="section-head">
       <p class="eyebrow">04 — Services</p>
-      <h2>What I can build for you</h2>
+      <h2>What I can <span class="outline">build for you</span></h2>
     </div>
     <div class="grid-cards" id="homeServicesGrid"></div>
     <div class="btn-row" style="margin-top:28px;">
@@ -238,7 +243,7 @@
     <!-- Client reviews -->
     <div class="section-head">
       <p class="eyebrow">05 — Client reviews</p>
-      <h2>What people say afterwards</h2>
+      <h2>What people say <span class="outline">afterwards</span></h2>
     </div>
     <div class="quote-grid" id="homeQuoteGrid"></div>
 
@@ -290,7 +295,7 @@
   <section class="page section-tint tint-b" id="page-work">
     <div class="section-head">
       <p class="eyebrow">02 — Selected Work</p>
-      <h2>Projects worth a look</h2>
+      <h2>Projects <span class="outline">worth a look</span></h2>
     </div>
     <div class="grid-cards" id="projectGrid"></div>
   </section>
@@ -473,7 +478,7 @@
   <section class="page section-tint tint-c" id="page-services">
     <div class="section-head">
       <p class="eyebrow">05 — Services</p>
-      <h2>What I can build for you</h2>
+      <h2>What I can <span class="outline">build for you</span></h2>
     </div>
     <p class="lede" style="margin-bottom:32px;">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
 
@@ -485,7 +490,7 @@
 
     <div class="section-head">
       <p class="eyebrow">How it works</p>
-      <h2>Four steps, no surprises</h2>
+      <h2>Four steps, <span class="outline">no surprises</span></h2>
     </div>
     <ol class="process-list">
       <li>
@@ -514,7 +519,7 @@
 
     <div class="section-head">
       <p class="eyebrow">Client reviews</p>
-      <h2>What it is like to work together</h2>
+      <h2>What it is like to <span class="outline">work together</span></h2>
     </div>
     <div class="quote-grid" id="quoteGrid"></div>
 

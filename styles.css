@@ -18,6 +18,7 @@
   --hero-glow-a:#ff6b3521;
   --hero-glow-b:#0d8f831f;
   --hero-shadow:0 22px 45px -18px rgba(20,29,46,.28), 0 2px 6px rgba(20,29,46,.06);
+  --outline-stroke:#e04e18;
   --radius:2px;
   --display:'Space Grotesk', sans-serif;
   --body:'Inter', sans-serif;
@@ -44,6 +45,7 @@
   --hero-glow-a:#ff825726;
   --hero-glow-b:#2fc4b622;
   --hero-shadow:0 22px 48px -16px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.04);
+  --outline-stroke:#ff8257;
 }
 
 body, .page, .card, .util-card, .stat-card, header{
@@ -349,6 +351,52 @@ nav.wrap{
   color:var(--accent);
 }
 
+/* ---------- Scroll progress ---------- */
+.scroll-progress{
+  position:fixed; top:0; left:0; right:0; z-index:90;
+  height:3px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  will-change:transform;
+  pointer-events:none;
+}
+
+/* ---------- Nav: path-style links and a talk CTA ---------- */
+.nav-links .slash{
+  font-style:normal;
+  color:var(--accent);
+  margin-right:1px;
+  opacity:.75;
+}
+.nav-links a:hover .slash, .nav-links a.active .slash,
+.nav-links button.nav-link:hover .slash{ opacity:1; }
+.nav-links a.nav-cta{
+  background:var(--accent);
+  color:#14100c;
+  padding:10px 16px;
+  font-weight:600;
+  letter-spacing:.06em;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.nav-links a.nav-cta::after{ display:none; }
+.nav-links a.nav-cta:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(20,29,46,.22); }
+.nav-cta-item{ margin-left:8px; }
+@media (max-width:860px){
+  .nav-cta-item{ margin-left:0; margin-top:6px; }
+  .nav-links a.nav-cta{ justify-content:center; }
+}
+
+/* ---------- Two-tone headings ---------- */
+/* fallback fill for browsers without text-stroke */
+.outline{ color:var(--outline-stroke); }
+@supports (-webkit-text-stroke: 1px red){
+  .outline{
+    color:transparent;
+    -webkit-text-stroke:1.5px var(--outline-stroke);
+  }
+}
+
 /* ---------- Capability ticker ---------- */
 .ticker{
   overflow:hidden;
@@ -390,6 +438,38 @@ nav.wrap{
 @media (prefers-reduced-motion: reduce){
   .ticker-track{ animation:none; }
   .ticker{ overflow-x:auto; -webkit-mask-image:none; mask-image:none; }
+}
+
+/* Full-bleed accent band variant */
+.ticker-band{
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  margin-top:0;
+  margin-bottom:0;
+  padding:15px 0;
+  background:var(--accent);
+  border:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+.ticker-band .ticker-track li{
+  color:#14100c;
+  font-size:.8rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  padding-right:52px;
+}
+.ticker-band .ticker-track li::after{
+  content:'//';
+  color:rgba(20,16,12,.5);
+  font-size:.8rem;
+  right:18px;
+  transform:translateY(-50%);
+}
+@media (max-width:480px){
+  .ticker-band{ padding:12px 0; }
+  .ticker-band .ticker-track li{ font-size:.68rem; padding-right:40px; }
+  .ticker-band .ticker-track li::after{ right:14px; }
 }
 
 /* ---------- Services as numbered rows ---------- */
@@ -693,6 +773,7 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
 /* Raised panel that carries the hero content, edge to edge */
 .hero-panel{
   position:relative;
+  isolation:isolate;
   margin-left:calc(50% - 50vw);
   margin-right:calc(50% - 50vw);
   padding:52px calc(50vw - 50%) 48px;
@@ -708,6 +789,21 @@ h1,h2,h3{ font-family:var(--display); font-weight:600; letter-spacing:-.01em; }
 }
 @media (max-width:480px){
   .hero-panel{ padding-top:30px; padding-bottom:30px; }
+}
+/* drawn rule down the left of the hero content */
+.hero-panel::before{
+  content:'';
+  position:absolute;
+  top:0; bottom:0;
+  /* the panel is full-bleed, so a 50% here would resolve against the
+     viewport, not the content column — derive the content edge instead */
+  left:calc(max((100vw - 1064px) / 2, 28px) - 22px);
+  width:1px;
+  background:linear-gradient(180deg, transparent, var(--accent) 18%, var(--accent) 78%, transparent);
+  opacity:.5;
+}
+@media (max-width:900px){
+  .hero-panel::before{ display:none; }
 }
 .hero h1{
   font-size:clamp(2.4rem, 7vw, 4.6rem);
