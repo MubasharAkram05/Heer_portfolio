@@ -2,7 +2,11 @@
    Part of the portfolio's plain-JS bundle. Files load in dependency order
    from index.html: data -> router -> render -> modal -> tools -> games
    -> forms -> ui -> main. Nothing here needs a build step. */
-const pageOrder = ['home','about','work','tools','games','services','contact'];
+const pageOrder = ['home','about','tools','games','contact'];
+
+/* Work and Services are sections of the landing page rather than pages of
+   their own, so their old hashes still have to lead somewhere. */
+const SECTION_HASHES = { work:'home-work', services:'home-services' };
 
 /* The browser restores scroll on its own by default, and it races the offset
    we restore from the history state — Back landed at y=12 instead of 600.
@@ -24,6 +28,12 @@ function updateBackBtn(){
 }
 
 function goTo(id, isBack, restoreY){
+  /* Bail before touching anything if there is no such page. The swap below
+     clears `active` from every page first, so an unknown id used to leave the
+     site showing nothing at all. */
+  const target = document.getElementById('page-' + id);
+  if(!target) return;
+
   const current = document.querySelector('.page.active');
   const currentId = current && current.id.replace('page-','');
   const leavingY = window.scrollY;
@@ -34,8 +44,7 @@ function goTo(id, isBack, restoreY){
   }
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById('page-'+id);
-  if(target) target.classList.add('active');
+  target.classList.add('active');
 
   document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
     const isCurrent = a.dataset.page === id;
@@ -78,19 +87,48 @@ function goTo(id, isBack, restoreY){
 /* The browser's Back and Forward, and anyone editing the hash by hand. Both
    route without pushing, or they would fight the entry they just moved to. */
 addEventListener('popstate', (e) => {
-  const id = (e.state && e.state.id) || location.hash.replace('#','') || 'home';
-  if(!pageOrder.includes(id)) return;
-  goTo(id, true, e.state ? e.state.scrollY : 0);
+  const raw = (e.state && e.state.id) || location.hash.replace('#','') || 'home';
+  if(SECTION_HASHES[raw]){ goToSection(SECTION_HASHES[raw]); return; }
+  if(!pageOrder.includes(raw)) return;
+  goTo(raw, true, e.state ? e.state.scrollY : 0);
 });
 
 addEventListener('hashchange', () => {
   const id = location.hash.replace('#','');
+  if(SECTION_HASHES[id]){ goToSection(SECTION_HASHES[id]); return; }
   const current = document.querySelector('.page.active');
   const activeId = current && current.id.replace('page-','');
   if(pageOrder.includes(id) && id !== activeId) goTo(id, true, 0);
 });
 
 /* ---------------- Dropdown ---------------- */
+/* Go to the landing page and scroll to one of its sections. Returns false so
+   an anchor's default jump does not fight the smooth scroll. */
+function goToSection(sectionId){
+  const active = document.querySelector('.page.active');
+  const onHome = active && active.id === 'page-home';
+  if(!onHome) goTo('home');
+  const target = document.getElementById(sectionId);
+  if(!target) return false;
+  /* On a page change the section is only laid out after the swap, so wait a
+     frame before measuring where to scroll to. */
+  requestAnimationFrame(() => {
+    const header = document.querySelector('header');
+    const offset = (header ? header.offsetHeight : 0) + 16;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(top, 0), behavior:'smooth' });
+  });
+  try { history.pushState({ id:'home', section:sectionId }, '', '#' + sectionHash(sectionId)); } catch(e){}
+  closeMobileNav({ keepFocus:true });
+  closeDropdown();
+  return false;
+}
+
+function sectionHash(sectionId){
+  const hit = Object.keys(SECTION_HASHES).find(k => SECTION_HASHES[k] === sectionId);
+  return hit || sectionId;
+}
+
 function toggleDropdown(e){
   e.preventDefault();
   const dd = document.getElementById('utilDropdown');

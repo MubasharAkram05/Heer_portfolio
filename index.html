@@ -34,7 +34,7 @@
       </li>
       <li><a href="#home" data-page="home" onclick="goTo('home')">Home</a></li>
       <li><a href="#about" data-page="about" onclick="goTo('about')">About</a></li>
-      <li><a href="#work" data-page="work" onclick="goTo('work')">Work</a></li>
+      <li><a href="#work" data-section="home-work" onclick="return goToSection('home-work')">Work</a></li>
       <li class="has-dropdown" id="utilDropdown">
         <button class="nav-link" id="utilDropdownBtn" aria-expanded="false" aria-haspopup="true" aria-controls="utilDropdownMenu" onclick="toggleDropdown(event)">Tools and Games <span class="chevron" aria-hidden="true">▾</span></button>
         <div class="dropdown" id="utilDropdownMenu">
@@ -42,7 +42,7 @@
           <a href="#games" data-page="games" onclick="goTo('games')">Games</a>
         </div>
       </li>
-      <li><a href="#services" data-page="services" onclick="goTo('services')">Services</a></li>
+      <li><a href="#services" data-section="home-services" onclick="return goToSection('home-services')">Services</a></li>
       <li><a href="#contact" data-page="contact" onclick="goTo('contact')">Contact</a></li>
       <li class="nav-cta-item"><a href="#contact" class="nav-cta" onclick="goTo('contact')">Let's talk <span aria-hidden="true">→</span></a></li>
     </ul>
@@ -63,7 +63,7 @@
     <h1 class="hero-anim">I build things that<br>work like they <em>should.</em></h1>
     <p class="lede hero-anim">App and games developer focused on smooth gameplay, clean interfaces, and builds that feel great to play. Based on Earth, working everywhere.</p>
     <div class="btn-row hero-anim">
-      <a href="#work" class="btn" onclick="goTo('work')">View the work</a>
+      <a href="#work" class="btn" onclick="return goToSection('home-work')">View the work</a>
       <a href="#contact" class="btn ghost" onclick="goTo('contact')">Get in touch</a>
     </div>
     </div><!-- /.hero-panel -->
@@ -124,13 +124,13 @@
 
     <hr class="divider">
 
-    <!-- Featured work preview -->
-    <div class="section-head">
-      <p class="eyebrow">02 — Featured Work</p>
+    <!-- Work -->
+    <div class="section-head" id="home-work">
+      <p class="eyebrow">02 — Work</p>
       <h2>A few <span class="outline">recent builds</span></h2>
     </div>
     <div class="deck" id="deckProjects" data-deck="projects" data-style="coverflow" aria-roledescription="carousel" aria-label="Recent builds">
-      <h3 class="reel-title"><a href="#work" onclick="goTo('work')"><span class="icon" aria-hidden="true">🗂</span> Shipped work</a></h3>
+      <h3 class="reel-title"><span class="icon" aria-hidden="true">🗂</span> Shipped work</h3>
       <div class="deck-stage"></div>
       <div class="deck-bar">
         <button class="deck-nav" data-dir="-1" aria-label="Previous project">&lsaquo;</button>
@@ -138,9 +138,7 @@
         <button class="deck-nav" data-dir="1" aria-label="Next project">&rsaquo;</button>
       </div>
     </div>
-    <div class="section-follow">
-      <a href="#work" class="btn ghost" onclick="goTo('work')">View all projects</a>
-    </div>
+    <ol class="service-rows section-follow" id="projectGrid"></ol>
 
     <hr class="divider">
 
@@ -170,15 +168,16 @@
 
     <hr class="divider">
 
-    <!-- Services preview -->
-    <div class="section-head">
+    <!-- Services -->
+    <div class="section-head" id="home-services">
       <p class="eyebrow">04 — Services</p>
       <h2>What I can <span class="outline">build for you</span></h2>
     </div>
+    <p class="lede section-intro">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
+
+    <div class="ticker" id="capTicker" role="group" aria-label="Capabilities"></div>
+
     <ol class="service-rows" id="homeServiceRows"></ol>
-    <div class="btn-row section-follow">
-      <a href="#services" class="btn ghost" onclick="goTo('services')">See how I work</a>
-    </div>
 
     <hr class="divider">
 
@@ -244,14 +243,6 @@
   </section>
 
   <!-- WORK -->
-  <section class="page section-tint tint-b" id="page-work">
-    <div class="section-head">
-      <p class="eyebrow">02 — Selected Work</p>
-      <h2>Projects <span class="outline">worth a look</span></h2>
-    </div>
-    <ol class="service-rows" id="projectGrid"></ol>
-  </section>
-
   <!-- TOOLS -->
     <section class="page section-tint tint-a" id="page-tools">
     <div class="section-head">
@@ -272,45 +263,6 @@
   </section>
 
   <!-- SERVICES -->
-  <section class="page section-tint tint-c" id="page-services">
-    <div class="section-head">
-      <p class="eyebrow">05 — Services</p>
-      <h2>What I can <span class="outline">build for you</span></h2>
-    </div>
-    <p class="lede section-intro">Apps and games from the first sketch to the shipped build — and the design work in between. Every project is quoted on scope, not on hours.</p>
-
-    <div class="ticker" id="capTicker" role="group" aria-label="Capabilities"></div>
-
-    <ol class="service-rows" id="serviceRows"></ol>
-
-    <hr class="divider">
-
-    <div class="section-head">
-      <p class="eyebrow">How it works</p>
-      <h2>The <span class="outline">design thinking process</span></h2>
-    </div>
-<ol class="process-cards" id="servicesProcess"></ol>
-
-    <hr class="divider">
-
-    <div class="section-head">
-      <p class="eyebrow">Client reviews</p>
-      <h2>What it is like to <span class="outline">work together</span></h2>
-    </div>
-    <div class="quote-grid" id="quoteGrid"></div>
-
-    <hr class="divider">
-
-    <div class="section-head">
-      <h2>Have something in mind?</h2>
-    </div>
-    <p class="lede section-intro">Tell me what you are trying to build and I will come back with a scope, a timeline, and a price.</p>
-    <div class="btn-row">
-      <a href="#contact" class="btn" onclick="goTo('contact')">Start a project</a>
-      <a href="#work" class="btn ghost" onclick="goTo('work')">See past work</a>
-    </div>
-  </section>
-
   <section class="page section-tint tint-d" id="page-contact">
     <div class="section-head">
       <p class="eyebrow">06 — Contact</p>
@@ -404,8 +356,8 @@
         <ul>
           <li><a href="#home" onclick="goTo('home')">Home</a></li>
           <li><a href="#about" onclick="goTo('about')">About</a></li>
-          <li><a href="#work" onclick="goTo('work')">Work</a></li>
-          <li><a href="#services" onclick="goTo('services')">Services</a></li>
+          <li><a href="#work" onclick="return goToSection('home-work')">Work</a></li>
+          <li><a href="#services" onclick="return goToSection('home-services')">Services</a></li>
           <li><a href="#contact" onclick="goTo('contact')">Contact</a></li>
           <li><a href="mailto:hello@hiraiqbal.dev">Email</a></li>
         </ul>

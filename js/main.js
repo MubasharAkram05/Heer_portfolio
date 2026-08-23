@@ -5,14 +5,11 @@
 
 /* Content into the page */
 renderProjectCards('projectGrid', PROJECTS);
-renderServiceRows('serviceRows', SERVICES);
 renderServiceRows('homeServiceRows', SERVICES);
 renderTicker('capTicker', CAPABILITIES);
 renderTicker('heroTicker', CAPABILITIES);
-renderQuotes('quoteGrid', TESTIMONIALS);
 renderQuotes('homeQuoteGrid', TESTIMONIALS.slice(0,3));
 renderProcess('homeProcess', PROCESS);
-renderProcess('servicesProcess', PROCESS);
 renderRating('homeRating', REVIEW_SCORE);
 renderItemRows('toolRows', 'tools');
 renderItemRows('gameRows', 'games');
@@ -35,5 +32,6 @@ document.getElementById('footDate').textContent =
 /* Open the page named in the URL hash, or home */
 window.addEventListener('load', () => {
   const hash = location.hash.replace('#','');
+  if(SECTION_HASHES[hash]){ goTo('home'); goToSection(SECTION_HASHES[hash]); return; }
   goTo(pageOrder.includes(hash) ? hash : 'home');
 });
