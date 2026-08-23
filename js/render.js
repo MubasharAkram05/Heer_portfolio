@@ -126,6 +126,38 @@ function renderFooterLinks(){
   fill('footerGames', 'Games');
 }
 
+/* The home reel. The track animates translateX(0) -> -50%, so the card set has
+   to appear exactly twice: the second copy is the frame the loop lands back on
+   and is hidden from assistive tech. Spacing lives on the card (margin-right),
+   not as a track gap, or -50% would not line up. */
+function renderProjectReel(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+
+  const card = (p, i, isClone) => `
+    <article class="mini-card"${isClone ? ' aria-hidden="true"' : ''}>
+      <span class="icon" aria-hidden="true">${p.icon}</span>
+      <h4>${p.title}</h4>
+      <p>${p.desc}</p>
+      <button class="mini-open"${isClone ? ' tabindex="-1"' : ''} onclick="openProject(${i})">Open <span aria-hidden="true">↗</span></button>
+    </article>`;
+
+  container.innerHTML =
+    list.map((p, i) => card(p, i, false)).join('') +
+    list.map((p, i) => card(p, i, true)).join('');
+}
+
+/* Open takes you to the full row for that project on the Work page. */
+function openProject(index){
+  goTo('work');
+  const row = document.querySelectorAll('#projectGrid .service-row')[index];
+  if(!row) return;
+  row.scrollIntoView({ behavior:'smooth', block:'center' });
+  row.classList.remove('row-flash');
+  void row.offsetWidth;
+  row.classList.add('row-flash');
+}
+
 function renderItemRows(containerId, page){
   const container = document.getElementById(containerId);
   if(!container) return;

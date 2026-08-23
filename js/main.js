@@ -5,7 +5,7 @@
 
 /* Content into the page */
 renderProjectCards('projectGrid', PROJECTS);
-renderProjectCards('homeProjectGrid', PROJECTS.slice(0,3));
+renderProjectReel('projectReel', PROJECTS);
 renderServiceRows('serviceRows', SERVICES);
 renderServiceRows('homeServiceRows', SERVICES);
 renderTicker('capTicker', CAPABILITIES);
@@ -21,6 +21,8 @@ renderItemRows('gameRows', 'games');
 renderFooterLinks();
 
 /* Behaviour */
+/* after the reels exist, since it binds to each .marquee */
+initReelTouch();
 initReveal();
 initCounters();
 tickRole();

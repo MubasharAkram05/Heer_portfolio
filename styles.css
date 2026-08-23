@@ -1809,3 +1809,16 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{
   .btn:hover, .small-btn:hover, .mini-open:hover, .to-top:hover,
   .social-icons a:hover, .footer-col a:hover{ transform:none; }
 }
+
+/* ---------- Row flash ----------
+   When Open on the home reel jumps you to a project, the row it landed on
+   says so briefly, rather than leaving you to work out which one moved. */
+.service-row.row-flash{ animation:rowFlash 1.4s var(--ease) 1; }
+@keyframes rowFlash{
+  0%   { background:var(--accent-soft); border-top-color:var(--accent); }
+  70%  { background:var(--accent-soft); border-top-color:var(--accent); }
+  100% { background:transparent; }
+}
+@media (prefers-reduced-motion: reduce){
+  .service-row.row-flash{ animation:none; border-top-color:var(--accent); }
+}
