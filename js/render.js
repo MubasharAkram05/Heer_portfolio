@@ -134,7 +134,7 @@ function renderFooterLinks(){
   const svc = document.getElementById('footerServices');
   if(svc){
     svc.innerHTML = SERVICES.slice(0,6).map(v =>
-      `<li><a href="#services" onclick="goTo('services')">${v.title}</a></li>`).join('');
+      `<li><a href="#services" onclick="return goToSection('home-services')">${v.title}</a></li>`).join('');
   }
   const fill = (id, page) => {
     const box = document.getElementById(id);
@@ -148,7 +148,9 @@ function renderFooterLinks(){
 
 /* Open takes you to the full row for that project on the Work page. */
 function openProject(index){
-  goTo('work');
+  /* The project rows live in the home page's Work section now, so this is a
+     scroll rather than a page change. */
+  goTo('home');
   const row = document.querySelectorAll('#projectGrid .service-row')[index];
   if(!row) return;
   row.scrollIntoView({ behavior:'smooth', block:'center' });
